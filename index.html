@@ -41,10 +41,13 @@
         </div>
       </div>
       <div class="header-actions">
+        <button class="btn-icon-header" id="btn-quick-scan" title="Escanear Tablero con Cámara (IA Efímera)">
+          📸
+        </button>
         <button class="btn-icon-header" id="btn-quick-odo" title="Actualizar Kilometraje">
           🔢
         </button>
-        <button class="btn-icon-header" id="btn-quick-backup" title="Copia de Seguridad">
+        <button class="btn-icon-header" id="btn-quick-backup" title="Copia de Seguridad y Ajustes">
           💾
         </button>
       </div>
@@ -93,7 +96,7 @@
             </div>
             <div class="odometer-widget" id="btn-edit-odo-widget" title="Toca para actualizar odómetro">
               <div class="label">Odómetro Actual</div>
-              <div class="val"><span id="dash-odo-val">128,450</span><small>km</small></div>
+              <div class="val"><span id="dash-odo-val">0</span><small>km</small></div>
             </div>
           </div>
 
@@ -108,10 +111,14 @@
         </div>
 
         <!-- Acciones Rápidas (Thumb Friendly) -->
-        <div class="action-buttons-group">
+        <div class="action-buttons-group" style="grid-template-columns: repeat(4, 1fr);">
+          <button class="btn-action-tile scan" id="dash-btn-scan-cluster">
+            <div class="tile-icon" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35);">📸</div>
+            <div class="tile-label">Foto Tablero</div>
+          </button>
           <button class="btn-action-tile fuel" id="dash-btn-add-fuel">
             <div class="tile-icon">⛽</div>
-            <div class="tile-label">Cargar Gas (10s)</div>
+            <div class="tile-label">Cargar Gas</div>
           </button>
           <button class="btn-action-tile service" id="dash-btn-add-service">
             <div class="tile-icon">🔧</div>
@@ -168,10 +175,10 @@
             <h3 style="display: flex; align-items: center; gap: 6px;">
               <span>🤖</span> Diagnóstico de Salud Gemini
             </h3>
-            <span style="font-size: 0.7rem; color: #34d399;" id="dash-ai-score-label">Score 90/100</span>
+            <span style="font-size: 0.7rem; color: #34d399;" id="dash-ai-score-label">Listo</span>
           </div>
           <p style="font-size: 0.78rem; color: #e2e8f0; line-height: 1.4;" id="dash-ai-summary-text">
-            Motor 1.6L en buen estado operativo. Banda de distribución con 38,450 km recorridos desde el último cambio (cambiar a los 50,000 km).
+            Bitácora limpia sin datos inventados. Toma una foto a tu tablero (📸) o ingresa tu kilometraje real para activar las alertas preventivas del motor 1.6L DOHC.
           </p>
         </div>
 
@@ -517,34 +524,52 @@
           <table class="specs-table" style="margin-bottom: 12px;">
             <tr>
               <td class="spec-title">Placas</td>
-              <td class="spec-val" id="garage-plates-val">NL-742-B</td>
+              <td class="spec-val" id="garage-plates-val">Sin registrar</td>
             </tr>
             <tr>
               <td class="spec-title">VIN / Serie</td>
-              <td class="spec-val" id="garage-vin-val">3G1JA5264BL129840</td>
+              <td class="spec-val" id="garage-vin-val">Sin registrar</td>
             </tr>
             <tr>
               <td class="spec-title">Aseguradora & Póliza</td>
-              <td class="spec-val" id="garage-insurance-val">Quálitas • POL-04829104</td>
+              <td class="spec-val" id="garage-insurance-val">Sin registrar</td>
             </tr>
             <tr>
               <td class="spec-title">Asistencia 24h</td>
-              <td class="spec-val" id="garage-phone-val"><a href="tel:8008002880" style="color:var(--telemetry-cyan); text-decoration:none;">📞 800 800 2880</a></td>
+              <td class="spec-val" id="garage-phone-val">Sin registrar</td>
             </tr>
             <tr>
               <td class="spec-title">Verificación</td>
-              <td class="spec-val" id="garage-verif-val">Mayo - Junio</td>
+              <td class="spec-val" id="garage-verif-val">Sin registrar</td>
             </tr>
           </table>
+
+          <!-- Configuración de Clave Gemini (Opcional para iPhone / GitHub Pages) -->
+          <div style="background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.25); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
+            <div style="font-size: 0.78rem; font-weight: 800; color: var(--telemetry-cyan); margin-bottom: 4px;">
+              🔑 Clave Gemini AI (Para Escáner de Fotos y Copiloto)
+            </div>
+            <p style="font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 8px;">
+              Si usas la app en GitHub Pages o no has configurado <code>.env</code> en el servidor, pega tu API Key gratuita de Google AI Studio aquí (se guarda solo en tu dispositivo):
+            </p>
+            <div style="display: flex; gap: 6px;">
+              <input type="password" class="form-input" id="garage-gemini-key-input" placeholder="AIzaSy..." style="padding: 8px 12px; font-size: 0.82rem;">
+              <button type="button" class="btn-primary" id="btn-save-gemini-key" style="width: auto; margin: 0; padding: 8px 14px; font-size: 0.8rem;">Guardar</button>
+            </div>
+          </div>
 
           <button class="btn-primary" id="btn-export-backup" style="margin-bottom: 8px;">
             📤 Descargar Respaldo JSON Completo
           </button>
           
-          <label class="btn-secondary" style="cursor: pointer;">
+          <label class="btn-secondary" style="cursor: pointer; margin-bottom: 8px;">
             📥 Restaurar Copia de Seguridad
             <input type="file" id="file-import-backup" accept=".json" style="display: none;">
           </label>
+
+          <button type="button" class="btn-secondary" id="btn-reset-all-data" style="border-color: rgba(239, 68, 68, 0.35); color: #f87171;">
+            🗑️ Borrar Todos los Datos (Empezar de Cero)
+          </button>
         </div>
       </section>
 
@@ -780,6 +805,82 @@
 
           <button type="submit" class="btn-primary">Guardar Documentación</button>
         </form>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 5: ESCÁNER EFÍMERO DE TABLERO CON IA -->
+    <!-- ========================================== -->
+    <div class="modal-overlay" id="modal-scan-cluster">
+      <div class="bottom-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <h3>📸 Escáner de Tablero (IA Efímera)</h3>
+          <button class="sheet-close-btn" data-close-modal="modal-scan-cluster">✕</button>
+        </div>
+
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 10px 12px; margin-bottom: 12px; font-size: 0.74rem; color: #a7f3d0;">
+          🔒 <strong>Ahorro Total de Base de Datos:</strong> Toma una foto a tu tablero. Gemini extraerá el <strong>kilometraje, testigos encendidos, gasolina y temperatura</strong>, y <strong>eliminará la foto inmediatamente</strong>. Solo se guarda la información.
+        </div>
+
+        <div class="form-group">
+          <label class="btn-primary" style="cursor: pointer; margin-top: 0; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff;">
+            📷 Tomar Foto al Tablero / Elegir Imagen
+            <input type="file" id="input-scan-cluster-file" accept="image/*" capture="environment" style="display: none;">
+          </label>
+        </div>
+
+        <!-- Estado de Procesamiento -->
+        <div id="scan-loading-box" style="display: none; text-align: center; padding: 20px 10px;">
+          <div style="font-size: 1.8rem; margin-bottom: 8px; animation: pulseDot 1s infinite;">🤖🔍</div>
+          <div style="font-weight: 800; color: var(--telemetry-cyan); font-size: 0.9rem;">Analizando tablero del Aveo 2011...</div>
+          <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 4px;">Extrayendo odómetro, testigos y agujas (la imagen se borrará al terminar)...</div>
+        </div>
+
+        <!-- Resultados Extraídos -->
+        <div id="scan-result-box" style="display: none;">
+          <div class="card-cockpit highlight-cyan" style="margin-bottom: 12px; padding: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <span style="font-size: 0.72rem; font-weight: 800; color: #34d399;">🗑️ FOTO ELIMINADA • DATOS EXTRAÍDOS:</span>
+              <span class="badge-impact" id="scan-res-alert-badge">OPTIMO</span>
+            </div>
+
+            <div class="metrics-grid-2x2" style="margin-bottom: 10px;">
+              <div class="metric-tile" style="padding: 10px;">
+                <div class="metric-tile-header"><span>Odómetro Leído</span><span>🔢</span></div>
+                <div class="metric-tile-val text-gold" id="scan-res-odo">---</div>
+              </div>
+              <div class="metric-tile" style="padding: 10px;">
+                <div class="metric-tile-header"><span>Gasolina / Temp</span><span>🌡️</span></div>
+                <div class="metric-tile-val text-cyan" style="font-size: 0.95rem;" id="scan-res-gauges">---</div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 8px;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">🚨 Testigos Detectados:</div>
+              <div id="scan-res-lights" style="font-size: 0.8rem; font-weight: 700; color: #fff;">Ninguno</div>
+            </div>
+
+            <div style="margin-bottom: 8px;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 2px;">🤖 Diagnóstico Técnico:</div>
+              <div id="scan-res-diag" style="font-size: 0.78rem; color: #e2e8f0; line-height: 1.4;"></div>
+            </div>
+
+            <div>
+              <div style="font-size: 0.72rem; font-weight: 700; color: var(--chevy-gold-light); margin-bottom: 2px;">🛠️ Acción Recomendada:</div>
+              <div id="scan-res-action" style="font-size: 0.76rem; color: var(--text-secondary); line-height: 1.35;"></div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button type="button" class="btn-primary" id="btn-scan-apply-odo" style="margin-top: 0;">
+              ✅ Aplicar Kilometraje al Odómetro
+            </button>
+            <button type="button" class="btn-secondary" id="btn-scan-save-symptom" style="margin-top: 0; border-color: rgba(245, 158, 11, 0.4); color: var(--chevy-gold-light);">
+              🔧 Guardar Diagnóstico de Testigos en Bitácora
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 

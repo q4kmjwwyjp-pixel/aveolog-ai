@@ -11,7 +11,8 @@ import {
   evaluateMaintenanceWithAI,
   analyzeFuelDropAnomaly,
   chatCopilotMecanico,
-  generateOverallHealthStatus
+  generateOverallHealthStatus,
+  analyzeDashboardImageWithAI
 } from './geminiService.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -261,6 +262,66 @@ router.get('/ai/health', async (req, res) => {
 
     const health = await generateOverallHealthStatus(maintenance, fuel, carProfile.currentOdometer);
     res.json({ success: true, data: health });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+// 6.5 Escáner Multimodal Efímero de Tablero (NO guarda la foto, solo extrae los datos y la descarta)
+router.post('/ai/analyze-dashboard', async (req, res) => {
+  try {
+    let { imageBase64, mimeType, apiKey } = req.body;
+    if (!imageBase64) {
+      return res.status(400).json({ success: false, error: "No se recibió imagen para analizar." });
+    }
+
+    const carProfile = await db.getCarProfile();
+    const result = await analyzeDashboardImageWithAI(
+      imageBase64,
+      mimeType || "image/jpeg",
+      carProfile.currentOdometer || 0,
+      apiKey || ""
+    );
+
+    // Liberar explícitamente la referencia a la imagen en memoria (procesamiento 100% efímero)
+    imageBase64 = null;
+    req.body.imageBase64 = null;
+
+    res.json({
+      success: true,
+      imageDiscarded: true,
+      message: "Información extraída con éxito. La fotografía fue descartada inmediatamente para ahorrar espacio.",
+      data: result
+    });
+  } catch (e) {
+    if (req.body) req.body.imageBase64 = null;
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+// Eliminar registros individuales o resetear base de datos
+router.delete('/fuel/:id', async (req, res) => {
+  try {
+    const out = await db.deleteFuelLog(req.params.id);
+    res.json({ success: true, data: out });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+router.delete('/maintenance/:id', async (req, res) => {
+  try {
+    const out = await db.deleteMaintenanceLog(req.params.id);
+    res.json({ success: true, data: out });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+router.post('/reset', async (req, res) => {
+  try {
+    const clean = await db.resetAllData();
+    res.json({ success: true, message: "Todos los datos de prueba fueron borrados.", data: clean });
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
   }

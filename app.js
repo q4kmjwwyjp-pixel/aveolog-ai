@@ -17,25 +17,25 @@ const DEFAULT_STATE = {
     power: "102 HP @ 5,800 RPM",
     torque: "145 Nm @ 3,600 RPM",
     tankCapacity: 45.0, // Litros
-    currentOdo: 128450,
-    plates: "NL-742-B",
-    vin: "3G1JA5264BL129840",
-    insuranceCompany: "Quálitas Seguros",
-    insurancePolicy: "POL-04829104",
-    insurancePhone: "800 800 2880",
-    verificationMonth: "Mayo - Junio",
+    currentOdo: 0,
+    plates: "",
+    vin: "",
+    insuranceCompany: "",
+    insurancePolicy: "",
+    insurancePhone: "",
+    verificationMonth: "",
     geminiApiKey: ""
   },
   
-  // Servicios Preventivos Oficiales Calibrados para Aveo 2011 1.6L DOHC
+  // Servicios Preventivos Oficiales Calibrados para Aveo 2011 1.6L DOHC (Limpios para datos reales)
   maintenanceSchedule: [
     {
       id: "timing_belt",
       name: "Banda de Distribución (Kit Completo)",
       intervalKm: 50000,
       intervalMonths: 36,
-      lastDoneOdo: 90000,
-      lastDoneDate: "2024-03-10",
+      lastDoneOdo: 0,
+      lastDoneDate: null,
       critical: true,
       description: "¡CRÍTICO! Motor con interferencia: si la banda se rompe, se doblan las 16 válvulas. Cambiar banda, bomba de agua, tensor y polea loca."
     },
@@ -44,8 +44,8 @@ const DEFAULT_STATE = {
       name: "Aceite SAE 5W-30 y Filtro",
       intervalKm: 6000,
       intervalMonths: 6,
-      lastDoneOdo: 124000,
-      lastDoneDate: "2026-08-15",
+      lastDoneOdo: 0,
+      lastDoneDate: null,
       critical: false,
       description: "Capacidad: 3.75 L con filtro. Usar sintético o semisintético SAE 5W-30 (o 10W-30) API SM/SN."
     },
@@ -54,8 +54,8 @@ const DEFAULT_STATE = {
       name: "Bujías NGK BKR6E-11 (1.0-1.1 mm) y Cables",
       intervalKm: 20000,
       intervalMonths: 12,
-      lastDoneOdo: 115000,
-      lastDoneDate: "2025-11-20",
+      lastDoneOdo: 0,
+      lastDoneDate: null,
       critical: false,
       description: "Bujías calibradas a 1.0 - 1.1 mm. Inspeccionar pozos por fugas de aceite de junta de punterías."
     },
@@ -64,8 +64,8 @@ const DEFAULT_STATE = {
       name: "Filtro de Aire de Motor",
       intervalKm: 12000,
       intervalMonths: 12,
-      lastDoneOdo: 124000,
-      lastDoneDate: "2026-08-15",
+      lastDoneOdo: 0,
+      lastDoneDate: null,
       critical: false,
       description: "Mantiene la mezcla aire/combustible óptima y protege el sensor MAP."
     },
@@ -74,8 +74,8 @@ const DEFAULT_STATE = {
       name: "Filtro de Gasolina (Línea de Chasis)",
       intervalKm: 15000,
       intervalMonths: 12,
-      lastDoneOdo: 115000,
-      lastDoneDate: "2025-11-20",
+      lastDoneOdo: 0,
+      lastDoneDate: null,
       critical: false,
       description: "Ubicado abajo junto al tanque. Protege inyectores y bomba de combustible."
     },
@@ -84,8 +84,8 @@ const DEFAULT_STATE = {
       name: "Anticongelante DEX-COOL y Termostato",
       intervalKm: 40000,
       intervalMonths: 24,
-      lastDoneOdo: 100000,
-      lastDoneDate: "2024-09-05",
+      lastDoneOdo: 0,
+      lastDoneDate: null,
       critical: true,
       description: "6.3 Litros mezcla 50/50. Inspeccionar carcasa plástica del termostato (reemplazo sugerido a aluminio)."
     },
@@ -94,8 +94,8 @@ const DEFAULT_STATE = {
       name: "Balatas Delanteras y Líquido DOT 3/4",
       intervalKm: 25000,
       intervalMonths: 18,
-      lastDoneOdo: 118000,
-      lastDoneDate: "2026-02-12",
+      lastDoneOdo: 0,
+      lastDoneDate: null,
       critical: true,
       description: "Sistema en X: revisar balatas cerámicas, discos ventilados y purgado."
     },
@@ -104,8 +104,8 @@ const DEFAULT_STATE = {
       name: "Limpieza Cuerpo de Aceleración e IAC",
       intervalKm: 20000,
       intervalMonths: 12,
-      lastDoneOdo: 110000,
-      lastDoneDate: "2025-06-18",
+      lastDoneOdo: 0,
+      lastDoneDate: null,
       critical: false,
       description: "Elimina carbonilla para evitar ralentí inestable y que el auto se apague con el A/C."
     },
@@ -114,128 +114,18 @@ const DEFAULT_STATE = {
       name: "Bujes de Horquilla y Bieletas Delanteras",
       intervalKm: 30000,
       intervalMonths: 18,
-      lastDoneOdo: 105000,
-      lastDoneDate: "2025-01-10",
+      lastDoneOdo: 0,
+      lastDoneDate: null,
       critical: false,
       description: "Evita golpeteos metálicos al pasar baches o topes en Aveo."
     }
   ],
 
-  // Cargas de Gasolina Iniciales
-  fuelLogs: [
-    {
-      id: "f_1",
-      date: "2026-10-15",
-      odometer: 127200,
-      liters: 34.5,
-      totalCost: 828.00,
-      pricePerLiter: 24.00,
-      fuelType: "Magna",
-      isFullTank: true,
-      calculatedKml: 11.5,
-      costPerKm: 2.08,
-      station: "Pemex Carretera Nacional",
-      notes: "Carga normal",
-      aiAnomalyNote: null
-    },
-    {
-      id: "f_2",
-      date: "2026-10-28",
-      odometer: 127610,
-      liters: 35.0,
-      totalCost: 840.00,
-      pricePerLiter: 24.00,
-      fuelType: "Magna",
-      isFullTank: true,
-      calculatedKml: 11.71,
-      costPerKm: 2.05,
-      station: "Oxxo Gas Gonzalitos",
-      notes: "Tráfico regular en Monterrey",
-      aiAnomalyNote: null
-    },
-    {
-      id: "f_3",
-      date: "2026-11-10",
-      odometer: 128035,
-      liters: 35.8,
-      totalCost: 866.36,
-      pricePerLiter: 24.20,
-      fuelType: "Magna",
-      isFullTank: true,
-      calculatedKml: 11.87,
-      costPerKm: 2.04,
-      station: "Mobil Constitución",
-      notes: "Uso moderado de A/C",
-      aiAnomalyNote: null
-    },
-    {
-      id: "f_4",
-      date: "2026-11-18",
-      odometer: 128450,
-      liters: 34.9,
-      totalCost: 844.58,
-      pricePerLiter: 24.20,
-      fuelType: "Magna",
-      isFullTank: true,
-      calculatedKml: 11.89,
-      costPerKm: 2.03,
-      station: "Pemex San Jerónimo",
-      notes: "415 km recorridos (11.89 km/L)",
-      aiAnomalyNote: null
-    }
-  ],
+  // Cargas de Gasolina Iniciales (Vacío para datos reales)
+  fuelLogs: [],
 
-  // Bitácora de Mantenimiento con Evaluación Estructurada
-  maintenanceLogs: [
-    {
-      id: "m_1",
-      date: "2026-08-15",
-      odometer: 124000,
-      category: "Preventivo",
-      title: "Cambio de Aceite SAE 5W-30 + Filtro de Aceite y Aire",
-      description: "Servicio de lubricación con garrafa Mobil Super 5W-30 (3.75 L) y reemplazo de filtros de aceite y aire.",
-      partsUsed: "Mobil Super 5W-30, Filtro Gonher GP-47, Filtro GA-187",
-      cost: 1150.00,
-      provider: "Hecho por mí (DIY)",
-      aiImpact: "BUENO",
-      aiPriceRating: "Justo",
-      aiTechnicalAnalysis: "Esencial para la lubricación de los 16 buzos hidráulicos del Aveo 1.6L DOHC. La viscosidad 5W-30 protege en el arranque matutino.",
-      aiRelatedParts: "Revisar empaque de tapa de punterías en el próximo servicio por posible sudado de aceite.",
-      aiNextServiceKm: 130000
-    },
-    {
-      id: "m_2",
-      date: "2026-02-12",
-      odometer: 118000,
-      category: "Preventivo",
-      title: "Balatas Delanteras Cerámicas y Purgado",
-      description: "Cambio de pastillas delanteras, rectificado de discos ventilados y purga con líquido DOT 4.",
-      partsUsed: "Balatas Wagner Cerámica, Líquido DOT 4",
-      cost: 1450.00,
-      provider: "Taller Mecánico",
-      aiImpact: "BUENO",
-      aiPriceRating: "Justo",
-      aiTechnicalAnalysis: "El circuito diagonal en X del Aveo 2011 recuperó tacto firme en el pedal evitando cristalización.",
-      aiRelatedParts: "Revisar tambores traseros y zapatas en el próximo servicio.",
-      aiNextServiceKm: 143000
-    },
-    {
-      id: "m_3",
-      date: "2024-03-10",
-      odometer: 90000,
-      category: "Preventivo",
-      title: "Kit Completo de Banda de Distribución y Bomba de Agua",
-      description: "Cambio preventivo de banda dentada, polea loca, polea tensora mecánica y bomba de agua con anticongelante DEX-COOL.",
-      partsUsed: "Kit Gates Distribución + Bomba de agua AC Delco + DEX-COOL 50/50",
-      cost: 3850.00,
-      provider: "Taller Mecánico",
-      aiImpact: "BUENO",
-      aiPriceRating: "Justo",
-      aiTechnicalAnalysis: "Intervención de máxima prioridad en el motor F16D3 1.6L DOHC. Al ser un motor de interferencia mecánica, cambiar el kit completo previene doblar las 16 válvulas.",
-      aiRelatedParts: "Retenes de árbol de levas y cigüeñal, y banda de accesorios 6PK.",
-      aiNextServiceKm: 140000
-    }
-  ]
+  // Bitácora de Mantenimiento (Vacío para datos reales)
+  maintenanceLogs: []
 };
 
 // =============================================================================
@@ -258,7 +148,9 @@ class AveoLogApp {
 
   loadState() {
     try {
-      const saved = localStorage.getItem("aveolog_ai_v2_state");
+      // Borrar cache antigua v2 con datos inventados
+      localStorage.removeItem("aveolog_ai_v2_state");
+      const saved = localStorage.getItem("aveolog_ai_v3_clean_state");
       if (saved) {
         const parsed = JSON.parse(saved);
         return {
@@ -276,7 +168,7 @@ class AveoLogApp {
 
   saveState() {
     try {
-      localStorage.setItem("aveolog_ai_v2_state", JSON.stringify(this.state));
+      localStorage.setItem("aveolog_ai_v3_clean_state", JSON.stringify(this.state));
     } catch (e) {
       console.error("Error guardando state:", e);
     }
@@ -397,6 +289,14 @@ class AveoLogApp {
     });
 
     // Botones de acción rápida
+    document.getElementById("dash-btn-scan-cluster")?.addEventListener("click", () => {
+      this.openScanClusterModal();
+      this.haptic("light");
+    });
+    document.getElementById("btn-quick-scan")?.addEventListener("click", () => {
+      this.openScanClusterModal();
+      this.haptic("light");
+    });
     document.getElementById("dash-btn-add-fuel")?.addEventListener("click", () => {
       this.openModal("modal-fuel");
       this.haptic("light");
@@ -413,6 +313,15 @@ class AveoLogApp {
       this.switchView("view-service");
       this.haptic("light");
     });
+
+    // Eventos del Escáner Efímero de Tablero
+    document.getElementById("input-scan-cluster-file")?.addEventListener("change", (e) => this.handleDashboardImageSelected(e));
+    document.getElementById("btn-scan-apply-odo")?.addEventListener("click", () => this.applyScannedOdometer());
+    document.getElementById("btn-scan-save-symptom")?.addEventListener("click", () => this.saveScannedSymptomToLog());
+
+    // Guardar API Key y Resetear Datos
+    document.getElementById("btn-save-gemini-key")?.addEventListener("click", () => this.saveGeminiKeyFromUI());
+    document.getElementById("btn-reset-all-data")?.addEventListener("click", () => this.resetAllDataConfirm());
 
     // Modales
     document.getElementById("btn-quick-odo")?.addEventListener("click", () => this.openOdoModal());
@@ -651,11 +560,19 @@ class AveoLogApp {
     const servicesStatus = this.getServicesCalculatedStatus();
     const nextService = servicesStatus[0];
 
-    if (nextService) {
-      const remainingKm = nextService.nextDueOdo - currentOdo;
-      const kmLabel = remainingKm > 0 ? `${remainingKm.toLocaleString()}` : `Vencido (${Math.abs(remainingKm)})`;
-      document.getElementById("dash-next-service-km").textContent = kmLabel;
-      document.getElementById("dash-next-service-name").textContent = nextService.name;
+    if (!currentOdo || currentOdo <= 0) {
+      document.getElementById("dash-next-service-km").textContent = "---";
+      document.getElementById("dash-next-service-name").textContent = "Ingresa tu km real";
+    } else if (nextService) {
+      if (!nextService.lastDoneOdo || nextService.lastDoneOdo <= 0) {
+        document.getElementById("dash-next-service-km").textContent = "Pendiente";
+        document.getElementById("dash-next-service-name").textContent = nextService.name;
+      } else {
+        const remainingKm = nextService.nextDueOdo - currentOdo;
+        const kmLabel = remainingKm > 0 ? `${remainingKm.toLocaleString()}` : `Vencido (${Math.abs(remainingKm)})`;
+        document.getElementById("dash-next-service-km").textContent = kmLabel;
+        document.getElementById("dash-next-service-name").textContent = nextService.name;
+      }
     }
 
     // Alerta Banda de Distribución Aveo
@@ -664,17 +581,22 @@ class AveoLogApp {
     const bannerDesc = document.getElementById("dash-timing-belt-desc");
     
     if (timingBelt) {
-      const remaining = timingBelt.nextDueOdo - currentOdo;
-      if (remaining <= 0) {
-        banner.style.background = "linear-gradient(90deg, rgba(239,68,68,0.3) 0%, rgba(220,38,38,0.15) 100%)";
-        banner.style.borderColor = "#ef4444";
-        bannerDesc.innerHTML = `<strong style="color:#ef4444;">¡URGENTE!</strong> Banda de distribución vencida por <strong>${Math.abs(remaining).toLocaleString()} km</strong>. Motor con interferencia: si se rompe dobla válvulas.`;
-      } else if (remaining < 5000) {
-        banner.style.borderColor = "#f59e0b";
-        bannerDesc.innerHTML = `Quedan <strong>${remaining.toLocaleString()} km</strong> para el cambio preventivo del kit de distribución (banda + bomba + poleas).`;
+      if (!timingBelt.lastDoneOdo || timingBelt.lastDoneOdo <= 0) {
+        banner.style.borderColor = "rgba(245, 158, 11, 0.35)";
+        bannerDesc.innerHTML = `Registra en Bitácora cuándo hiciste el último cambio de banda de distribución (se cambia cada <strong>50,000 km</strong>; motor con interferencia).`;
       } else {
-        banner.style.borderColor = "rgba(16,185,129,0.3)";
-        bannerDesc.innerHTML = `Kit de distribución en orden. Próximo cambio en <strong>${remaining.toLocaleString()} km</strong> (${timingBelt.nextDueOdo.toLocaleString()} km).`;
+        const remaining = timingBelt.nextDueOdo - currentOdo;
+        if (remaining <= 0) {
+          banner.style.background = "linear-gradient(90deg, rgba(239,68,68,0.3) 0%, rgba(220,38,38,0.15) 100%)";
+          banner.style.borderColor = "#ef4444";
+          bannerDesc.innerHTML = `<strong style="color:#ef4444;">¡URGENTE!</strong> Banda de distribución vencida por <strong>${Math.abs(remaining).toLocaleString()} km</strong>. Motor con interferencia: si se rompe dobla válvulas.`;
+        } else if (remaining < 5000) {
+          banner.style.borderColor = "#f59e0b";
+          bannerDesc.innerHTML = `Quedan <strong>${remaining.toLocaleString()} km</strong> para el cambio preventivo del kit de distribución (banda + bomba + poleas).`;
+        } else {
+          banner.style.borderColor = "rgba(16,185,129,0.3)";
+          bannerDesc.innerHTML = `Kit de distribución en orden. Próximo cambio en <strong>${remaining.toLocaleString()} km</strong> (${timingBelt.nextDueOdo.toLocaleString()} km).`;
+        }
       }
     }
 
@@ -887,7 +809,39 @@ class AveoLogApp {
     const currentOdo = this.state.car.currentOdo;
 
     return this.state.maintenanceSchedule.map(s => {
-      const nextDueOdo = s.lastDoneOdo + s.intervalKm;
+      // Buscar si ya hay un registro real en maintenanceLogs que corresponda a este servicio
+      let lastDoneOdo = s.lastDoneOdo || 0;
+      const keywords = s.name.toLowerCase().split(" ").filter(w => w.length > 3);
+      this.state.maintenanceLogs.forEach(log => {
+        const logText = `${log.title || ""} ${log.partsUsed || ""}`.toLowerCase();
+        if (
+          (s.id === "timing_belt" && (logText.includes("banda") || logText.includes("distribuc"))) ||
+          (s.id === "engine_oil" && logText.includes("aceite")) ||
+          (s.id === "spark_plugs" && (logText.includes("bujia") || logText.includes("bujía"))) ||
+          (s.id === "air_filter" && logText.includes("filtro") && logText.includes("aire")) ||
+          (s.id === "fuel_filter" && logText.includes("filtro") && logText.includes("gasolina")) ||
+          (s.id === "coolant_thermostat" && (logText.includes("anticongelante") || logText.includes("termostato") || logText.includes("dex-cool"))) ||
+          (s.id === "brakes_front" && (logText.includes("balata") || logText.includes("freno"))) ||
+          (s.id === "throttle_iac" && (logText.includes("aceleracion") || logText.includes("iac"))) ||
+          (s.id === "suspension_front" && (logText.includes("horquilla") || logText.includes("bieleta") || logText.includes("amortiguador")))
+        ) {
+          if (log.odometer > lastDoneOdo) {
+            lastDoneOdo = log.odometer;
+          }
+        }
+      });
+
+      if (!lastDoneOdo || lastDoneOdo <= 0 || !currentOdo || currentOdo <= 0) {
+        return {
+          ...s,
+          lastDoneOdo: 0,
+          nextDueOdo: s.intervalKm,
+          kmRemaining: s.intervalKm,
+          status: "pending"
+        };
+      }
+
+      const nextDueOdo = lastDoneOdo + s.intervalKm;
       const kmRemaining = nextDueOdo - currentOdo;
       
       let status = "ok";
@@ -899,6 +853,7 @@ class AveoLogApp {
 
       return {
         ...s,
+        lastDoneOdo,
         nextDueOdo,
         kmRemaining,
         status
@@ -920,13 +875,18 @@ class AveoLogApp {
       let pillClass = "status-ok";
       let pillText = `En ${s.kmRemaining.toLocaleString()} km`;
 
-      if (s.status === "due") {
+      if (s.status === "pending") {
+        pillClass = "status-soon";
+        pillText = `Toca para registrar último`;
+      } else if (s.status === "due") {
         pillClass = "status-due";
         pillText = `⚠️ Vencido por ${Math.abs(s.kmRemaining).toLocaleString()} km`;
       } else if (s.status === "soon") {
         pillClass = "status-soon";
         pillText = `Próximo: ${s.kmRemaining.toLocaleString()} km`;
       }
+
+      const lastLabel = s.lastDoneOdo > 0 ? `Último: ${s.lastDoneOdo.toLocaleString()} km` : `Sin registro previo`;
 
       return `
         <div class="item-row" style="cursor:pointer;" onclick="app.quickRegisterService('${s.name}')">
@@ -937,7 +897,7 @@ class AveoLogApp {
               </div>
               <div class="item-title-col">
                 <h4>${s.name}</h4>
-                <p>Último: ${s.lastDoneOdo.toLocaleString()} km • Cada ${s.intervalKm.toLocaleString()} km</p>
+                <p>${lastLabel} • Cada ${s.intervalKm.toLocaleString()} km</p>
               </div>
             </div>
             <div class="item-right">
@@ -1060,7 +1020,20 @@ class AveoLogApp {
           }
         }
       } catch (e) {
-        console.warn("Falla en backend chat, usando copiloto offline:", e);
+        console.warn("Falla en backend chat, intentando Gemini directo o fallback:", e);
+      }
+    }
+
+    // 1.5 Si no hay backend (iPhone / GitHub Pages) pero hay API Key guardada en el dispositivo, llamar directo a Gemini
+    if (this.state.car.geminiApiKey) {
+      try {
+        const directReply = await this.callGeminiChatDirectly(query, this.state.car.geminiApiKey);
+        if (directReply) {
+          this.addChatMessage(directReply, "bot");
+          return;
+        }
+      } catch (e) {
+        console.warn("Error en Gemini Chat directo, usando respuesta offline:", e);
       }
     }
 
@@ -1097,13 +1070,414 @@ class AveoLogApp {
     const car = this.state.car;
     document.getElementById("garage-plates-val").textContent = car.plates || "Sin registrar";
     document.getElementById("garage-vin-val").textContent = car.vin || "Sin registrar";
-    document.getElementById("garage-insurance-val").textContent = `${car.insuranceCompany || 'Aseguradora'} • ${car.insurancePolicy || 'Póliza'}`;
+    document.getElementById("garage-insurance-val").textContent =
+      (car.insuranceCompany || car.insurancePolicy)
+        ? `${car.insuranceCompany || ''} ${car.insurancePolicy ? '• ' + car.insurancePolicy : ''}`.trim()
+        : "Sin registrar";
     
     const phoneEl = document.getElementById("garage-phone-val");
     if (car.insurancePhone) {
       phoneEl.innerHTML = `<a href="tel:${car.insurancePhone.replace(/\s/g, '')}" style="color:var(--telemetry-cyan); text-decoration:none;">📞 ${car.insurancePhone}</a>`;
+    } else {
+      phoneEl.textContent = "Sin registrar";
     }
-    document.getElementById("garage-verif-val").textContent = car.verificationMonth || "Mayo - Junio";
+    document.getElementById("garage-verif-val").textContent = car.verificationMonth || "Sin registrar";
+
+    const keyInput = document.getElementById("garage-gemini-key-input");
+    if (keyInput) {
+      keyInput.value = car.geminiApiKey || "";
+    }
+  }
+
+  saveGeminiKeyFromUI() {
+    const keyInput = document.getElementById("garage-gemini-key-input");
+    if (!keyInput) return;
+    this.state.car.geminiApiKey = keyInput.value.trim();
+    this.saveState();
+    this.showToast(this.state.car.geminiApiKey ? "Clave Gemini AI guardada" : "Clave Gemini eliminada", "🔑");
+    this.haptic("medium");
+  }
+
+  async resetAllDataConfirm() {
+    const ok = confirm("¿Seguro que deseas borrar TODOS los registros y dejar la app limpia desde cero?");
+    if (!ok) return;
+
+    const existingKey = this.state.car?.geminiApiKey || "";
+    this.state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    this.state.car.geminiApiKey = existingKey;
+    this.saveState();
+
+    if (this.apiBase) {
+      try {
+        await fetch(`${this.apiBase}/reset`, { method: "POST" });
+      } catch (e) {}
+    }
+
+    this.renderAll();
+    this.showToast("Base de datos limpia desde cero", "🗑️");
+    this.haptic("heavy");
+  }
+
+  // =============================================================================
+  // 8.5 ESCÁNER MULTIMODAL EFÍMERO DE TABLERO (CÁMARA -> IA -> BORRADO INMEDIATO)
+  // =============================================================================
+
+  openScanClusterModal() {
+    this.lastScanResult = null;
+    const loadingBox = document.getElementById("scan-loading-box");
+    const resultBox = document.getElementById("scan-result-box");
+    const fileInput = document.getElementById("input-scan-cluster-file");
+    if (loadingBox) loadingBox.style.display = "none";
+    if (resultBox) resultBox.style.display = "none";
+    if (fileInput) fileInput.value = "";
+    this.openModal("modal-scan-cluster");
+  }
+
+  /**
+   * Comprime la foto en un Canvas efímero en RAM (máx 1024px) para enviarla rápido a Gemini
+   * y destruye inmediatamente el Canvas, el File y el Buffer después de extraer el base64.
+   */
+  compressImageToEphemeralBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 1024;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, w, h);
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.78);
+
+          // Destruir el canvas y la imagen en memoria inmediatamente
+          ctx.clearRect(0, 0, w, h);
+          canvas.width = 0;
+          canvas.height = 0;
+          img.src = "";
+
+          resolve(dataUrl.replace(/^data:image\/jpeg;base64,/, ""));
+        };
+        img.onerror = () => reject(new Error("No se pudo decodificar la imagen."));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error("Error leyendo la fotografía."));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async handleDashboardImageSelected(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const loadingBox = document.getElementById("scan-loading-box");
+    const resultBox = document.getElementById("scan-result-box");
+    if (loadingBox) loadingBox.style.display = "block";
+    if (resultBox) resultBox.style.display = "none";
+
+    let ephemeralBase64 = null;
+    try {
+      ephemeralBase64 = await this.compressImageToEphemeralBase64(file);
+
+      // Limpiar inmediatamente el input file del DOM para no retener el archivo en memoria del navegador
+      event.target.value = "";
+
+      let analysis = null;
+
+      // 1. Intentar analizar vía Backend (/api/ai/analyze-dashboard)
+      if (this.apiBase) {
+        try {
+          const res = await fetch(`${this.apiBase}/ai/analyze-dashboard`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              imageBase64: ephemeralBase64,
+              mimeType: "image/jpeg",
+              apiKey: this.state.car.geminiApiKey || ""
+            })
+          });
+          const resJson = await res.json();
+          if (res.ok && resJson.success && resJson.data) {
+            analysis = resJson.data;
+          } else if (resJson.error && !this.state.car.geminiApiKey) {
+            throw new Error(resJson.error);
+          }
+        } catch (err) {
+          if (!this.state.car.geminiApiKey) {
+            throw err;
+          }
+        }
+      }
+
+      // 2. Si estamos en GitHub Pages (sin backend) o con API Key local en el iPhone, llamar directo a Gemini Vision
+      if (!analysis) {
+        const localKey = this.state.car.geminiApiKey;
+        if (!localKey) {
+          throw new Error("Para analizar fotos del tablero necesitas configurar tu GEMINI_API_KEY en la pestaña 'Manual' (o en el archivo .env de tu servidor).");
+        }
+        analysis = await this.callGeminiVisionDirectly(ephemeralBase64, localKey);
+      }
+
+      // 3. BORRADO TOTAL DE LA FOTO EN MEMORIA (Solo conservamos el JSON extraído)
+      ephemeralBase64 = null;
+
+      this.lastScanResult = analysis;
+      this.renderScanClusterResult(analysis);
+      this.showToast("Datos extraídos • Foto eliminada", "🗑️");
+      this.haptic("heavy");
+    } catch (err) {
+      ephemeralBase64 = null;
+      event.target.value = "";
+      if (loadingBox) loadingBox.style.display = "none";
+      alert("No se pudo analizar la foto: " + err.message);
+    }
+  }
+
+  async callGeminiVisionDirectly(cleanBase64, apiKey) {
+    const prompt = `
+Eres el Ingeniero Jefe del Chevrolet Aveo 2011 Sedán 1.6L 16V DOHC (F16D3).
+Analiza esta foto del tablero. Extrae el kilometraje total (odometro_detectado como entero o null), testigos encendidos, nivel de gasolina, temperatura del motor, nivel de alerta (OPTIMO, PREVENTIVO, ATENCION, CRITICO), diagnóstico técnico y acción recomendada.
+`;
+    const payload = {
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { text: prompt },
+            { inlineData: { mimeType: "image/jpeg", data: cleanBase64 } }
+          ]
+        }
+      ],
+      generationConfig: {
+        temperature: 0.1,
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            odometro_detectado: { type: "INTEGER", nullable: true },
+            nivel_combustible_aprox: { type: "STRING" },
+            temperatura_motor: { type: "STRING" },
+            rpm_aprox: { type: "INTEGER", nullable: true },
+            testigos_encendidos: { type: "ARRAY", items: { type: "STRING" } },
+            nivel_alerta: { type: "STRING", enum: ["OPTIMO", "PREVENTIVO", "ATENCION", "CRITICO"] },
+            diagnostico_tablero: { type: "STRING" },
+            accion_recomendada: { type: "STRING" }
+          },
+          required: [
+            "nivel_combustible_aprox",
+            "temperatura_motor",
+            "testigos_encendidos",
+            "nivel_alerta",
+            "diagnostico_tablero",
+            "accion_recomendada"
+          ]
+        }
+      }
+    };
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`Error Gemini (${res.status}): ${txt}`);
+    }
+    const data = await res.json();
+    const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    return JSON.parse(raw);
+  }
+
+  async callGeminiChatDirectly(userMessage, apiKey) {
+    const prompt = `
+Eres "Copiloto Aveo AI", mecánico experto del Chevrolet Aveo 2011 Sedán 1.6L 16V DOHC (F16D3).
+Odómetro actual: ${this.state.car.currentOdo || 0} km.
+Datos técnicos oficiales: Banda de distribución con interferencia mecánica (cambio cada 50,000 km), Aceite SAE 5W-30 3.75L con filtro, Refrigerante DEX-COOL 6.3L, Bujías NGK BKR6E-11 (1.0-1.1mm), Llantas 33 PSI en frío, Fusibles: CIGAR 15A (cabina), OBD 10A (cabina), Bomba gasolina F/PUMP 15A (motor), ECU 10A (motor), Ventilador 20A/30A (motor).
+Últimos mantenimientos del auto: ${JSON.stringify(this.state.maintenanceLogs.slice(-6))}
+Últimas cargas de gasolina: ${JSON.stringify(this.state.fuelLogs.slice(-4))}
+
+Pregunta del conductor: ${userMessage}
+Responde breve, directo y preciso en español de México.
+`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.3 }
+      })
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
+  }
+
+  async callGeminiMaintenanceEvalDirectly(entry, apiKey) {
+    const prompt = `
+Evalúa este mantenimiento o síntoma para un Chevrolet Aveo 2011 Sedán 1.6L 16V DOHC (Motor F16D3 con interferencia mecánica):
+- Categoría: ${entry.category}
+- Título: ${entry.title}
+- Descripción: ${entry.description}
+- Piezas: ${entry.partsUsed}
+- Costo: $${entry.cost} MXN
+- Odómetro: ${entry.odometer} km
+`;
+    const payload = {
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: {
+        temperature: 0.2,
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            impacto: { type: "STRING", enum: ["BUENO", "NORMAL", "MALO", "CRITICO"] },
+            calificacion_precio: { type: "STRING", enum: ["Justo", "Alto", "Bajo"] },
+            analisis_tecnico: { type: "STRING" },
+            piezas_relacionadas: { type: "STRING" },
+            proximo_servicio_km: { type: "INTEGER" }
+          },
+          required: ["impacto", "calificacion_precio", "analisis_tecnico", "piezas_relacionadas", "proximo_servicio_km"]
+        }
+      }
+    };
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    return raw ? JSON.parse(raw) : null;
+  }
+
+  renderScanClusterResult(res) {
+    const loadingBox = document.getElementById("scan-loading-box");
+    const resultBox = document.getElementById("scan-result-box");
+    if (loadingBox) loadingBox.style.display = "none";
+    if (resultBox) resultBox.style.display = "block";
+
+    const odoEl = document.getElementById("scan-res-odo");
+    const gaugesEl = document.getElementById("scan-res-gauges");
+    const lightsEl = document.getElementById("scan-res-lights");
+    const diagEl = document.getElementById("scan-res-diag");
+    const actionEl = document.getElementById("scan-res-action");
+    const badgeEl = document.getElementById("scan-res-alert-badge");
+    const btnApplyOdo = document.getElementById("btn-scan-apply-odo");
+
+    if (res.odometro_detectado && res.odometro_detectado > 0) {
+      odoEl.innerHTML = `${Number(res.odometro_detectado).toLocaleString()}<small>km</small>`;
+      btnApplyOdo.style.display = "flex";
+      btnApplyOdo.textContent = `✅ Actualizar Odómetro a ${Number(res.odometro_detectado).toLocaleString()} km`;
+    } else {
+      odoEl.textContent = "No visible";
+      btnApplyOdo.style.display = "none";
+    }
+
+    gaugesEl.textContent = `⛽ ${res.nivel_combustible_aprox || 'N/A'} • 🌡️ ${res.temperatura_motor || 'N/A'}`;
+
+    if (Array.isArray(res.testigos_encendidos) && res.testigos_encendidos.length > 0) {
+      lightsEl.innerHTML = res.testigos_encendidos
+        .map(t => `<span style="display:inline-block; background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); color:#fca5a5; padding:2px 8px; border-radius:999px; font-size:0.72rem; margin:2px;">⚠️ ${t}</span>`)
+        .join(" ");
+    } else {
+      lightsEl.innerHTML = `<span style="color:#34d399;">✅ Ningún testigo de falla encendido</span>`;
+    }
+
+    diagEl.textContent = res.diagnostico_tablero || "";
+    actionEl.textContent = res.accion_recomendada || "";
+
+    const alertMap = { OPTIMO: "BUENO", PREVENTIVO: "NORMAL", ATENCION: "MALO", CRITICO: "CRITICO" };
+    badgeEl.className = `badge-impact ${alertMap[res.nivel_alerta] || "NORMAL"}`;
+    badgeEl.textContent = res.nivel_alerta || "ANALIZADO";
+  }
+
+  applyScannedOdometer() {
+    if (!this.lastScanResult || !this.lastScanResult.odometro_detectado) return;
+    const newOdo = parseInt(this.lastScanResult.odometro_detectado, 10);
+    if (!newOdo || newOdo <= 0) return;
+
+    this.state.car.currentOdo = newOdo;
+    if (this.apiBase) {
+      fetch(`${this.apiBase}/car`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentOdometer: newOdo })
+      }).catch(() => {});
+    }
+    this.saveState();
+    this.renderAll();
+    this.showToast(`Odómetro actualizado: ${newOdo.toLocaleString()} km`, "🔢");
+    this.haptic("heavy");
+  }
+
+  async saveScannedSymptomToLog() {
+    if (!this.lastScanResult) return;
+    const res = this.lastScanResult;
+    const odo = res.odometro_detectado || this.state.car.currentOdo || 0;
+    const lights = Array.isArray(res.testigos_encendidos) && res.testigos_encendidos.length > 0
+      ? res.testigos_encendidos.join(", ")
+      : "Inspección de tablero sin testigos de alerta";
+
+    const alertMap = { OPTIMO: "BUENO", PREVENTIVO: "NORMAL", ATENCION: "MALO", CRITICO: "CRITICO" };
+    const newEntry = {
+      id: "m_" + Date.now(),
+      date: new Date().toISOString().split("T")[0],
+      odometer: odo,
+      category: (res.testigos_encendidos && res.testigos_encendidos.length > 0) ? "Falla/Síntoma" : "Preventivo",
+      title: `Escaneo de Tablero IA: ${lights}`,
+      description: `${res.diagnostico_tablero} | Gasolina: ${res.nivel_combustible_aprox}, Temp: ${res.temperatura_motor}`,
+      partsUsed: "Escáner Visual Efímero (Foto descartada)",
+      cost: 0,
+      provider: "Hecho por mí (DIY)",
+      aiImpact: alertMap[res.nivel_alerta] || "NORMAL",
+      aiPriceRating: "Justo",
+      aiTechnicalAnalysis: res.diagnostico_tablero,
+      aiRelatedParts: res.accion_recomendada,
+      aiNextServiceKm: odo > 0 ? odo + 5000 : null
+    };
+
+    if (this.apiBase) {
+      try {
+        await fetch(`${this.apiBase}/maintenance`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newEntry)
+        });
+        await this.syncWithBackend();
+      } catch (e) {
+        this.state.maintenanceLogs.push(newEntry);
+      }
+    } else {
+      this.state.maintenanceLogs.push(newEntry);
+    }
+
+    if (odo > this.state.car.currentOdo) {
+      this.state.car.currentOdo = odo;
+    }
+
+    this.saveState();
+    this.closeModal("modal-scan-cluster");
+    this.renderAll();
+    this.switchView("view-service");
+    this.showToast("Diagnóstico guardado en Bitácora", "🔧");
+    this.haptic("heavy");
   }
 
   // =============================================================================
@@ -1259,6 +1633,48 @@ class AveoLogApp {
         }
       } catch (err) {
         console.warn("Falla en backend maintenance, guardando local:", err);
+      }
+    }
+
+    // 1.5 Si no hay backend (iPhone / GitHub Pages) pero hay API Key guardada en el dispositivo, evaluar con Gemini directo
+    if (this.state.car.geminiApiKey) {
+      try {
+        const evalAI = await this.callGeminiMaintenanceEvalDirectly(
+          { category, title, description, partsUsed, cost, odometer },
+          this.state.car.geminiApiKey
+        );
+        if (evalAI) {
+          const newServiceAI = {
+            id: "m_" + Date.now(),
+            date,
+            odometer,
+            category,
+            title,
+            description,
+            partsUsed,
+            cost,
+            provider,
+            aiImpact: evalAI.impacto,
+            aiPriceRating: evalAI.calificacion_precio,
+            aiTechnicalAnalysis: evalAI.analisis_tecnico,
+            aiRelatedParts: evalAI.piezas_relacionadas,
+            aiNextServiceKm: evalAI.proximo_servicio_km
+          };
+          this.state.maintenanceLogs.push(newServiceAI);
+          if (odometer > this.state.car.currentOdo) {
+            this.state.car.currentOdo = odometer;
+          }
+          this.saveState();
+          btnSubmit.textContent = "Guardar y Evaluar con IA";
+          btnSubmit.disabled = false;
+          this.closeModal("modal-service");
+          this.renderAll();
+          this.showToast("Evaluado con Gemini AI en tu iPhone", "🤖");
+          this.haptic("heavy");
+          return;
+        }
+      } catch (err) {
+        console.warn("Error evaluando servicio directo con Gemini, usando fallback local:", err);
       }
     }
 

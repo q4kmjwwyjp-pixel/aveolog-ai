@@ -258,29 +258,43 @@ REGLAS DE RESPUESTA:
  * 4. Semáforo de Salud General Generado por IA
  */
 export async function generateOverallHealthStatus(maintenanceList, fuelList, currentOdo) {
+  if (!currentOdo || currentOdo <= 0) {
+    return {
+      score: 100,
+      status: "OPTIMO",
+      summary: "Bitácora lista. Registra tu kilometraje actual o escanea tu tablero con la cámara para comenzar.",
+      timingKmSinceLast: 0,
+      oilKmSinceLast: 0
+    };
+  }
+
   // Encontrar estado de banda de tiempo
   const timingEntry = maintenanceList.find(m => m.title.toLowerCase().includes("banda") || m.title.toLowerCase().includes("distribuci"));
   const oilEntry = maintenanceList.find(m => m.title.toLowerCase().includes("aceite"));
 
-  let timingKm = timingEntry ? currentOdo - timingEntry.odometer : 38450;
-  let oilKm = oilEntry ? currentOdo - oilEntry.odometer : 4450;
+  let timingKm = timingEntry ? currentOdo - timingEntry.odometer : null;
+  let oilKm = oilEntry ? currentOdo - oilEntry.odometer : null;
 
-  let score = 90;
+  let score = 95;
   let status = "OPTIMO";
-  let summary = "Motor 1.6L en buen estado operativo.";
+  let summary = "Motor 1.6L registrado. Agrega tus últimos cambios de aceite y banda de distribución para calcular alertas exactas.";
 
-  if (timingKm >= 50000) {
+  if (timingKm !== null && timingKm >= 50000) {
     score = 45;
     status = "CRITICO";
     summary = "¡Urgente! Banda de distribución superó los 50,000 km recomendados. Motor con interferencia.";
-  } else if (oilKm >= 7500) {
+  } else if (oilKm !== null && oilKm >= 7500) {
     score = 65;
     status = "ATENCION";
     summary = "Cambio de aceite SAE 5W-30 vencido o próximo a vencer.";
-  } else if (timingKm >= 42000) {
+  } else if (timingKm !== null && timingKm >= 42000) {
     score = 75;
     status = "PREVENTIVO";
     summary = "Próximo a cambio preventivo de kit de distribución (banda + bomba + poleas).";
+  } else if (timingKm !== null || oilKm !== null) {
+    score = 92;
+    status = "OPTIMO";
+    summary = "Motor 1.6L en buen estado operativo según tus registros reales.";
   }
 
   return {
@@ -290,6 +304,125 @@ export async function generateOverallHealthStatus(maintenanceList, fuelList, cur
     timingKmSinceLast: timingKm,
     oilKmSinceLast: oilKm
   };
+}
+
+/**
+ * 5. Escáner Multimodal Efímero de Tablero (Odómetro, Testigos, Temperatura, Combustible, RPM)
+ * Recibe la imagen en memoria (base64), extrae la información estructurada con Gemini 2.5 Flash
+ * y descarta inmediatamente la imagen sin guardarla en disco ni en base de datos.
+ */
+export async function analyzeDashboardImageWithAI(imageBase64, mimeType = "image/jpeg", currentOdo = 0, customApiKey = "") {
+  const apiKey = customApiKey || process.env.GEMINI_API_KEY || GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("Falta tu GEMINI_API_KEY. Configúrala en el servidor (.env) o en la app para analizar fotos del tablero con IA.");
+  }
+
+  // Limpiar prefijo data:image/...;base64, si viene incluido
+  const cleanBase64 = imageBase64.replace(/^data:image\/[a-zA-Z0-9+.-]+;base64,/, "");
+
+  const prompt = `
+Eres el Ingeniero Jefe y Especialista en Telemetría del Chevrolet Aveo 2011 Sedán 1.6L 16V DOHC (Motor F16D3).
+Analiza esta fotografía tomada al tablero de instrumentos (cluster) o indicador del vehículo.
+Odómetro previo registrado: ${currentOdo} km.
+
+INSTRUCCIONES DE EXTRACCIÓN:
+1. Lee con máxima precisión el número del odómetro (kilometraje total en km). Si aparece un odómetro parcial (TRIP) con decimales y el total, extrae el kilometraje total como entero en "odometro_detectado" (o null si no es visible/legible).
+2. Identifica TODOS los testigos luminosos encendidos en el tablero (ej. Check Engine / MIL, HOLD parpadeando o fijo, Presión de Aceite, Temperatura, Batería/Alternador, ABS, Airbag, Freno de mano, Puerta abierta, Bajo combustible, etc.).
+3. Observa las agujas si son visibles: nivel de gasolina (Vacío, 1/4, 1/2, 3/4, Lleno), aguja de temperatura (Frío, Normal al centro, Caliente/Peligro) y RPM aproximadas.
+4. Determina el nivel de alerta global: "OPTIMO", "PREVENTIVO", "ATENCION" o "CRITICO".
+5. Da un diagnóstico técnico directo y una recomendación accionable específica para el Chevrolet Aveo 2011 1.6L DOHC.
+
+Responde ÚNICAMENTE en el JSON Schema solicitado.
+`;
+
+  const payload = {
+    contents: [
+      {
+        role: "user",
+        parts: [
+          { text: prompt },
+          {
+            inlineData: {
+              mimeType: mimeType || "image/jpeg",
+              data: cleanBase64
+            }
+          }
+        ]
+      }
+    ],
+    generationConfig: {
+      temperature: 0.1,
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: "OBJECT",
+        properties: {
+          odometro_detectado: {
+            type: "INTEGER",
+            nullable: true,
+            description: "Kilometraje total leído en el odómetro digital o analógico, o null si no se distingue."
+          },
+          nivel_combustible_aprox: {
+            type: "STRING",
+            description: "Nivel aproximado de combustible observado (ej. 'No visible', 'Reserva', '1/4', '1/2', '3/4', 'Lleno')."
+          },
+          temperatura_motor: {
+            type: "STRING",
+            description: "Estado de la aguja o indicador de temperatura (ej. 'No visible', 'Frío', 'Normal (Centro)', 'Elevada / Peligro')."
+          },
+          rpm_aprox: {
+            type: "INTEGER",
+            nullable: true,
+            description: "RPM aproximadas si el tacómetro es visible, o null."
+          },
+          testigos_encendidos: {
+            type: "ARRAY",
+            items: { type: "STRING" },
+            description: "Lista de testigos o luces de advertencia encendidos."
+          },
+          nivel_alerta: {
+            type: "STRING",
+            enum: ["OPTIMO", "PREVENTIVO", "ATENCION", "CRITICO"]
+          },
+          diagnostico_tablero: {
+            type: "STRING",
+            description: "Explicación clara de lo que muestra el tablero y qué significan los testigos o lecturas para el Aveo 2011 1.6L."
+          },
+          accion_recomendada: {
+            type: "STRING",
+            description: "Pasos concretos que debe seguir el conductor."
+          }
+        },
+        required: [
+          "nivel_combustible_aprox",
+          "temperatura_motor",
+          "testigos_encendidos",
+          "nivel_alerta",
+          "diagnostico_tablero",
+          "accion_recomendada"
+        ]
+      }
+    }
+  };
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Error de Gemini Vision (${res.status}): ${errText}`);
+  }
+
+  const response = await res.json();
+  const rawText = response?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!rawText) {
+    throw new Error("No se pudo extraer información de la imagen.");
+  }
+
+  return JSON.parse(rawText);
 }
 
 /**
