@@ -1,0 +1,55 @@
+{
+  "name": "AveoLog AI — Chevrolet Aveo 2011 1.6L",
+  "short_name": "AveoLog AI",
+  "description": "Bitácora, control de combustible y diagnóstico inteligente para Chevrolet Aveo 2011 Sedán 1.6L DOHC",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0d14",
+  "theme_color": "#0a0d14",
+  "lang": "es-MX",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Cargar Combustible",
+      "short_name": "Gasolina",
+      "description": "Registrar carga rápida de gasolina",
+      "url": "./index.html#combustible-nuevo",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Diagnóstico AI",
+      "short_name": "Diagnóstico",
+      "description": "Consultar falla o código OBD2 de Aveo",
+      "url": "./index.html#diagnostico",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Bitácora de Servicios",
+      "short_name": "Mantenimiento",
+      "description": "Ver semáforo de servicios del Aveo",
+      "url": "./index.html#mantenimiento",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "categories": ["utilities", "productivity", "auto"]
+}

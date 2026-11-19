@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f1d"/>
+      <stop offset="50%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#070a12"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="35%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    <linearGradient id="cyanRing" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="70%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- iOS App Icon Squircle Background -->
+  <rect width="512" height="512" rx="115" fill="url(#bg)"/>
+  
+  <!-- Subtle Carbon Pattern / Grid -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#1f2937" stroke-width="2" stroke-dasharray="6,6"/>
+  
+  <!-- Tachometer Outer Telemetry Arc -->
+  <path d="M 110 330 A 180 180 0 1 1 402 330" fill="none" stroke="url(#cyanRing)" stroke-width="14" stroke-linecap="round" filter="url(#glow)"/>
+  
+  <!-- Ticks -->
+  <circle cx="110" cy="330" r="5" fill="#06b6d4"/>
+  <circle cx="256" cy="76" r="5" fill="#3b82f6"/>
+  <circle cx="402" cy="330" r="5" fill="#ef4444"/>
+  
+  <!-- Central Emblem: Stylized Chevrolet Bowtie with metallic bevel -->
+  <g filter="url(#glow)">
+    <!-- Horizontal bar -->
+    <polygon points="120,230 392,230 375,282 137,282" fill="url(#gold)" stroke="#78350f" stroke-width="3"/>
+    <!-- Vertical Cross -->
+    <polygon points="216,165 296,165 296,347 216,347" fill="url(#gold)" stroke="#78350f" stroke-width="3"/>
+    <!-- Inner Core Highlight -->
+    <polygon points="224,175 288,175 288,337 224,337" fill="#fef08a" opacity="0.35"/>
+    <polygon points="135,238 377,238 365,274 147,274" fill="#fef08a" opacity="0.35"/>
+  </g>
+  
+  <!-- AI Pulse Nodes & Lettering -->
+  <text x="256" y="420" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="900" fill="#f8fafc" text-anchor="middle" letter-spacing="4">AVEOLOG</text>
+  <text x="256" y="452" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="700" fill="#06b6d4" text-anchor="middle" letter-spacing="6">AI • 1.6L</text>
+</svg>
