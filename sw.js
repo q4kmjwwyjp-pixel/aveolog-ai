@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aveolog-ai-v4.4.0-fastvision';
+const CACHE_NAME = 'aveolog-ai-v4.5.0-listmodels';
 const ASSETS = [
   './',
   './index.html',

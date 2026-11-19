@@ -1295,23 +1295,66 @@ class AveoLogApp {
     }
   }
 
-  async invokeGeminiDirectWithFallback(payload, apiKey, onProgress) {
-    const models = [
-      "gemini-3.8-flash",
-      "gemini-3.8-flash-lite",
-      "gemini-3.8-pro"
-    ];
-    let lastError = null;
+  async getAvailableGeminiModels(apiKey) {
+    if (this.cachedGeminiModels && this.cachedGeminiModels.length > 0) {
+      return this.cachedGeminiModels;
+    }
+    try {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+      if (res.ok) {
+        const data = await res.json();
+        const valid = (data.models || [])
+          .filter((m) =>
+            Array.isArray(m.supportedGenerationMethods) &&
+            m.supportedGenerationMethods.includes("generateContent") &&
+            m.name.includes("gemini") &&
+            !m.name.includes("embedding") &&
+            !m.name.includes("imagen") &&
+            !m.name.includes("veo") &&
+            !m.name.includes("tts") &&
+            !m.name.includes("audio")
+          )
+          .map((m) => m.name.replace("models/", ""));
 
-    for (let attempt = 1; attempt <= 2; attempt++) {
+        // Priorizar modelos flash/lite/latest activos para esta cuenta
+        valid.sort((a, b) => {
+          const score = (name) => {
+            if (name === "gemini-3.8-flash") return 100;
+            if (name.includes("3.8") && name.includes("flash")) return 95;
+            if (name.includes("flash-latest")) return 90;
+            if (name.includes("flash-lite")) return 85;
+            if (name.includes("flash")) return 80;
+            if (name.includes("pro")) return 70;
+            return 50;
+          };
+          return score(b) - score(a);
+        });
+
+        if (valid.length > 0) {
+          this.cachedGeminiModels = valid.slice(0, 5);
+          return this.cachedGeminiModels;
+        }
+      }
+    } catch (e) {
+      console.warn("No se pudo listar modelos dinámicamente:", e);
+    }
+    return ["gemini-3.8-flash", "gemini-flash-latest"];
+  }
+
+  async invokeGeminiDirectWithFallback(payload, apiKey, onProgress) {
+    const models = await this.getAvailableGeminiModels(apiKey);
+    let lastError = null;
+    let last503Error = null;
+
+    for (let attempt = 1; attempt <= 3; attempt++) {
       for (const model of models) {
         try {
           if (onProgress) {
-            onProgress(`Consultando ${model} (intento ${attempt}/2)...`);
+            onProgress(`Consultando ${model} (intento ${attempt}/3)...`);
           }
 
           const controller = new AbortController();
-          const timer = setTimeout(() => controller.abort(), 9000);
+          const timer = setTimeout(() => controller.abort(), 22000);
 
           const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
           const res = await fetch(url, {
@@ -1327,24 +1370,33 @@ class AveoLogApp {
           }
 
           const txt = await res.text();
-          lastError = new Error(`Error Gemini (${res.status}): ${txt}`);
+          const errObj = new Error(`Error Gemini (${res.status}) en ${model}: ${txt}`);
 
           if (res.status === 400 || res.status === 401 || res.status === 403) {
-            throw lastError;
+            throw errObj;
+          }
+
+          if (res.status === 503 || res.status === 429) {
+            last503Error = errObj;
+          } else if (res.status !== 404) {
+            lastError = errObj;
           }
         } catch (err) {
-          lastError = err.name === "AbortError"
-            ? new Error(`Tiempo de espera agotado (9s) en ${model}.`)
-            : err;
+          if (err.name === "AbortError") {
+            last503Error = new Error(`El servidor de Google (${model}) tardó más de 22s por alta demanda.`);
+          } else {
+            lastError = err;
+          }
           if (err.message && (err.message.includes("(400)") || err.message.includes("(401)") || err.message.includes("(403)"))) {
             throw err;
           }
         }
       }
-      await new Promise((r) => setTimeout(r, 800));
+      // Espera progresiva antes del siguiente intento si Google está saturado (503)
+      await new Promise((r) => setTimeout(r, attempt * 1500));
     }
 
-    throw lastError;
+    throw last503Error || lastError || new Error("No se encontró un modelo disponible en tu cuenta de Gemini.");
   }
 
   async callGeminiVisionDirectly(cleanBase64, apiKey) {
