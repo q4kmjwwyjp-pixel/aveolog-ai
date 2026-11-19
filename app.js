@@ -1270,6 +1270,32 @@ class AveoLogApp {
     }
   }
 
+  async invokeGeminiDirectWithFallback(payload, apiKey) {
+    const models = ["gemini-3.8-flash", "gemini-2.5-flash"];
+    let lastError = null;
+
+    for (const model of models) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        return await res.json();
+      }
+
+      const txt = await res.text();
+      lastError = new Error(`Error Gemini (${res.status}): ${txt}`);
+      if (res.status !== 404) {
+        throw lastError;
+      }
+    }
+
+    throw lastError;
+  }
+
   async callGeminiVisionDirectly(cleanBase64, apiKey) {
     const prompt = `
 Eres el Ingeniero Jefe del Chevrolet Aveo 2011 Sedán 1.6L 16V DOHC (F16D3).
@@ -1312,17 +1338,7 @@ Analiza esta foto del tablero. Extrae el kilometraje total (odometro_detectado c
       }
     };
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    if (!res.ok) {
-      const txt = await res.text();
-      throw new Error(`Error Gemini (${res.status}): ${txt}`);
-    }
-    const data = await res.json();
+    const data = await this.invokeGeminiDirectWithFallback(payload, apiKey);
     const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     return JSON.parse(raw);
   }
@@ -1338,17 +1354,11 @@ Datos técnicos oficiales: Banda de distribución con interferencia mecánica (c
 Pregunta del conductor: ${userMessage}
 Responde breve, directo y preciso en español de México.
 `;
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.3 }
-      })
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
+    const payload = {
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.3 }
+    };
+    const data = await this.invokeGeminiDirectWithFallback(payload, apiKey);
     return data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
   }
 
@@ -1380,14 +1390,7 @@ Evalúa este mantenimiento o síntoma para un Chevrolet Aveo 2011 Sedán 1.6L 16
         }
       }
     };
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
+    const data = await this.invokeGeminiDirectWithFallback(payload, apiKey);
     const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     return raw ? JSON.parse(raw) : null;
   }

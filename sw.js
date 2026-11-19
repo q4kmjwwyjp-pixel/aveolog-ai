@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aveolog-ai-v4.0.0-apple-white';
+const CACHE_NAME = 'aveolog-ai-v4.1.0-gemini38';
 const ASSETS = [
   './',
   './index.html',
