@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aveolog-ai-v4.5.0-listmodels';
+const CACHE_NAME = 'aveolog-ai-v4.6.0-chevy-icon';
 const ASSETS = [
   './',
   './index.html',
