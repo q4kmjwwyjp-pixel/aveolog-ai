@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aveolog-ai-v4.1.0-gemini38';
+const CACHE_NAME = 'aveolog-ai-v4.2.0-network-first';
 const ASSETS = [
   './',
   './index.html',
@@ -12,49 +12,41 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
+  self.skipWaiting();
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    }).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
 });
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((k) => {
-          if (k !== CACHE_NAME) {
-            return caches.delete(k);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
+    caches.keys().then((keys) =>
+      Promise.all(keys.map((k) => (k !== CACHE_NAME ? caches.delete(k) : null)))
+    ).then(() => self.clients.claim())
   );
 });
 
+// Estrategia Network-First: siempre descarga la versión más reciente si hay internet,
+// y usa la caché solo cuando el iPhone está sin conexión (offline).
 self.addEventListener('fetch', (e) => {
-  // Solo cachear peticiones GET
   if (e.request.method !== 'GET') return;
 
   e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Retornar caché y actualizar en segundo plano
-        fetch(e.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(e.request, networkResponse);
-            });
+    fetch(e.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, clone));
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        return caches.match(e.request, { ignoreSearch: true }).then((cached) => {
+          if (cached) return cached;
+          if (e.request.destination === 'document') {
+            return caches.match('./index.html');
           }
-        }).catch(() => {});
-        return cachedResponse;
-      }
-      return fetch(e.request);
-    }).catch(() => {
-      if (e.request.destination === 'document') {
-        return caches.match('./index.html');
-      }
-    })
+        });
+      })
   );
 });

@@ -1866,7 +1866,8 @@ Evalúa este mantenimiento o síntoma para un Chevrolet Aveo 2011 Sedán 1.6L 16
   registerServiceWorker() {
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js").then((reg) => {
+        navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).then((reg) => {
+          reg.update();
           console.log("AveoLog ServiceWorker activo:", reg.scope);
         }).catch(() => {});
       });
