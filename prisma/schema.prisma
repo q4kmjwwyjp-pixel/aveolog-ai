@@ -1,0 +1,83 @@
+// Prisma Schema para AveoLog AI
+// Configurado para PostgreSQL (Neon DB) / Supabase / Render Postgres
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CarProfile {
+  id                String   @id @default("aveo-2011")
+  make              String   @default("Chevrolet")
+  model             String   @default("Aveo Sedán 4 Puertas")
+  year              Int      @default(2011)
+  engine            String   @default("1.6L DOHC 16V (F16D3)")
+  currentOdometer   Int      @default(128450)
+  plates            String?  @default("NL-742-B")
+  vin               String?  @default("3G1JA5264BL129840")
+  insuranceCompany  String?  @default("Quálitas Seguros")
+  insurancePolicy   String?  @default("POL-04829104")
+  insurancePhone    String?  @default("800 800 2880")
+  verificationMonth String?  @default("Mayo - Junio")
+  updatedAt         DateTime @updatedAt
+  createdAt         DateTime @default(now())
+}
+
+model FuelLog {
+  id              String   @id @default(cuid())
+  date            DateTime @default(now())
+  odometer        Int
+  liters          Float
+  totalCost       Float
+  pricePerLiter   Float
+  fuelType        String   @default("Magna") // Magna | Premium
+  isFullTank      Boolean  @default(true)
+  calculatedKml   Float?
+  costPerKm       Float?
+  station         String?
+  notes           String?
+  aiAnomalyNote   String?  // Análisis disparado automáticamente si cae >15%
+  createdAt       DateTime @default(now())
+
+  @@index([odometer])
+  @@index([date])
+}
+
+model MaintenanceLog {
+  id                  String    @id @default(cuid())
+  date                DateTime  @default(now())
+  odometer            Int
+  category            String    // Preventivo | Correctivo | Falla/Síntoma | Modificación/Accesorio
+  title               String
+  description         String
+  partsUsed           String?
+  cost                Float     @default(0.0)
+  provider            String?   @default("Taller Mecánico") // Taller Mecánico | Hecho por mí (DIY) | Agencia
+
+  // Evaluación Estructurada con Gemini 2.5 Flash
+  aiImpact            String?   // BUENO | NORMAL | MALO | CRITICO
+  aiPriceRating       String?   // Justo | Alto | Bajo
+  aiTechnicalAnalysis String?   // Explicación técnica para el motor 1.6L DOHC
+  aiRelatedParts      String?   // Piezas relacionadas que convendría revisar
+  aiNextServiceKm     Int?      // Kilometraje sugerido para próximo chequeo/cambio
+  aiEvaluatedAt       DateTime?
+
+  createdAt           DateTime  @default(now())
+
+  @@index([odometer])
+  @@index([date])
+  @@index([category])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  role      String   // user | model
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

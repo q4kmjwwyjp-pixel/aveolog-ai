@@ -1,20 +1,22 @@
 /**
- * AVEOLOG AI — Motor Lógico & Controlador PWA
+ * AVEOLOG AI — Controlador Frontend PWA Mobile-First
  * Especializado para Chevrolet Aveo 2011 Sedán 1.6L DOHC (Motor F16D3)
+ * Integra API REST + Gemini 2.5 Flash Structured Outputs con Fallback Offline
  */
 
 // =============================================================================
-// 1. ESTADO INICIAL Y MODELO DE DATOS
+// 1. ESTADO POR DEFECTO & FALLBACK LOCAL
 // =============================================================================
 
 const DEFAULT_STATE = {
   car: {
     make: "Chevrolet",
-    model: "Aveo Sedán 4P",
+    model: "Aveo Sedán 4 Puertas",
     year: 2011,
     engine: "1.6L DOHC 16V (F16D3)",
-    power: "103 HP @ 6,000 RPM",
-    tankCapacity: 45, // Litros
+    power: "102 HP @ 5,800 RPM",
+    torque: "145 Nm @ 3,600 RPM",
+    tankCapacity: 45.0, // Litros
     currentOdo: 128450,
     plates: "NL-742-B",
     vin: "3G1JA5264BL129840",
@@ -25,7 +27,7 @@ const DEFAULT_STATE = {
     geminiApiKey: ""
   },
   
-  // Servicios Preventivos Oficiales Calibrados para Aveo 2011 1.6L
+  // Servicios Preventivos Oficiales Calibrados para Aveo 2011 1.6L DOHC
   maintenanceSchedule: [
     {
       id: "timing_belt",
@@ -39,23 +41,23 @@ const DEFAULT_STATE = {
     },
     {
       id: "engine_oil",
-      name: "Cambio de Aceite y Filtro (5W-30)",
+      name: "Aceite SAE 5W-30 y Filtro",
       intervalKm: 6000,
       intervalMonths: 6,
       lastDoneOdo: 124000,
       lastDoneDate: "2026-08-15",
       critical: false,
-      description: "Capacidad: 3.75 L con filtro. Usar sintético o semisintético 5W-30 o 10W-30 API SN/SP."
+      description: "Capacidad: 3.75 L con filtro. Usar sintético o semisintético SAE 5W-30 (o 10W-30) API SM/SN."
     },
     {
       id: "spark_plugs",
-      name: "Bujías (1.1 mm) y Cables",
+      name: "Bujías NGK BKR6E-11 (1.0-1.1 mm) y Cables",
       intervalKm: 20000,
       intervalMonths: 12,
       lastDoneOdo: 115000,
       lastDoneDate: "2025-11-20",
       critical: false,
-      description: "Bujías NGK BKR6E-11 calibradas a 1.1 mm (0.043\"). Revisar pozos por fugas de aceite de la junta de punterías."
+      description: "Bujías calibradas a 1.0 - 1.1 mm. Inspeccionar pozos por fugas de aceite de junta de punterías."
     },
     {
       id: "air_filter",
@@ -65,27 +67,27 @@ const DEFAULT_STATE = {
       lastDoneOdo: 124000,
       lastDoneDate: "2026-08-15",
       critical: false,
-      description: "Mantiene la mezcla aire/combustible óptima y evita ensuciar el sensor MAP."
+      description: "Mantiene la mezcla aire/combustible óptima y protege el sensor MAP."
     },
     {
       id: "fuel_filter",
-      name: "Filtro de Gasolina (Chasis)",
+      name: "Filtro de Gasolina (Línea de Chasis)",
       intervalKm: 15000,
       intervalMonths: 12,
       lastDoneOdo: 115000,
       lastDoneDate: "2025-11-20",
       critical: false,
-      description: "Ubicado abajo junto al tanque. Protege los inyectores y la bomba de gasolina."
+      description: "Ubicado abajo junto al tanque. Protege inyectores y bomba de combustible."
     },
     {
       id: "coolant_thermostat",
-      name: "Anticongelante Dex-Cool y Termostato",
+      name: "Anticongelante DEX-COOL y Termostato",
       intervalKm: 40000,
       intervalMonths: 24,
       lastDoneOdo: 100000,
       lastDoneDate: "2024-09-05",
       critical: true,
-      description: "Refrigerante 7.0 Litros 50/50. Inspeccionar carcasa de termostato (reemplazo recomendado a carcasa de aluminio si frena)."
+      description: "6.3 Litros mezcla 50/50. Inspeccionar carcasa plástica del termostato (reemplazo sugerido a aluminio)."
     },
     {
       id: "brakes_front",
@@ -95,11 +97,11 @@ const DEFAULT_STATE = {
       lastDoneOdo: 118000,
       lastDoneDate: "2026-02-12",
       critical: true,
-      description: "Revisar espesor de pastillas, rectificado de discos y purgado de líquido."
+      description: "Sistema en X: revisar balatas cerámicas, discos ventilados y purgado."
     },
     {
       id: "throttle_iac",
-      name: "Limpieza Cuerpo de Aceleración y Válvula IAC",
+      name: "Limpieza Cuerpo de Aceleración e IAC",
       intervalKm: 20000,
       intervalMonths: 12,
       lastDoneOdo: 110000,
@@ -109,342 +111,222 @@ const DEFAULT_STATE = {
     },
     {
       id: "suspension_front",
-      name: "Suspensión: Bujes de Horquilla y Bieletas",
+      name: "Bujes de Horquilla y Bieletas Delanteras",
       intervalKm: 30000,
       intervalMonths: 18,
       lastDoneOdo: 105000,
       lastDoneDate: "2025-01-10",
       critical: false,
-      description: "Falla clásica de golpeteo en caminos irregulares en Aveo 2011."
+      description: "Evita golpeteos metálicos al pasar baches o topes en Aveo."
     }
   ],
 
-  // Cargas de Gasolina Iniciales de Ejemplo
+  // Cargas de Gasolina Iniciales
   fuelLogs: [
     {
       id: "f_1",
       date: "2026-10-15",
-      odo: 127200,
+      odometer: 127200,
       liters: 34.5,
-      cost: 828.00,
+      totalCost: 828.00,
       pricePerLiter: 24.00,
-      fullTank: true,
       fuelType: "Magna",
+      isFullTank: true,
+      calculatedKml: 11.5,
+      costPerKm: 2.08,
       station: "Pemex Carretera Nacional",
-      notes: "Carga normal tanque lleno"
+      notes: "Carga normal",
+      aiAnomalyNote: null
     },
     {
       id: "f_2",
       date: "2026-10-28",
-      odo: 127610,
+      odometer: 127610,
       liters: 35.0,
-      cost: 840.00,
+      totalCost: 840.00,
       pricePerLiter: 24.00,
-      fullTank: true,
       fuelType: "Magna",
+      isFullTank: true,
+      calculatedKml: 11.71,
+      costPerKm: 2.05,
       station: "Oxxo Gas Gonzalitos",
-      notes: "410 km recorridos (11.71 km/L)"
+      notes: "Tráfico regular en Monterrey",
+      aiAnomalyNote: null
     },
     {
       id: "f_3",
       date: "2026-11-10",
-      odo: 128035,
+      odometer: 128035,
       liters: 35.8,
-      cost: 866.36,
+      totalCost: 866.36,
       pricePerLiter: 24.20,
-      fullTank: true,
       fuelType: "Magna",
+      isFullTank: true,
+      calculatedKml: 11.87,
+      costPerKm: 2.04,
       station: "Mobil Constitución",
-      notes: "425 km recorridos (11.87 km/L)"
+      notes: "Uso moderado de A/C",
+      aiAnomalyNote: null
     },
     {
       id: "f_4",
       date: "2026-11-18",
-      odo: 128450,
+      odometer: 128450,
       liters: 34.9,
-      cost: 844.58,
+      totalCost: 844.58,
       pricePerLiter: 24.20,
-      fullTank: true,
       fuelType: "Magna",
+      isFullTank: true,
+      calculatedKml: 11.89,
+      costPerKm: 2.03,
       station: "Pemex San Jerónimo",
-      notes: "415 km recorridos (11.89 km/L)"
+      notes: "415 km recorridos (11.89 km/L)",
+      aiAnomalyNote: null
     }
   ],
 
-  // Servicios Mecánicos Realizados
-  serviceLogs: [
+  // Bitácora de Mantenimiento con Evaluación Estructurada
+  maintenanceLogs: [
     {
-      id: "s_1",
+      id: "m_1",
       date: "2026-08-15",
-      odo: 124000,
-      type: "Cambio de Aceite y Filtro",
-      title: "Aceite Mobil 5W-30 + Filtro Gonher + Filtro de Aire",
+      odometer: 124000,
+      category: "Preventivo",
+      title: "Cambio de Aceite SAE 5W-30 + Filtro de Aceite y Aire",
+      description: "Servicio de lubricación con garrafa Mobil Super 5W-30 (3.75 L) y reemplazo de filtros de aceite y aire.",
+      partsUsed: "Mobil Super 5W-30, Filtro Gonher GP-47, Filtro GA-187",
       cost: 1150.00,
-      who: "Hecho por mí (DIY)",
-      parts: "Garrafa 5W-30 Mobil Super Sintético, Filtro GP-47",
-      notes: "Nivel exacto a 3.75 Litros con filtro. Punterías limpias."
+      provider: "Hecho por mí (DIY)",
+      aiImpact: "BUENO",
+      aiPriceRating: "Justo",
+      aiTechnicalAnalysis: "Esencial para la lubricación de los 16 buzos hidráulicos del Aveo 1.6L DOHC. La viscosidad 5W-30 protege en el arranque matutino.",
+      aiRelatedParts: "Revisar empaque de tapa de punterías en el próximo servicio por posible sudado de aceite.",
+      aiNextServiceKm: 130000
     },
     {
-      id: "s_2",
+      id: "m_2",
       date: "2026-02-12",
-      odo: 118000,
-      type: "Frenos Delanteros / Balatas",
-      title: "Cambio de Balatas Delanteras Cerámicas y Rectificado",
+      odometer: 118000,
+      category: "Preventivo",
+      title: "Balatas Delanteras Cerámicas y Purgado",
+      description: "Cambio de pastillas delanteras, rectificado de discos ventilados y purga con líquido DOT 4.",
+      partsUsed: "Balatas Wagner Cerámica, Líquido DOT 4",
       cost: 1450.00,
-      who: "Taller Mecánico",
-      parts: "Balatas Wagner Cerámica, Rectificado de discos",
-      notes: "Líquido purgado con DOT 4."
+      provider: "Taller Mecánico",
+      aiImpact: "BUENO",
+      aiPriceRating: "Justo",
+      aiTechnicalAnalysis: "El circuito diagonal en X del Aveo 2011 recuperó tacto firme en el pedal evitando cristalización.",
+      aiRelatedParts: "Revisar tambores traseros y zapatas en el próximo servicio.",
+      aiNextServiceKm: 143000
     },
     {
-      id: "s_3",
+      id: "m_3",
       date: "2024-03-10",
-      odo: 90000,
-      type: "Banda de Distribución (Kit Completo)",
-      title: "Cambio Preventivo Kit de Distribución + Bomba de Agua",
+      odometer: 90000,
+      category: "Preventivo",
+      title: "Kit Completo de Banda de Distribución y Bomba de Agua",
+      description: "Cambio preventivo de banda dentada, polea loca, polea tensora mecánica y bomba de agua con anticongelante DEX-COOL.",
+      partsUsed: "Kit Gates Distribución + Bomba de agua AC Delco + DEX-COOL 50/50",
       cost: 3850.00,
-      who: "Taller Mecánico",
-      parts: "Kit Gates (Banda + Tensor + Polea Loca) + Bomba de agua AC Delco",
-      notes: "Puesto a punto en marcas exactas. Próximo cambio a los 140,000 km."
+      provider: "Taller Mecánico",
+      aiImpact: "BUENO",
+      aiPriceRating: "Justo",
+      aiTechnicalAnalysis: "Intervención de máxima prioridad en el motor F16D3 1.6L DOHC. Al ser un motor de interferencia mecánica, cambiar el kit completo previene doblar las 16 válvulas.",
+      aiRelatedParts: "Retenes de árbol de levas y cigüeñal, y banda de accesorios 6PK.",
+      aiNextServiceKm: 140000
     }
   ]
 };
 
 // =============================================================================
-// 2. BASE DE CONOCIMIENTO DE DIAGNÓSTICO (OBD2 Y MECÁNICA AVEO 1.6L)
-// =============================================================================
-
-const AVEO_DIAG_DB = {
-  dtc: [
-    {
-      code: "P0300",
-      title: "Fallo de encendido en cilindros aleatorios / múltiples",
-      severity: "alta",
-      system: "Encendido y Combustión",
-      symptoms: "El motor tiembla fuertemente en ralentí, parpadea el foco de Check Engine (falla destructiva de catalizador), falta de potencia al acelerar.",
-      causes: [
-        "Cables de bujía cruzados, quemados o con fuga de chispa (falla #1 en Aveo).",
-        "Aceite en los pozos de las bujías debido al desgaste del empaque de la tapa de punterías.",
-        "Bujías desgastadas, calibración fuera de 1.1 mm o carbonizadas.",
-        "Bobina de encendido DIS agrietada por calor.",
-        "Baja compresión en válvulas o inyectores sucios."
-      ],
-      solution: "1. Retirar los cables de bujía y verificar si hay aceite en los tubos. Si hay aceite, cambiar empaque de tapa de punterías.\n2. Medir resistencia de cables (no más de 10k ohms).\n3. Cambiar bujías por NGK BKR6E-11 calibradas a 1.1 mm.\n4. Si la falla persiste en pares de cilindros (1-4 o 2-3), sustituir bobina de encendido."
-    },
-    {
-      code: "P0420",
-      title: "Eficiencia del sistema catalítico por debajo del umbral",
-      severity: "media",
-      system: "Escape y Emisiones",
-      symptoms: "Testigo Check Engine encendido fijo, olor a azufre en el escape, puede no pasar la verificación vehicular.",
-      causes: [
-        "Fisura o fuga en el múltiple de escape de acero (común en Aveo cerca de la unión).",
-        "Sensor de oxígeno post-catalizador (Banco 1 Sensor 2) defectuoso o lento.",
-        "Convertidor catalítico tapado o degradado por fallas previas de encendido (P0300)."
-      ],
-      solution: "1. Inspeccionar físicamente el múltiple de escape en busca de grietas o fugas de aire antes del sensor 1.\n2. Revisar con escáner la gráfica de voltaje del sensor 2: debe mantenerse estable (~0.45V - 0.7V). Si oscila como el sensor 1, el catalizador está agotado."
-    },
-    {
-      code: "P0171",
-      title: "Sistema de combustible demasiado pobre (Banco 1)",
-      severity: "media",
-      system: "Inyección y Admisión",
-      symptoms: "El auto se siente sonso, tironea en subidas, ralentí ligeramente errático.",
-      causes: [
-        "Fuga de vacío en mangueras del cuerpo de aceleración, válvula PCV o múltiple de admisión.",
-        "Sensor MAP sucio, desconectado o con lecturas erróneas.",
-        "Baja presión de la bomba de gasolina (menos de 45-50 PSI) o filtro de gasolina tapado.",
-        "Inyectores obstruidos con sedimentos."
-      ],
-      solution: "1. Rociar spray limpiador de carburador suavemente alrededor de las mangueras de vacío para detectar si se altera el ralentí (fuga de aire).\n2. Medir presión de riel de inyectores.\n3. Reemplazar filtro de gasolina ubicado bajo el chasis."
-    },
-    {
-      code: "P0117",
-      title: "Sensor de temperatura de refrigerante (ECT) - Señal baja / Corto",
-      severity: "alta",
-      system: "Refrigeración y Mezcla",
-      symptoms: "El electroventilador se queda prendido al máximo todo el tiempo, arranque difícil en frío o en caliente, alto consumo de combustible y humo negro.",
-      causes: [
-        "Sensor ECT de 2 cables defectuoso o con sarro.",
-        "Arnés del sensor quebrado por vibración o calor cerca de la cabeza del motor.",
-        "Fuga de refrigerante que dejó sin líquido el sensor."
-      ],
-      solution: "1. Ubicar el sensor ECT en la parte trasera de la cabeza del motor debajo de la bobina.\n2. Medir resistencia en frío (~2.5k ohms a 20°C). Si marca corto o circuito abierto, reemplazar sensor original AC Delco."
-    },
-    {
-      code: "P0340",
-      title: "Fallo en circuito del sensor de posición de árbol de levas (CMP)",
-      severity: "media",
-      system: "Sincronización Electrónica",
-      symptoms: "Marcha larga al intentar encender, jaloneo súbito al rebasar las 3,000 RPM, pérdida de potencia.",
-      causes: [
-        "Sensor CMP desgastado o sucio de aceite.",
-        "Banda de distribución destensada o fuera de punto por 1 diente.",
-        "Falso contacto en el conector de 3 pines."
-      ],
-      solution: "1. Verificar la tensión de la banda de distribución inmediatamente.\n2. Limpiar el conector del sensor CMP en el lateral superior de la tapa de punterías.\n3. Sustituir el sensor CMP si tiene daño interno."
-    },
-    {
-      code: "P0335",
-      title: "Sensor de posición de cigüeñal (CKP) - Circuito defectuoso",
-      severity: "critica",
-      system: "Encendido y Giro de Motor",
-      symptoms: "El motor se apaga repentinamente en marcha (especialmente cuando se calienta) y no arranca hasta que se enfría; no hay chispa en bujías.",
-      causes: [
-        "Bobinado interno del sensor CKP degradado por temperatura cerca de la polea del cigüeñal.",
-        "Cable rozando con banda de accesorios o escape.",
-        "Suciedad o rebaba metálica en la punta magnética del sensor."
-      ],
-      solution: "1. Reemplazar sensor de cigüeñal CKP por pieza de equipo original.\n2. Asegurar el cableado lejos de piezas móviles o calientes."
-    },
-    {
-      code: "P0505",
-      title: "Fallo en el control de aire de marcha mínima (Válvula IAC)",
-      severity: "media",
-      system: "Admisión y Ralentí",
-      symptoms: "El motor se apaga al frenar o al llegar a un semáforo, el ralentí sube y baja entre 600 y 1400 RPM (ralentí oscilante), se apaga al encender el aire acondicionado.",
-      causes: [
-        "Punta cónica de la válvula IAC atascada de carbón y aceite negro.",
-        "Conducto de bypass del cuerpo de aceleración obstruido.",
-        "Falla en el motor a pasos interno de la válvula IAC."
-      ],
-      solution: "1. Desmontar la válvula IAC (dos tornillos Torx) y el cuerpo de aceleración.\n2. Limpiar meticulosamente con solvente Carbuclean sin forzar el vástago.\n3. Si tras calibrar (abrir switch 10s, cerrar 10s x 3 veces) sigue oscilando, cambiar la válvula IAC."
-    },
-    {
-      code: "P0463",
-      title: "Sensor de nivel de combustible - Señal alta",
-      severity: "baja",
-      system: "Instrumentos y Tanque",
-      symptoms: "La aguja del marcador de gasolina en el tablero marca lleno siempre, o se cae a vacío con luz de reserva prendida.",
-      causes: [
-        "Pistas de resistencia de la resistencia del flotador desgastadas en el módulo de la bomba de gasolina.",
-        "Cable a tierra suelto bajo el asiento trasero."
-      ],
-      solution: "Levantar el asiento trasero, abrir la tapa de registro de la bomba de gasolina y cambiar la tableta de flotador de nivel (resistencia variable)."
-    }
-  ],
-
-  symptoms: [
-    {
-      trigger: ["tiembla", "vibracion", "ralenti", "inestable", "baja"],
-      title: "Temblor / Ralentí Inestable en Semáforos",
-      summary: "El motor 1.6L del Aveo es muy sensible a tres puntos críticos: 1) Aceite en pozos de bujías por empaque de punterías cuarteado, 2) Cables de bujías con fuga de chispa, 3) Válvula IAC y cuerpo de aceleración sucios.",
-      urgency: "Media",
-      steps: [
-        "Retira los 4 cables de bujía uno a uno: fíjate si la bota de hule sale con aceite de motor. Si tiene aceite, la chispa se fuga y hay que cambiar la junta de punterías.",
-        "Limpia la válvula IAC con limpiador de cuerpo de aceleración.",
-        "Revisa la manguera de la válvula PCV; si está floja o rota, entra aire no medido."
-      ],
-      estimatedCost: "$350 - $900 MXN en refacciones"
-    },
-    {
-      trigger: ["cascabelea", "cascabeleo", "subida", "pistoneo"],
-      title: "Cascabeleo / Pistoneo en Subidas o Aceleración",
-      summary: "Se produce por detonación prematura de la mezcla en las cámaras de combustión.",
-      urgency: "Media / Alta",
-      steps: [
-        "Prueba cargando gasolina Premium de 91 octanos en la próxima carga para comprobar si se mitiga.",
-        "Verifica que las bujías sean del grado térmico correcto (NGK BKR6E-11) y tengan la calibración de 1.1 mm.",
-        "Revisa el sensor de detonación (Knock Sensor) atornillado al monoblock debajo del múltiple de admisión."
-      ],
-      estimatedCost: "$250 - $800 MXN"
-    },
-    {
-      trigger: ["gasolina", "olor", "huele", "combustible"],
-      title: "Olor a Gasolina Cruda en Cabina o Exterior",
-      summary: "Muy común en el Aveo por el empaque de la tapa de la bomba de combustible o el cánister de gases.",
-      urgency: "Alta (Riesgo de seguridad)",
-      steps: [
-        "Levanta el asiento trasero y huele la tapa plástica de registro de la bomba de gasolina. Si huele fuerte o hay humedad, la tuerca roscada o la liga O-ring del tanque se vencieron.",
-        "Inspecciona las mangueras de alimentación de riel de inyectores en el compartimento del motor.",
-        "Revisa la válvula de purga del cánister (EVAP) ubicada detrás del motor."
-      ],
-      estimatedCost: "$150 - $500 MXN (Sello O-Ring)"
-    },
-    {
-      trigger: ["temperatura", "calienta", "calentamiento", "anticongelante", "hierve"],
-      title: "Sube la Temperatura / Pérdida de Refrigerante",
-      summary: "Punto débil conocido del Aveo 1.6L: La carcasa plástica del termostato se cristaliza y se quiebra, o el termostato se queda pegado cerrado.",
-      urgency: "Crítica (Riesgo de soplar junta de cabeza)",
-      steps: [
-        "NO abras el tapón del depósito con motor caliente.",
-        "Revisa con una linterna el lado derecho del motor (junto a la banda de tiempo): inspecciona si hay escurrimiento rosado en la carcasa del termostato.",
-        "Si la carcasa de plástico fuga, sustitúyela por una carcasa de ALUMINIO (muy popular y durable para Aveo).",
-        "Verifica que el ventilador encienda cuando la aguja llega a la mitad."
-      ],
-      estimatedCost: "$450 - $1,100 MXN (Termostato de aluminio + Dex-Cool)"
-    },
-    {
-      trigger: ["frio", "chirrido", "banda", "ruido", "chilla"],
-      title: "Chirrido Agudo al Encender en Frío",
-      summary: "Proviene casi siempre de la banda de accesorios (alternador, bomba de dirección y compresor de aire).",
-      urgency: "Baja / Media",
-      steps: [
-        "Verifica la tensión de la banda poly-V de accesorios.",
-        "Si la banda tiene grietas o brillo vidriado en los canales, reemplázala (Medida típica: 6PK1875 o similar según si tiene A/C).",
-        "Si el ruido persiste con banda nueva, la polea loca o polea tensora tiene baleros secos."
-      ],
-      estimatedCost: "$250 - $600 MXN"
-    },
-    {
-      trigger: ["freno", "frenos", "pedal", "esponjoso", "rechina"],
-      title: "Frenos Esponjosos o Chillido Metálico",
-      summary: "El Aveo usa frenos de disco ventilados adelante y tambor atrás.",
-      urgency: "Alta",
-      steps: [
-        "Chillido continuo al frenar: el avisador acústico de lámina está tocando el disco; las balatas están gastadas (menos de 2 mm).",
-        "Pedal esponjoso que se hunde: hay aire en las líneas de frenado o el líquido absorbió humedad. Requiere purgado con líquido DOT 3 o DOT 4 nuevo.",
-        "Vibración en el volante al frenar a alta velocidad: discos delanteros deformados/alabeados por calentamiento."
-      ],
-      estimatedCost: "$500 - $1,600 MXN"
-    }
-  ]
-};
-
-// =============================================================================
-// 3. CONTROLADOR PRINCIPAL DE LA APLICACIÓN
+// 2. CONTROLADOR PRINCIPAL AVEOLOG AI APP
 // =============================================================================
 
 class AveoLogApp {
   constructor() {
+    this.apiBase = window.location.origin.includes('github.io') ? null : '/api';
     this.state = this.loadState();
     this.currentView = "view-dashboard";
     this.initAudioHaptics();
     this.initDOM();
     this.bindEvents();
     this.renderAll();
+    this.syncWithBackend();
     this.checkSafariPwaBanner();
     this.registerServiceWorker();
   }
 
-  // Carga o Inicialización con LocalStorage
   loadState() {
     try {
-      const saved = localStorage.getItem("aveolog_ai_state_v1");
+      const saved = localStorage.getItem("aveolog_ai_v2_state");
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Mezclar con default para asegurar llaves nuevas
         return {
           car: { ...DEFAULT_STATE.car, ...parsed.car },
           maintenanceSchedule: parsed.maintenanceSchedule || DEFAULT_STATE.maintenanceSchedule,
           fuelLogs: parsed.fuelLogs || DEFAULT_STATE.fuelLogs,
-          serviceLogs: parsed.serviceLogs || DEFAULT_STATE.serviceLogs
+          maintenanceLogs: parsed.maintenanceLogs || DEFAULT_STATE.maintenanceLogs
         };
       }
     } catch (e) {
-      console.warn("Error leyendo state, restaurando default:", e);
+      console.warn("Error leyendo state local, usando inicial:", e);
     }
     return JSON.parse(JSON.stringify(DEFAULT_STATE));
   }
 
   saveState() {
     try {
-      localStorage.setItem("aveolog_ai_state_v1", JSON.stringify(this.state));
+      localStorage.setItem("aveolog_ai_v2_state", JSON.stringify(this.state));
     } catch (e) {
       console.error("Error guardando state:", e);
     }
   }
 
-  // Audio háptico sintético para iPhone (imita Taptic Engine)
+  async syncWithBackend() {
+    if (!this.apiBase) return;
+    try {
+      // Intentar obtener car profile
+      const resCar = await fetch(`${this.apiBase}/car`);
+      if (resCar.ok) {
+        const carData = await resCar.json();
+        if (carData.success && carData.data) {
+          this.state.car.currentOdo = carData.data.currentOdometer || this.state.car.currentOdo;
+          this.state.car.plates = carData.data.plates || this.state.car.plates;
+          this.state.car.vin = carData.data.vin || this.state.car.vin;
+          this.state.car.insuranceCompany = carData.data.insuranceCompany || this.state.car.insuranceCompany;
+          this.state.car.insurancePolicy = carData.data.insurancePolicy || this.state.car.insurancePolicy;
+          this.state.car.insurancePhone = carData.data.insurancePhone || this.state.car.insurancePhone;
+          this.state.car.verificationMonth = carData.data.verificationMonth || this.state.car.verificationMonth;
+        }
+      }
+
+      // Obtener fuel logs
+      const resFuel = await fetch(`${this.apiBase}/fuel`);
+      if (resFuel.ok) {
+        const fuelData = await resFuel.json();
+        if (fuelData.success && fuelData.data && fuelData.data.logs) {
+          this.state.fuelLogs = fuelData.data.logs;
+        }
+      }
+
+      // Obtener maintenance logs
+      const resMaint = await fetch(`${this.apiBase}/maintenance`);
+      if (resMaint.ok) {
+        const maintData = await resMaint.json();
+        if (maintData.success && maintData.data) {
+          this.state.maintenanceLogs = maintData.data;
+        }
+      }
+
+      this.saveState();
+      this.renderAll();
+      console.log("Sincronización con backend exitosa.");
+    } catch (e) {
+      console.log("Trabajando en modo offline / local (backend no disponible).");
+    }
+  }
+
+  // Audio háptico sintético para iPhone
   initAudioHaptics() {
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -457,14 +339,12 @@ class AveoLogApp {
   }
 
   haptic(type = "light") {
-    // 1. Vibración estándar si el dispositivo lo soporta
     if (navigator.vibrate) {
       if (type === "light") navigator.vibrate(10);
       else if (type === "medium") navigator.vibrate(25);
       else if (type === "heavy") navigator.vibrate([40, 30, 40]);
     }
 
-    // 2. Micro-pulso acústico de audio háptico para iPhone
     if (this.audioCtx && this.audioCtx.state === "running") {
       try {
         const osc = this.audioCtx.createOscillator();
@@ -481,41 +361,33 @@ class AveoLogApp {
     }
   }
 
-  // Conectar con el DOM
   initDOM() {
-    // Tabbar
     this.tabButtons = document.querySelectorAll(".tabbar-item");
     this.views = document.querySelectorAll(".app-view");
 
-    // Inputs y Formularios
     this.formFuel = document.getElementById("form-fuel");
     this.formService = document.getElementById("form-service");
     this.formOdo = document.getElementById("form-odo");
     this.formCarDocs = document.getElementById("form-car-docs");
-    
-    // Modales
+
     this.modalFuel = document.getElementById("modal-fuel");
     this.modalService = document.getElementById("modal-service");
     this.modalOdo = document.getElementById("modal-odo");
-    this.modalDiagDetail = document.getElementById("modal-diag-detail");
     this.modalCarDocs = document.getElementById("modal-car-docs");
 
-    // Chat
     this.chatMessages = document.getElementById("chat-messages");
     this.chatInput = document.getElementById("chat-input-text");
     this.btnChatSend = document.getElementById("btn-chat-send");
   }
 
-  // Event Listeners
   bindEvents() {
-    // Desbloquear AudioContext en primer toque del usuario
     document.addEventListener("touchstart", () => {
       if (this.audioCtx && this.audioCtx.state === "suspended") {
         this.audioCtx.resume();
       }
     }, { once: true });
 
-    // Navegación por Pestañas iOS
+    // Navegación por pestañas
     this.tabButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         const viewId = btn.dataset.view;
@@ -524,7 +396,7 @@ class AveoLogApp {
       });
     });
 
-    // Botones de Acción Rápida en Dashboard
+    // Botones de acción rápida
     document.getElementById("dash-btn-add-fuel")?.addEventListener("click", () => {
       this.openModal("modal-fuel");
       this.haptic("light");
@@ -542,7 +414,7 @@ class AveoLogApp {
       this.haptic("light");
     });
 
-    // Botones de Abrir Modales
+    // Modales
     document.getElementById("btn-quick-odo")?.addEventListener("click", () => this.openOdoModal());
     document.getElementById("btn-edit-odo-widget")?.addEventListener("click", () => this.openOdoModal());
     document.getElementById("btn-open-fuel-modal")?.addEventListener("click", () => this.openModal("modal-fuel"));
@@ -553,7 +425,7 @@ class AveoLogApp {
       this.showToast("Gestión de Respaldos", "💾");
     });
 
-    // Cerrar Modales
+    // Cerrar modales
     document.querySelectorAll("[data-close-modal]").forEach(btn => {
       btn.addEventListener("click", () => {
         const modalId = btn.dataset.closeModal;
@@ -562,7 +434,6 @@ class AveoLogApp {
       });
     });
 
-    // Cerrar modal al tocar overlay fuera de la hoja
     document.querySelectorAll(".modal-overlay").forEach(overlay => {
       overlay.addEventListener("click", (e) => {
         if (e.target === overlay) {
@@ -572,7 +443,7 @@ class AveoLogApp {
       });
     });
 
-    // Segmented Buttons (Magna / Premium)
+    // Botones segmentados
     document.querySelectorAll(".seg-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const group = btn.dataset.seg;
@@ -582,64 +453,38 @@ class AveoLogApp {
       });
     });
 
-    // Envíos de Formularios
+    // Envíos de formulario
     this.formFuel.addEventListener("submit", (e) => this.handleFuelSubmit(e));
     this.formService.addEventListener("submit", (e) => this.handleServiceSubmit(e));
     this.formOdo.addEventListener("submit", (e) => this.handleOdoSubmit(e));
     this.formCarDocs.addEventListener("submit", (e) => this.handleCarDocsSubmit(e));
 
-    // Chat AI y Buscador de Diagnóstico
+    // Copiloto Chat
     this.btnChatSend.addEventListener("click", () => this.handleChatSubmit());
     this.chatInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") this.handleChatSubmit();
     });
 
-    // Tags de Síntomas
+    // Chips de preguntas frecuentes
     document.querySelectorAll(".symptom-tag").forEach(tag => {
       tag.addEventListener("click", () => {
         const query = tag.dataset.query;
-        this.runDiagnosticQuery(query);
+        this.runCopilotQuery(query);
         this.haptic("light");
       });
     });
 
-    // Buscador general de diagnóstico en tiempo real
-    const searchInput = document.getElementById("diag-search-input");
-    if (searchInput) {
-      searchInput.addEventListener("input", (e) => {
-        const val = e.target.value.trim();
-        if (val.length >= 3) {
-          this.filterDiagnosticList(val);
-        } else {
-          this.renderPopularDtcList();
-        }
-      });
-    }
-
     // Exportar e Importar Respaldo
     document.getElementById("btn-export-backup")?.addEventListener("click", () => this.exportBackupJSON());
     document.getElementById("file-import-backup")?.addEventListener("change", (e) => this.importBackupJSON(e));
-    document.getElementById("btn-load-demo-data")?.addEventListener("click", () => this.loadDemoData());
 
-    // Guardar Gemini API Key
-    document.getElementById("btn-save-gemini-key")?.addEventListener("click", () => {
-      const keyInput = document.getElementById("cfg-gemini-key");
-      this.state.car.geminiApiKey = (keyInput.value || "").trim();
-      this.saveState();
-      this.showToast("Clave API guardada", "🔑");
-      this.haptic("medium");
-    });
-
-    // Cerrar banner de instalación Safari
+    // Cerrar banner iOS Safari
     document.getElementById("btn-close-install-banner")?.addEventListener("click", () => {
       document.getElementById("ios-install-banner").style.display = "none";
       sessionStorage.setItem("aveolog_hide_ios_banner", "1");
     });
   }
 
-  // =============================================================================
-  // 4. CAMBIO DE VISTA (TABS IOS)
-  // =============================================================================
   switchView(viewId) {
     this.currentView = viewId;
     this.tabButtons.forEach(btn => {
@@ -649,17 +494,15 @@ class AveoLogApp {
       v.classList.toggle("active", v.id === viewId);
     });
 
-    // Resetear scroll al inicio de la vista
     const scrollElem = document.getElementById("main-scroll");
     if (scrollElem) scrollElem.scrollTop = 0;
 
-    // Renderizar gráfico o componentes específicos al entrar
     if (viewId === "view-fuel") {
       this.renderFuelView();
     } else if (viewId === "view-service") {
       this.renderServiceView();
     } else if (viewId === "view-diag") {
-      this.renderDiagnosticView();
+      // Vista Copiloto
     } else if (viewId === "view-garage") {
       this.renderGarageView();
     } else {
@@ -667,12 +510,10 @@ class AveoLogApp {
     }
   }
 
-  // Modales
   openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
     
-    // Auto rellenar fechas y odómetros en formularios
     const todayStr = new Date().toISOString().split("T")[0];
     if (modalId === "modal-fuel") {
       document.getElementById("fuel-input-date").value = todayStr;
@@ -720,12 +561,12 @@ class AveoLogApp {
   }
 
   // =============================================================================
-  // 5. CÁLCULOS MATEMÁTICOS Y TELEMETRÍA (KM/L, AUTONOMÍA, COSTO/KM)
+  // 3. CÁLCULO DE TELEMETRÍA (KM/L, COSTO/KM, AUTONOMÍA)
   // =============================================================================
 
   calculateFuelTelemetry() {
-    const sorted = [...this.state.fuelLogs].sort((a, b) => a.odo - b.odo);
-    if (sorted.length < 2) {
+    const logs = [...this.state.fuelLogs].sort((a, b) => a.odometer - b.odometer);
+    if (logs.length < 2) {
       return {
         avgKml: 11.5,
         bestKml: 11.5,
@@ -745,36 +586,34 @@ class AveoLogApp {
     let bestKml = 0;
     let worstKml = 999;
 
-    for (let i = 1; i < sorted.length; i++) {
-      const prev = sorted[i - 1];
-      const curr = sorted[i];
-      const dist = curr.odo - prev.odo;
-      
+    for (let i = 1; i < logs.length; i++) {
+      const prev = logs[i - 1];
+      const curr = logs[i];
+      const dist = curr.odometer - prev.odometer;
+
       if (dist > 0 && curr.liters > 0) {
         const kml = parseFloat((dist / curr.liters).toFixed(2));
-        historyKml.push({ date: curr.date, kml, odo: curr.odo });
+        historyKml.push({ date: curr.date ? curr.date.slice(0, 10) : "", kml, odo: curr.odometer });
 
         if (kml > bestKml) bestKml = kml;
         if (kml < worstKml) worstKml = kml;
 
         totalDist += dist;
         totalLiters += curr.liters;
-        totalCost += curr.cost;
+        totalCost += curr.totalCost;
       }
     }
 
     const avgKml = totalLiters > 0 ? parseFloat((totalDist / totalLiters).toFixed(2)) : 11.5;
-    const avgCostPerKm = totalDist > 0 ? parseFloat((totalCost / totalDist).toFixed(2)) : 2.10;
+    const avgCostPerKm = totalDist > 0 ? parseFloat((totalCost / totalDist).toFixed(2)) : 2.05;
     const lastKml = historyKml.length > 0 ? historyKml[historyKml.length - 1].kml : avgKml;
 
-    // Calcular gasto del mes actual
-    const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
-    const monthExpense = sorted
-      .filter(l => (l.date || "").startsWith(currentMonth))
-      .reduce((acc, curr) => acc + (parseFloat(curr.cost) || 0), 0);
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    const monthExpense = logs
+      .filter(l => (l.date || "").slice(0, 7) === currentMonth)
+      .reduce((acc, curr) => acc + (parseFloat(curr.totalCost) || 0), 0);
 
-    // Autonomía estimada considerando ~80% de tanque promedio o último llenado
-    const estimatedRange = Math.round(this.state.car.tankCapacity * 0.7 * avgKml);
+    const estimatedRange = Math.round(this.state.car.tankCapacity * 0.75 * avgKml);
 
     return {
       avgKml,
@@ -789,14 +628,13 @@ class AveoLogApp {
   }
 
   // =============================================================================
-  // 6. RENDERIZADO DE LAS VISTAS
+  // 4. RENDERIZADO GENERAL Y VISTAS
   // =============================================================================
 
   renderAll() {
     this.renderDashboard();
     this.renderFuelView();
     this.renderServiceView();
-    this.renderDiagnosticView();
     this.renderGarageView();
   }
 
@@ -804,17 +642,14 @@ class AveoLogApp {
     const tele = this.calculateFuelTelemetry();
     const currentOdo = this.state.car.currentOdo;
 
-    // Odómetro principal
     document.getElementById("dash-odo-val").textContent = Number(currentOdo).toLocaleString();
-    
-    // Métricas
     document.getElementById("dash-kml-val").textContent = tele.avgKml;
     document.getElementById("dash-range-val").textContent = tele.estimatedRange;
     document.getElementById("dash-costkm-val").textContent = `$${tele.avgCostPerKm}`;
 
-    // Semáforo de servicios para calcular el próximo servicio
+    // Semáforo de servicios
     const servicesStatus = this.getServicesCalculatedStatus();
-    const nextService = servicesStatus[0]; // El más urgente
+    const nextService = servicesStatus[0];
 
     if (nextService) {
       const remainingKm = nextService.nextDueOdo - currentOdo;
@@ -833,10 +668,10 @@ class AveoLogApp {
       if (remaining <= 0) {
         banner.style.background = "linear-gradient(90deg, rgba(239,68,68,0.3) 0%, rgba(220,38,38,0.15) 100%)";
         banner.style.borderColor = "#ef4444";
-        bannerDesc.innerHTML = `<strong style="color:#ef4444;">¡URGENTE!</strong> Banda de distribución vencida por <strong>${Math.abs(remaining).toLocaleString()} km</strong>. Si se revienta el motor doblará válvulas.`;
+        bannerDesc.innerHTML = `<strong style="color:#ef4444;">¡URGENTE!</strong> Banda de distribución vencida por <strong>${Math.abs(remaining).toLocaleString()} km</strong>. Motor con interferencia: si se rompe dobla válvulas.`;
       } else if (remaining < 5000) {
         banner.style.borderColor = "#f59e0b";
-        bannerDesc.innerHTML = `Quedan <strong>${remaining.toLocaleString()} km</strong> para el cambio preventivo del kit de distribución.`;
+        bannerDesc.innerHTML = `Quedan <strong>${remaining.toLocaleString()} km</strong> para el cambio preventivo del kit de distribución (banda + bomba + poleas).`;
       } else {
         banner.style.borderColor = "rgba(16,185,129,0.3)";
         bannerDesc.innerHTML = `Kit de distribución en orden. Próximo cambio en <strong>${remaining.toLocaleString()} km</strong> (${timingBelt.nextDueOdo.toLocaleString()} km).`;
@@ -853,20 +688,19 @@ class AveoLogApp {
       healthBadge.style.background = "rgba(239, 68, 68, 0.18)";
       healthBadge.style.borderColor = "rgba(239, 68, 68, 0.4)";
       healthBadge.style.color = "#f87171";
-      healthText.textContent = "Atención Requerida";
+      healthText.textContent = "ATENCION";
     } else if (hasSoon) {
       healthBadge.style.background = "rgba(245, 158, 11, 0.18)";
       healthBadge.style.borderColor = "rgba(245, 158, 11, 0.4)";
       healthBadge.style.color = "#fbbf24";
-      healthText.textContent = "Servicio Próximo";
+      healthText.textContent = "PREVENTIVO";
     } else {
       healthBadge.style.background = "rgba(16, 185, 129, 0.15)";
       healthBadge.style.borderColor = "rgba(16, 185, 129, 0.3)";
       healthBadge.style.color = "#34d399";
-      healthText.textContent = "En Óptimo Estado";
+      healthText.textContent = "OPTIMO";
     }
 
-    // Lista de Actividad Reciente (últimos 3 eventos)
     this.renderDashboardRecentList();
   }
 
@@ -874,27 +708,27 @@ class AveoLogApp {
     const listEl = document.getElementById("dash-recent-list");
     if (!listEl) return;
 
-    // Combinar últimos combustibles y servicios
     const events = [];
     this.state.fuelLogs.forEach(f => {
       events.push({
         type: "fuel",
         title: `Carga Gasolina ${f.fuelType}`,
         subtitle: `${f.liters} L • ${f.station || "Estación"}`,
-        date: f.date,
-        odo: f.odo,
-        cost: f.cost
+        date: (f.date || "").slice(0, 10),
+        odo: f.odometer,
+        cost: f.totalCost
       });
     });
 
-    this.state.serviceLogs.forEach(s => {
+    this.state.maintenanceLogs.forEach(s => {
       events.push({
         type: "service",
-        title: s.type,
-        subtitle: s.title || s.parts || "Mantenimiento",
-        date: s.date,
-        odo: s.odo,
-        cost: s.cost
+        title: s.title,
+        subtitle: s.partsUsed || s.category,
+        date: (s.date || "").slice(0, 10),
+        odo: s.odometer,
+        cost: s.cost,
+        impact: s.aiImpact
       });
     });
 
@@ -908,25 +742,27 @@ class AveoLogApp {
 
     listEl.innerHTML = recent.map(item => `
       <div class="item-row">
-        <div class="item-left">
-          <div class="item-icon-box" style="${item.type === 'fuel' ? 'color:#f59e0b;' : 'color:#06b6d4;'}">
-            ${item.type === 'fuel' ? '⛽' : '🔧'}
+        <div class="item-row-top">
+          <div class="item-left">
+            <div class="item-icon-box" style="${item.type === 'fuel' ? 'color:#f59e0b;' : 'color:#06b6d4;'}">
+              ${item.type === 'fuel' ? '⛽' : '🔧'}
+            </div>
+            <div class="item-title-col">
+              <h4>${item.title}</h4>
+              <p>${item.date} • ${item.odo.toLocaleString()} km</p>
+            </div>
           </div>
-          <div class="item-title-col">
-            <h4>${item.title}</h4>
-            <p>${item.date} • ${item.odo.toLocaleString()} km</p>
+          <div class="item-right">
+            <div class="main-val">$${Number(item.cost).toFixed(0)}</div>
+            <div class="sub-val">${item.impact ? `<span class="badge-impact ${item.impact}">${item.impact}</span>` : (item.type === 'fuel' ? 'Gasolina' : 'Servicio')}</div>
           </div>
-        </div>
-        <div class="item-right">
-          <div class="main-val">$${Number(item.cost).toFixed(0)}</div>
-          <div class="sub-val">${item.type === 'fuel' ? 'Combustible' : 'Servicio'}</div>
         </div>
       </div>
     `).join("");
   }
 
   // =============================================================================
-  // 7. VISTA DE COMBUSTIBLE & GRÁFICO SVG
+  // 5. VISTA DE GASOLINA CON ALERTA DE CAÍDA >15%
   // =============================================================================
 
   renderFuelView() {
@@ -938,44 +774,50 @@ class AveoLogApp {
     document.getElementById("fuel-worst-kml").textContent = tele.worstKml;
     document.getElementById("fuel-count-label").textContent = `${this.state.fuelLogs.length} cargas registradas`;
 
-    // Renderizar gráfico SVG
     this.renderFuelChart(tele.historyKml);
 
-    // Renderizar historial de cargas
     const listEl = document.getElementById("fuel-history-list");
     if (!listEl) return;
 
-    const sortedLogs = [...this.state.fuelLogs].sort((a, b) => b.odo - a.odo);
+    const sorted = [...this.state.fuelLogs].sort((a, b) => b.odometer - a.odometer);
 
-    if (sortedLogs.length === 0) {
+    if (sorted.length === 0) {
       listEl.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.8rem;">No hay cargas registradas. Pulsa '+ Cargar Gas' para agregar tu primera carga.</div>`;
       return;
     }
 
-    listEl.innerHTML = sortedLogs.map((log, idx) => {
-      // Calcular rendimiento individual respecto al registro anterior
+    listEl.innerHTML = sorted.map((log, idx) => {
       let kmlText = "";
-      const olderLog = sortedLogs[idx + 1];
-      if (olderLog && log.odo > olderLog.odo && log.liters > 0) {
-        const kml = ((log.odo - olderLog.odo) / log.liters).toFixed(2);
+      const olderLog = sorted[idx + 1];
+      if (olderLog && log.odometer > olderLog.odometer && log.liters > 0) {
+        const kml = ((log.odometer - olderLog.odometer) / log.liters).toFixed(2);
         kmlText = `<span style="color:var(--telemetry-cyan); font-weight:700;">${kml} km/L</span> • `;
       }
 
       return `
         <div class="item-row">
-          <div class="item-left">
-            <div class="item-icon-box" style="color: ${log.fuelType === 'Premium' ? '#ef4444' : '#10b981'};">
-              ⛽
+          <div class="item-row-top">
+            <div class="item-left">
+              <div class="item-icon-box" style="color: ${log.fuelType === 'Premium' ? '#ef4444' : '#10b981'};">
+                ⛽
+              </div>
+              <div class="item-title-col">
+                <h4>${log.liters} L ${log.fuelType}</h4>
+                <p>${(log.date || '').slice(0, 10)} • ${log.odometer.toLocaleString()} km • ${log.station || 'Gasolinera'}</p>
+                ${log.notes ? `<div style="font-size:0.68rem; color:var(--text-muted); margin-top:2px;">"${log.notes}"</div>` : ''}
+              </div>
             </div>
-            <div class="item-title-col">
-              <h4>${log.liters} Litros ${log.fuelType}</h4>
-              <p>${log.date} • ${log.odo.toLocaleString()} km • ${log.station || 'Gasolinera'}</p>
+            <div class="item-right">
+              <div class="main-val">$${Number(log.totalCost).toFixed(2)}</div>
+              <div class="sub-val">${kmlText}$${(log.totalCost / log.liters).toFixed(2)}/L</div>
             </div>
           </div>
-          <div class="item-right">
-            <div class="main-val">$${Number(log.cost).toFixed(2)}</div>
-            <div class="sub-val">${kmlText}$${(log.cost / log.liters).toFixed(2)}/L</div>
-          </div>
+          ${log.aiAnomalyNote ? `
+            <div class="fuel-anomaly-box">
+              <strong>🤖 Análisis de Anomalía Gemini:</strong><br>
+              ${log.aiAnomalyNote}
+            </div>
+          ` : ''}
         </div>
       `;
     }).join("");
@@ -1011,7 +853,6 @@ class AveoLogApp {
       pathD += ` L ${getX(i)} ${getY(values[i])}`;
     }
 
-    // Área bajo la curva
     const areaD = `${pathD} L ${getX(history.length - 1)} ${height - paddingY} L ${getX(0)} ${height - paddingY} Z`;
 
     const dots = history.map((h, i) => `
@@ -1028,22 +869,18 @@ class AveoLogApp {
           </linearGradient>
         </defs>
         
-        <!-- Líneas guía -->
         <line x1="${paddingX}" y1="${getY(minVal)}" x2="${width - paddingX}" y2="${getY(minVal)}" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3"/>
         <line x1="${paddingX}" y1="${getY(maxVal)}" x2="${width - paddingX}" y2="${getY(maxVal)}" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3"/>
 
-        <!-- Curva y Área -->
         <path d="${areaD}" fill="url(#chartGrad)"/>
         <path d="${pathD}" fill="none" stroke="#06b6d4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-
-        <!-- Puntos -->
         ${dots}
       </svg>
     `;
   }
 
   // =============================================================================
-  // 8. VISTA DE SERVICIOS Y SEMÁFORO PREVENTIVO
+  // 6. VISTA DE BITÁCORA Y EVALUACIÓN ESTRUCTURADA CON GEMINI
   // =============================================================================
 
   getServicesCalculatedStatus() {
@@ -1076,7 +913,6 @@ class AveoLogApp {
     const services = this.getServicesCalculatedStatus();
     const hasDue = services.some(s => s.status === "due");
     
-    // Badge de advertencia en pestaña
     const tabBadge = document.getElementById("tab-service-badge");
     if (tabBadge) tabBadge.style.display = hasDue ? "block" : "none";
 
@@ -1094,25 +930,26 @@ class AveoLogApp {
 
       return `
         <div class="item-row" style="cursor:pointer;" onclick="app.quickRegisterService('${s.name}')">
-          <div class="item-left">
-            <div class="item-icon-box" style="${s.critical ? 'border-color: rgba(239,68,68,0.4); color: #f87171;' : ''}">
-              ${s.critical ? '⚠️' : '🔧'}
+          <div class="item-row-top">
+            <div class="item-left">
+              <div class="item-icon-box" style="${s.critical ? 'border-color: rgba(239,68,68,0.4); color: #f87171;' : ''}">
+                ${s.critical ? '⚠️' : '🔧'}
+              </div>
+              <div class="item-title-col">
+                <h4>${s.name}</h4>
+                <p>Último: ${s.lastDoneOdo.toLocaleString()} km • Cada ${s.intervalKm.toLocaleString()} km</p>
+              </div>
             </div>
-            <div class="item-title-col">
-              <h4>${s.name}</h4>
-              <p>Último: ${s.lastDoneOdo.toLocaleString()} km • Cada ${s.intervalKm.toLocaleString()} km</p>
-            </div>
-          </div>
-          <div class="item-right">
-            <div class="service-pill-status ${pillClass}">
-              ${pillText}
+            <div class="item-right">
+              <div class="service-pill-status ${pillClass}">
+                ${pillText}
+              </div>
             </div>
           </div>
         </div>
       `;
     }).join("");
 
-    // Historial de servicios realizados
     this.renderServiceHistoryList();
   }
 
@@ -1121,7 +958,7 @@ class AveoLogApp {
     const countEl = document.getElementById("service-count-label");
     if (!histEl) return;
 
-    const sorted = [...this.state.serviceLogs].sort((a, b) => b.odo - a.odo);
+    const sorted = [...this.state.maintenanceLogs].sort((a, b) => b.odometer - a.odometer);
     if (countEl) countEl.textContent = `${sorted.length} servicios registrados`;
 
     if (sorted.length === 0) {
@@ -1131,245 +968,129 @@ class AveoLogApp {
 
     histEl.innerHTML = sorted.map(item => `
       <div class="item-row">
-        <div class="item-left">
-          <div class="item-icon-box" style="color:var(--telemetry-cyan);">
-            🛠️
+        <div class="item-row-top">
+          <div class="item-left">
+            <div class="item-icon-box" style="color:var(--telemetry-cyan);">
+              🛠️
+            </div>
+            <div class="item-title-col">
+              <h4>${item.title}</h4>
+              <p>${(item.date || '').slice(0, 10)} • ${item.odometer.toLocaleString()} km • ${item.provider || 'Mecánico'}</p>
+              ${item.partsUsed ? `<div style="font-size:0.68rem; color:var(--chevy-gold-light); margin-top:2px;">Refacciones: ${item.partsUsed}</div>` : ''}
+            </div>
           </div>
-          <div class="item-title-col">
-            <h4>${item.type}</h4>
-            <p>${item.date} • ${item.odo.toLocaleString()} km • ${item.who || 'Mecánico'}</p>
-            ${item.parts ? `<div style="font-size:0.68rem; color:var(--chevy-gold-light); margin-top:2px;">Refacciones: ${item.parts}</div>` : ''}
+          <div class="item-right">
+            <div class="main-val">$${Number(item.cost || 0).toFixed(0)}</div>
+            <div class="sub-val">${item.category || 'Mantenimiento'}</div>
           </div>
         </div>
-        <div class="item-right">
-          <div class="main-val">$${Number(item.cost || 0).toFixed(0)}</div>
-          <div class="sub-val">${item.who === 'Hecho por mí (DIY)' ? 'DIY' : 'Taller'}</div>
-        </div>
+
+        <!-- Tarjeta de Evaluación Estructurada con Gemini AI -->
+        ${item.aiImpact ? `
+          <div class="ai-evaluation-card">
+            <div class="ai-eval-header">
+              <span class="badge-impact ${item.aiImpact}">Impacto: ${item.aiImpact}</span>
+              <span class="badge-price">Precio: ${item.aiPriceRating || 'Justo'}</span>
+            </div>
+            <div class="ai-eval-analysis">
+              ${item.aiTechnicalAnalysis}
+            </div>
+            ${item.aiRelatedParts ? `
+              <div class="ai-eval-related">
+                🔍 <strong>Aprovechar para revisar:</strong> ${item.aiRelatedParts}
+              </div>
+            ` : ''}
+            ${item.aiNextServiceKm ? `
+              <div class="ai-eval-next">
+                ⏱️ Próximo servicio sugerido: ${item.aiNextServiceKm.toLocaleString()} km
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
       </div>
     `).join("");
   }
 
   quickRegisterService(serviceName) {
     this.openModal("modal-service");
-    const select = document.getElementById("service-input-type");
-    if (select) {
-      for (let i = 0; i < select.options.length; i++) {
-        if (select.options[i].text.includes(serviceName) || serviceName.includes(select.options[i].value)) {
-          select.selectedIndex = i;
-          break;
-        }
-      }
-    }
+    document.getElementById("service-input-title").value = serviceName;
     this.haptic("light");
   }
 
   // =============================================================================
-  // 9. VISTA DE DIAGNÓSTICO AI & DTC CODES
+  // 7. COPILOTO MECÁNICO ("PREGÚNTALE AL AVEO")
   // =============================================================================
 
-  renderDiagnosticView() {
-    this.renderPopularDtcList();
-  }
-
-  renderPopularDtcList(filteredItems = null) {
-    const listEl = document.getElementById("diag-popular-dtc-list");
-    if (!listEl) return;
-
-    const items = filteredItems || AVEO_DIAG_DB.dtc;
-
-    if (items.length === 0) {
-      listEl.innerHTML = `<div style="text-align:center; padding:16px; color:var(--text-muted); font-size:0.8rem;">No se encontraron códigos o síntomas coincidentes. Escribe tu duda en el chat de AveoBot AI.</div>`;
-      return;
-    }
-
-    listEl.innerHTML = items.map(dtc => `
-      <div class="item-row" style="cursor:pointer;" onclick="app.showDtcDetail('${dtc.code}')">
-        <div class="item-left">
-          <div class="item-icon-box" style="color:${dtc.severity === 'critica' || dtc.severity === 'alta' ? '#ef4444' : '#fbbf24'}; font-weight:800; font-size:0.75rem;">
-            ${dtc.code}
-          </div>
-          <div class="item-title-col">
-            <h4>${dtc.title}</h4>
-            <p>${dtc.system} • Severidad ${dtc.severity.toUpperCase()}</p>
-          </div>
-        </div>
-        <div class="item-right">
-          <span style="font-size:0.75rem; color:var(--telemetry-cyan);">Ver Ficha ›</span>
-        </div>
-      </div>
-    `).join("");
-  }
-
-  filterDiagnosticList(query) {
-    const q = query.toLowerCase();
-    const filtered = AVEO_DIAG_DB.dtc.filter(d => 
-      d.code.toLowerCase().includes(q) ||
-      d.title.toLowerCase().includes(q) ||
-      d.symptoms.toLowerCase().includes(q) ||
-      d.causes.some(c => c.toLowerCase().includes(q))
-    );
-    this.renderPopularDtcList(filtered);
-  }
-
-  showDtcDetail(code) {
-    const dtc = AVEO_DIAG_DB.dtc.find(d => d.code === code);
-    if (!dtc) return;
-
-    document.getElementById("diag-detail-title").textContent = `Código ${dtc.code}: ${dtc.title}`;
-    const content = document.getElementById("diag-detail-content");
-
-    content.innerHTML = `
-      <div style="background: rgba(0,0,0,0.3); padding:10px; border-radius:10px; margin-bottom:12px; border:1px solid var(--border-subtle);">
-        <div style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;">Sistema Afectado</div>
-        <div style="font-weight:700; color:#fff;">${dtc.system}</div>
-        <div style="font-size:0.72rem; color:${dtc.severity === 'critica' || dtc.severity === 'alta' ? '#ef4444' : '#fbbf24'}; margin-top:4px;">
-          Severidad: ${dtc.severity.toUpperCase()}
-        </div>
-      </div>
-
-      <div style="margin-bottom:12px;">
-        <h4 style="font-size:0.85rem; color:var(--chevy-gold-light); margin-bottom:4px;">⚠️ Síntomas en el Aveo:</h4>
-        <p style="color:var(--text-secondary);">${dtc.symptoms}</p>
-      </div>
-
-      <div style="margin-bottom:12px;">
-        <h4 style="font-size:0.85rem; color:#f87171; margin-bottom:4px;">🔍 Causas Frecuentes en Motor 1.6L:</h4>
-        <ul style="padding-left:18px; color:var(--text-secondary);">
-          ${dtc.causes.map(c => `<li style="margin-bottom:4px;">${c}</li>`).join("")}
-        </ul>
-      </div>
-
-      <div>
-        <h4 style="font-size:0.85rem; color:var(--telemetry-cyan); margin-bottom:4px;">🔧 Procedimiento de Solución:</h4>
-        <div style="background:rgba(6,182,212,0.08); padding:10px; border-radius:8px; border:1px solid rgba(6,182,212,0.2); white-space:pre-line; color:#e2e8f0;">
-          ${dtc.solution}
-        </div>
-      </div>
-    `;
-
-    this.openModal("modal-diag-detail");
-    this.haptic("medium");
-  }
-
-  runDiagnosticQuery(query) {
+  runCopilotQuery(query) {
     this.addChatMessage(query, "user");
     this.chatInput.value = "";
-    this.processDiagnosticResponse(query);
+    this.processCopilotResponse(query);
   }
 
   handleChatSubmit() {
     const text = (this.chatInput.value || "").trim();
     if (!text) return;
-    this.runDiagnosticQuery(text);
+    this.runCopilotQuery(text);
   }
 
   addChatMessage(text, sender = "bot") {
     const msgEl = document.createElement("div");
     msgEl.className = `chat-bubble ${sender}`;
-    msgEl.innerHTML = text;
+    msgEl.innerHTML = text.replace(/\n/g, "<br>");
     this.chatMessages.appendChild(msgEl);
     this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
   }
 
-  async processDiagnosticResponse(query) {
+  async processCopilotResponse(query) {
     this.haptic("light");
-    const q = query.toLowerCase();
 
-    // 1. Si el usuario tiene API Key de Gemini configurada, intentar llamada en la nube
-    if (this.state.car.geminiApiKey) {
+    // 1. Intentar llamar al backend si está disponible
+    if (this.apiBase) {
       try {
-        const geminiAnswer = await this.callGeminiAPI(query);
-        if (geminiAnswer) {
-          this.addChatMessage(geminiAnswer, "bot");
-          return;
+        const res = await fetch(`${this.apiBase}/ai/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: query })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.data) {
+            this.addChatMessage(data.data.content, "bot");
+            return;
+          }
         }
-      } catch (err) {
-        console.warn("Falla en Gemini API, recurriendo a motor local AveoBot:", err);
+      } catch (e) {
+        console.warn("Falla en backend chat, usando copiloto offline:", e);
       }
     }
 
-    // 2. Motor Heurístico Embebido AveoBot (100% Offline)
-    // Verificar si es un código OBD2 directo
-    const obdMatch = q.match(/p0\d{3}/i);
-    if (obdMatch) {
-      const code = obdMatch[0].toUpperCase();
-      const foundDtc = AVEO_DIAG_DB.dtc.find(d => d.code === code);
-      if (foundDtc) {
-        const reply = `
-          <strong>Código ${foundDtc.code}: ${foundDtc.title}</strong><br><br>
-          <strong>Causas principales en Aveo 1.6L:</strong><br>
-          • ${foundDtc.causes.slice(0, 3).join("<br>• ")}<br><br>
-          <strong>¿Qué hacer?</strong><br>
-          ${foundDtc.solution.split("\n")[0]}<br><br>
-          <a href="javascript:void(0)" onclick="app.showDtcDetail('${foundDtc.code}')" style="color:var(--chevy-gold-light); font-weight:700;">Ver procedimiento completo y pruebas ›</a>
-        `;
-        this.addChatMessage(reply, "bot");
-        return;
-      }
+    // 2. Respuesta Offline del Copiloto Aveo
+    const m = query.toLowerCase();
+    let reply = "";
+
+    if (m.includes("fusible") && (m.includes("encendedor") || m.includes("cigar") || m.includes("toma"))) {
+      reply = "🔌 El fusible del encendedor / toma corriente de 12V es de **15 Amperios (CIGAR)** y se encuentra en la **caja de fusibles de la cabina interior** (al lado izquierdo del tablero, junto a la puerta del conductor).";
+    } else if (m.includes("fusible") && (m.includes("bomba") || m.includes("gasolina"))) {
+      reply = "⛽ El fusible de la bomba de gasolina es de **15A (F/PUMP)** y se encuentra en la **caja de fusibles del compartimento del motor** (cerca de la batería).";
+    } else if (m.includes("hold") || m.includes("parpadea")) {
+      reply = "⚠️ **Testigo HOLD parpadeando en Aveo 2011 (Automático):**\nIndica una falla en la transmisión automática de 4 velocidades o en el sensor de rango (pare/neutro).\n1. Revisa el nivel de fluido con motor encendido en caliente (lleva **ESSO JWS 3309 o TOTAL FLUID III G**, capacidad 5.6 L).\n2. Escanea el módulo TCM.\n3. Evita aceleraciones bruscas para proteger los embragues.";
+    } else if (m.includes("presion") && m.includes("llanta")) {
+      reply = "🛞 La presión oficial en frío para el Aveo 2011 (tanto para llantas 185/60 R14 como 185/55 R15) es de **33 PSI (230 kPa)** en las cuatro ruedas.";
+    } else if (m.includes("aceite") && (m.includes("cual") || m.includes("viscosidad") || m.includes("lleva"))) {
+      reply = "🛢️ El Aveo 2011 1.6L DOHC lleva aceite **SAE 5W-30** (clasificación API SM / ILSAC GF-IV o superior). En climas cálidos como Monterrey también se aprueba **10W-30**. La capacidad exacta es de **3.75 Litros con filtro**.";
+    } else if (m.includes("banda") || m.includes("distribucion")) {
+      reply = "⚠️ **¡Banda de Distribución del Aveo 1.6L!**\nEste motor F16D3 tiene **interferencia mecánica**. Si la banda se rompe, los pistones doblan las válvulas. El cambio preventivo debe hacerse cada **50,000 km o 3 años**, cambiando siempre el kit completo: banda dentada, bomba de agua, polea tensora y polea loca.";
+    } else if (m.includes("tiembla") || m.includes("ralenti")) {
+      reply = "🛑 **Temblor en ralentí en Aveo 1.6L:**\n1. Revisa si hay aceite en los tubos de bujías (falla clásica por junta de punterías desgastada).\n2. Verifica bujías **NGK BKR6E-11 calibradas a 1.0 - 1.1 mm**.\n3. Limpia la válvula IAC y el cuerpo de aceleración.";
+    } else {
+      reply = `He registrado tu consulta sobre el Aveo 2011 1.6L DOHC. Tu odómetro actual es de ${this.state.car.currentOdo.toLocaleString()} km. Recuerda que la presión de llantas debe mantenerse en 33 PSI y el aceite en SAE 5W-30 (3.75 L).`;
     }
 
-    // Buscar en síntomas
-    let matchedSymptom = null;
-    for (const sym of AVEO_DIAG_DB.symptoms) {
-      if (sym.trigger.some(t => q.includes(t))) {
-        matchedSymptom = sym;
-        break;
-      }
-    }
-
-    if (matchedSymptom) {
-      const reply = `
-        <strong>🔍 Diagnóstico Aveo 1.6L: ${matchedSymptom.title}</strong><br><br>
-        ${matchedSymptom.summary}<br><br>
-        <strong>⚠️ Urgencia:</strong> ${matchedSymptom.urgency}<br>
-        <strong>💰 Costo Estimado:</strong> ${matchedSymptom.estimatedCost}<br><br>
-        <strong>Pasos recomendados para revisar:</strong><br>
-        1. ${matchedSymptom.steps.join("<br>2. ")}
-      `;
-      this.addChatMessage(reply, "bot");
-      return;
-    }
-
-    // Respuesta genérica inteligente calibrada para Aveo 2011 1.6L
-    const generic = `
-      He analizado tu consulta para el <strong>Chevrolet Aveo 2011 1.6L DOHC</strong>.<br><br>
-      Para este modelo, los puntos clave a inspeccionar ante este comportamiento son:<br>
-      • <strong>Sistema eléctrico:</strong> Estado de bujías (calibración 1.1mm) y verificar que no haya aceite en los pozos por la junta de punterías.<br>
-      • <strong>Admisión y vacío:</strong> Limpieza del cuerpo de aceleración y mangueras de vacío del sensor MAP.<br>
-      • <strong>Presión de combustible:</strong> El Aveo requiere 45-50 PSI constantes en el riel de inyectores.<br><br>
-      <em>Tip: Si tienes un escáner OBD2 básico ELM327, escribe aquí el código DTC (ej. P0300) para darte la solución exacta.</em>
-    `;
-    this.addChatMessage(generic, "bot");
-  }
-
-  async callGeminiAPI(userPrompt) {
-    const apiKey = this.state.car.geminiApiKey;
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-    const systemPrompt = `Eres AveoLog AI, un mecánico experto automotriz especializado EXCLUSIVAMENTE en el Chevrolet Aveo 2011 Sedán motor 1.6L DOHC 16 Válvulas (F16D3 / E-TEC II). Responde en español de México, de forma concisa, práctica y estructurada (Causa probable, pruebas que puede hacer el dueño con herramientas caseras, y refacciones recomendadas con costo aproximado en pesos mexicanos). El odómetro actual del auto es ${this.state.car.currentOdo} km.`;
-
-    const body = {
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: `${systemPrompt}\n\nConsulta del dueño: ${userPrompt}` }]
-        }
-      ]
-    };
-
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-
-    if (!res.ok) throw new Error("Error en respuesta de Gemini API");
-    const data = await res.json();
-    return data.candidates[0].content.parts[0].text.replace(/\n/g, "<br>");
+    this.addChatMessage(reply, "bot");
   }
 
   // =============================================================================
-  // 10. VISTA DE GARAJE & DOCUMENTACIÓN
+  // 8. VISTA DE GARAJE & DOCUMENTACIÓN
   // =============================================================================
 
   renderGarageView() {
@@ -1380,120 +1101,235 @@ class AveoLogApp {
     
     const phoneEl = document.getElementById("garage-phone-val");
     if (car.insurancePhone) {
-      phoneEl.innerHTML = `<a href="tel:${car.insurancePhone}" style="color:var(--telemetry-cyan); text-decoration:none;">📞 ${car.insurancePhone}</a>`;
-    } else {
-      phoneEl.textContent = "Sin registrar";
+      phoneEl.innerHTML = `<a href="tel:${car.insurancePhone.replace(/\s/g, '')}" style="color:var(--telemetry-cyan); text-decoration:none;">📞 ${car.insurancePhone}</a>`;
     }
-
-    document.getElementById("garage-verif-val").textContent = car.verificationMonth || "Sin registrar";
-    
-    // API key
-    const keyInput = document.getElementById("cfg-gemini-key");
-    if (keyInput) keyInput.value = car.geminiApiKey || "";
+    document.getElementById("garage-verif-val").textContent = car.verificationMonth || "Mayo - Junio";
   }
 
   // =============================================================================
-  // 11. MANEJO DE ENVÍO DE FORMULARIOS (SUBMITS)
+  // 9. SUBMITS DE FORMULARIOS (GASOLINA Y BITÁCORA)
   // =============================================================================
 
-  handleFuelSubmit(e) {
+  async handleFuelSubmit(e) {
     e.preventDefault();
     const date = document.getElementById("fuel-input-date").value;
-    const odo = parseInt(document.getElementById("fuel-input-odo").value, 10);
+    const odometer = parseInt(document.getElementById("fuel-input-odo").value, 10);
     const liters = parseFloat(document.getElementById("fuel-input-liters").value);
-    const cost = parseFloat(document.getElementById("fuel-input-total").value);
-    const fullTank = document.getElementById("fuel-input-full").checked;
+    const totalCost = parseFloat(document.getElementById("fuel-input-total").value);
+    const isFullTank = document.getElementById("fuel-input-full").checked;
     const station = document.getElementById("fuel-input-station").value.trim();
-    
-    // Tipo de combustible activo
+
     const activeSeg = document.querySelector('.seg-btn[data-seg="fuel-type"].active');
     const fuelType = activeSeg ? activeSeg.dataset.val : "Magna";
 
-    if (!odo || !liters || !cost) {
-      alert("Por favor completa todos los campos requeridos.");
+    if (!odometer || !liters || !totalCost) {
+      alert("Por favor completa los campos requeridos.");
       return;
+    }
+
+    const pricePerLiter = parseFloat((totalCost / liters).toFixed(2));
+
+    // Si hay backend, enviar al servidor
+    if (this.apiBase) {
+      try {
+        const res = await fetch(`${this.apiBase}/fuel`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            odometer,
+            liters,
+            totalCost,
+            pricePerLiter,
+            fuelType,
+            isFullTank,
+            station,
+            notes: station,
+            date
+          })
+        });
+        if (res.ok) {
+          const resData = await res.json();
+          if (resData.success) {
+            await this.syncWithBackend();
+            this.closeModal("modal-fuel");
+            this.showToast("Carga guardada con éxito", "⛽");
+            this.haptic("heavy");
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn("Falla en backend fuel, guardando localmente:", err);
+      }
+    }
+
+    // Modo local / Fallback
+    const sorted = [...this.state.fuelLogs].sort((a, b) => a.odometer - b.odometer);
+    let calculatedKml = null;
+    let costPerKm = null;
+    let aiAnomalyNote = null;
+
+    if (sorted.length > 0) {
+      const last = sorted[sorted.length - 1];
+      const dist = odometer - last.odometer;
+      if (dist > 0 && liters > 0) {
+        calculatedKml = parseFloat((dist / liters).toFixed(2));
+        costPerKm = parseFloat((totalCost / dist).toFixed(2));
+
+        // Calcular promedio previo
+        const tele = this.calculateFuelTelemetry();
+        if (calculatedKml < tele.avgKml * 0.85) {
+          const drop = Math.round(((tele.avgKml - calculatedKml) / tele.avgKml) * 100);
+          aiAnomalyNote = `⚠️ Caída del ${drop}% en rendimiento (${calculatedKml} km/L vs promedio ${tele.avgKml} km/L). Revisar: 1) Presión de llantas a 33 PSI en frío, 2) Bujías BKR6E-11, 3) Filtro de aire, 4) Sensor de oxígeno o uso intensivo de A/C.`;
+        }
+      }
     }
 
     const newLog = {
       id: "f_" + Date.now(),
       date,
-      odo,
+      odometer,
       liters,
-      cost,
-      pricePerLiter: parseFloat((cost / liters).toFixed(2)),
-      fullTank,
+      totalCost,
+      pricePerLiter,
       fuelType,
+      isFullTank,
+      calculatedKml,
+      costPerKm,
       station: station || "Estación de servicio",
-      notes: "Carga registrada"
+      notes: station,
+      aiAnomalyNote
     };
 
     this.state.fuelLogs.push(newLog);
-
-    // Actualizar odómetro si el ingresado es mayor
-    if (odo > this.state.car.currentOdo) {
-      this.state.car.currentOdo = odo;
+    if (odometer > this.state.car.currentOdo) {
+      this.state.car.currentOdo = odometer;
     }
 
     this.saveState();
     this.closeModal("modal-fuel");
     this.renderAll();
-    this.showToast("Carga de gasolina registrada", "⛽");
+    this.showToast("Carga guardada (10s)", "⛽");
     this.haptic("heavy");
   }
 
-  handleServiceSubmit(e) {
+  async handleServiceSubmit(e) {
     e.preventDefault();
-    const type = document.getElementById("service-input-type").value;
+    const category = document.getElementById("service-input-category").value;
+    const provider = document.getElementById("service-input-who").value;
+    const title = document.getElementById("service-input-title").value.trim();
     const date = document.getElementById("service-input-date").value;
-    const odo = parseInt(document.getElementById("service-input-odo").value, 10);
+    const odometer = parseInt(document.getElementById("service-input-odo").value, 10);
+    const partsUsed = document.getElementById("service-input-parts").value.trim();
+    const description = document.getElementById("service-input-desc").value.trim();
     const cost = parseFloat(document.getElementById("service-input-cost").value) || 0;
-    const who = document.getElementById("service-input-who").value;
-    const parts = document.getElementById("service-input-parts").value.trim();
-    const notes = document.getElementById("service-input-notes").value.trim();
 
-    if (!odo || !date) {
-      alert("Completa fecha y kilometraje.");
-      return;
+    const btnSubmit = document.getElementById("btn-submit-service");
+    btnSubmit.textContent = "Evaluando con Gemini AI...";
+    btnSubmit.disabled = true;
+
+    // Si hay backend disponible
+    if (this.apiBase) {
+      try {
+        const res = await fetch(`${this.apiBase}/maintenance`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            category,
+            provider,
+            title,
+            date,
+            odometer,
+            partsUsed,
+            description,
+            cost
+          })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            await this.syncWithBackend();
+            btnSubmit.textContent = "Guardar y Evaluar con IA";
+            btnSubmit.disabled = false;
+            this.closeModal("modal-service");
+            this.showToast("Servicio evaluado con Gemini AI", "🤖");
+            this.haptic("heavy");
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn("Falla en backend maintenance, guardando local:", err);
+      }
+    }
+
+    // Fallback local estructurado
+    let aiImpact = "BUENO";
+    let aiPriceRating = "Justo";
+    let aiTechnicalAnalysis = `Intervención registrada para el Aveo 2011 1.6L DOHC. Se evaluó de forma positiva para el cuidado del motor F16D3.`;
+    let aiRelatedParts = "Niveles generales de fluidos (DEX-COOL, líquido de frenos y aceite).";
+    let aiNextServiceKm = odometer + 10000;
+
+    const lower = `${title} ${description}`.toLowerCase();
+    if (lower.includes("banda") || lower.includes("distribuc")) {
+      aiImpact = "BUENO";
+      aiTechnicalAnalysis = "Intervención de máxima prioridad. Al ser motor con interferencia, cambiar kit de distribución y bomba previene rotura de válvulas.";
+      aiRelatedParts = "Bomba de agua, retén de árbol de levas y cigüeñal.";
+      aiNextServiceKm = odometer + 50000;
+    } else if (lower.includes("aceite")) {
+      aiImpact = "BUENO";
+      aiTechnicalAnalysis = "Lubricación adecuada con SAE 5W-30 (3.75 L con filtro) para proteger los 16 buzos hidráulicos.";
+      aiRelatedParts = "Filtro de aire y revisión de junta de punterías.";
+      aiNextServiceKm = odometer + 6000;
+    } else if (category === "Falla/Síntoma") {
+      aiImpact = "MALO";
+      aiTechnicalAnalysis = "Síntoma reportado en motor 1.6L. Inspeccionar a la brevedad para evitar daños mayores.";
     }
 
     const newService = {
-      id: "s_" + Date.now(),
+      id: "m_" + Date.now(),
       date,
-      odo,
-      type,
-      title: `${type} • ${who}`,
+      odometer,
+      category,
+      title,
+      description,
+      partsUsed,
       cost,
-      who,
-      parts,
-      notes
+      provider,
+      aiImpact,
+      aiPriceRating,
+      aiTechnicalAnalysis,
+      aiRelatedParts,
+      aiNextServiceKm
     };
 
-    this.state.serviceLogs.push(newService);
-
-    // Actualizar el último servicio en la tabla de frecuencias si coincide
-    const matchedSched = this.state.maintenanceSchedule.find(s => s.name.includes(type) || type.includes(s.name));
-    if (matchedSched) {
-      matchedSched.lastDoneOdo = odo;
-      matchedSched.lastDoneDate = date;
-    }
-
-    // Actualizar odómetro si es mayor
-    if (odo > this.state.car.currentOdo) {
-      this.state.car.currentOdo = odo;
+    this.state.maintenanceLogs.push(newService);
+    if (odometer > this.state.car.currentOdo) {
+      this.state.car.currentOdo = odometer;
     }
 
     this.saveState();
+    btnSubmit.textContent = "Guardar y Evaluar con IA";
+    btnSubmit.disabled = false;
     this.closeModal("modal-service");
     this.renderAll();
-    this.showToast("Servicio guardado en bitácora", "🔧");
+    this.showToast("Servicio registrado y evaluado", "🔧");
     this.haptic("heavy");
   }
 
-  handleOdoSubmit(e) {
+  async handleOdoSubmit(e) {
     e.preventDefault();
     const newOdo = parseInt(document.getElementById("input-quick-odo-val").value, 10);
     if (newOdo && newOdo > 0) {
       this.state.car.currentOdo = newOdo;
+      
+      if (this.apiBase) {
+        fetch(`${this.apiBase}/car`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ currentOdometer: newOdo })
+        }).catch(() => {});
+      }
+
       this.saveState();
       this.closeModal("modal-odo");
       this.renderAll();
@@ -1511,16 +1347,27 @@ class AveoLogApp {
     this.state.car.insurancePhone = document.getElementById("doc-input-ins-phone").value.trim();
     this.state.car.verificationMonth = document.getElementById("doc-input-verif").value.trim();
 
+    if (this.apiBase) {
+      fetch(`${this.apiBase}/car`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plates: this.state.car.plates,
+          vin: this.state.car.vin,
+          insuranceCompany: this.state.car.insuranceCompany,
+          insurancePolicy: this.state.car.insurancePolicy,
+          insurancePhone: this.state.car.insurancePhone,
+          verificationMonth: this.state.car.verificationMonth
+        })
+      }).catch(() => {});
+    }
+
     this.saveState();
     this.closeModal("modal-car-docs");
     this.renderGarageView();
     this.showToast("Documentación guardada", "📋");
     this.haptic("medium");
   }
-
-  // =============================================================================
-  // 12. GESTIÓN DE RESPALDOS (EXPORT / IMPORT JSON)
-  // =============================================================================
 
   exportBackupJSON() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.state, null, 2));
@@ -1541,7 +1388,7 @@ class AveoLogApp {
     reader.onload = (e) => {
       try {
         const parsed = JSON.parse(e.target.result);
-        if (parsed.car && parsed.maintenanceSchedule) {
+        if (parsed.car && parsed.maintenanceLogs) {
           this.state = parsed;
           this.saveState();
           this.renderAll();
@@ -1556,20 +1403,6 @@ class AveoLogApp {
     };
     reader.readAsText(file);
   }
-
-  loadDemoData() {
-    if (confirm("¿Cargar datos de prueba de ejemplo para el Aveo 2011?")) {
-      this.state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-      this.saveState();
-      this.renderAll();
-      this.showToast("Datos de demostración cargados", "🚗");
-      this.haptic("heavy");
-    }
-  }
-
-  // =============================================================================
-  // 13. EXPERIENCIA PWA SAFARI IPHONE
-  // =============================================================================
 
   checkSafariPwaBanner() {
     const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -1590,16 +1423,14 @@ class AveoLogApp {
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("./sw.js").then((reg) => {
-          console.log("AveoLog ServiceWorker registrado con éxito:", reg.scope);
-        }).catch((err) => {
-          console.warn("Falla al registrar ServiceWorker:", err);
-        });
+          console.log("AveoLog ServiceWorker activo:", reg.scope);
+        }).catch(() => {});
       });
     }
   }
 }
 
-// Inicializar la aplicación cuando el DOM esté listo
+// Inicializar la aplicación
 let app;
 document.addEventListener("DOMContentLoaded", () => {
   app = new AveoLogApp();

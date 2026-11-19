@@ -36,8 +36,8 @@
           </svg>
         </div>
         <div class="brand-text">
-          <h1>AveoLog <span>AI</span></h1>
-          <div class="brand-subtitle">Aveo 2011 Sedán • 1.6L DOHC</div>
+          <h1>AveoLog <span>AI 2.5</span></h1>
+          <div class="brand-subtitle">Aveo 2011 Sedán • 1.6L DOHC (F16D3)</div>
         </div>
       </div>
       <div class="header-actions">
@@ -54,7 +54,7 @@
     <main class="ios-content-scroll" id="main-scroll">
       
       <!-- ========================================== -->
-      <!-- VISTA 1: DASHBOARD (INICIO) -->
+      <!-- VISTA 1: DASHBOARD DE SALUD ("INICIO") -->
       <!-- ========================================== -->
       <section class="app-view active" id="view-dashboard">
         <!-- Hero Card del Auto -->
@@ -63,12 +63,12 @@
             <div class="hero-title-group">
               <h2>Chevrolet Aveo 2011</h2>
               <div class="hero-badge-spec">
-                <span>⚙️ 1.6L 16V DOHC • 103 HP</span>
+                <span>⚙️ 1.6L 16V DOHC • 102 HP @ 5800 RPM</span>
               </div>
             </div>
             <div class="health-status-badge" id="dash-health-badge">
               <span class="health-dot"></span>
-              <span id="dash-health-text">En Óptimo Estado</span>
+              <span id="dash-health-text">OPTIMO</span>
             </div>
           </div>
 
@@ -102,7 +102,7 @@
             <div class="aveo-critical-icon">⚠️</div>
             <div class="aveo-critical-info">
               <h4>Banda de Distribución 1.6L (Interferencia)</h4>
-              <p id="dash-timing-belt-desc">¡Revisión prioritaria! Motor con interferencia: si la banda se rompe, se doblan válvulas.</p>
+              <p id="dash-timing-belt-desc">¡Atención! Motor con interferencia: si la banda se rompe, se doblan las 16 válvulas.</p>
             </div>
           </div>
         </div>
@@ -111,15 +111,15 @@
         <div class="action-buttons-group">
           <button class="btn-action-tile fuel" id="dash-btn-add-fuel">
             <div class="tile-icon">⛽</div>
-            <div class="tile-label">Cargar Gas</div>
+            <div class="tile-label">Cargar Gas (10s)</div>
           </button>
           <button class="btn-action-tile service" id="dash-btn-add-service">
             <div class="tile-icon">🔧</div>
-            <div class="tile-label">Nuevo Servicio</div>
+            <div class="tile-label">+ Bitácora</div>
           </button>
           <button class="btn-action-tile diag" id="dash-btn-open-diag">
-            <div class="tile-icon">🧠</div>
-            <div class="tile-label">Diagnóstico AI</div>
+            <div class="tile-icon">🤖</div>
+            <div class="tile-label">Copiloto IA</div>
           </button>
         </div>
 
@@ -127,11 +127,11 @@
         <div class="metrics-grid-2x2">
           <div class="metric-tile">
             <div class="metric-tile-header">
-              <span>Rendimiento</span>
+              <span>Rendimiento Promedio</span>
               <span>⛽</span>
             </div>
             <div class="metric-tile-val text-cyan"><span id="dash-kml-val">11.8</span><small>km/L</small></div>
-            <div class="metric-tile-sub" id="dash-kml-sub">Promedio calculado</div>
+            <div class="metric-tile-sub" id="dash-kml-sub">Calculado entre tanques</div>
           </div>
 
           <div class="metric-tile">
@@ -139,8 +139,8 @@
               <span>Autonomía Est.</span>
               <span>📍</span>
             </div>
-            <div class="metric-tile-val text-gold"><span id="dash-range-val">380</span><small>km</small></div>
-            <div class="metric-tile-sub">Tanque restante (45L máx)</div>
+            <div class="metric-tile-val text-gold"><span id="dash-range-val">398</span><small>km</small></div>
+            <div class="metric-tile-sub">Tanque 45.0 L</div>
           </div>
 
           <div class="metric-tile">
@@ -148,8 +148,8 @@
               <span>Costo por Km</span>
               <span>💵</span>
             </div>
-            <div class="metric-tile-val text-green"><span id="dash-costkm-val">$2.05</span><small>/km</small></div>
-            <div class="metric-tile-sub" id="dash-costkm-sub">Gasto en combustible</div>
+            <div class="metric-tile-val text-green"><span id="dash-costkm-val">$2.04</span><small>/km</small></div>
+            <div class="metric-tile-sub" id="dash-costkm-sub">Gasto en gasolina</div>
           </div>
 
           <div class="metric-tile">
@@ -158,15 +158,28 @@
               <span>⏱️</span>
             </div>
             <div class="metric-tile-val text-gold"><span id="dash-next-service-km">1,550</span><small>km</small></div>
-            <div class="metric-tile-sub" id="dash-next-service-name">Cambio de Aceite 5W-30</div>
+            <div class="metric-tile-sub" id="dash-next-service-name">Aceite SAE 5W-30</div>
           </div>
+        </div>
+
+        <!-- Resumen de Salud por IA -->
+        <div class="card-cockpit" id="dash-ai-health-box">
+          <div class="section-head">
+            <h3 style="display: flex; align-items: center; gap: 6px;">
+              <span>🤖</span> Diagnóstico de Salud Gemini
+            </h3>
+            <span style="font-size: 0.7rem; color: #34d399;" id="dash-ai-score-label">Score 90/100</span>
+          </div>
+          <p style="font-size: 0.78rem; color: #e2e8f0; line-height: 1.4;" id="dash-ai-summary-text">
+            Motor 1.6L en buen estado operativo. Banda de distribución con 38,450 km recorridos desde el último cambio (cambiar a los 50,000 km).
+          </p>
         </div>
 
         <!-- Últimos Registros Recientes -->
         <div class="card-cockpit">
           <div class="section-head">
             <h3>Actividad Reciente</h3>
-            <button class="section-head-action" id="dash-see-all-logs">Ver todo</button>
+            <button class="section-head-action" id="dash-see-all-logs">Ver Bitácora</button>
           </div>
           <div id="dash-recent-list">
             <!-- Inyectado vía JS -->
@@ -179,9 +192,9 @@
       <!-- ========================================== -->
       <section class="app-view" id="view-fuel">
         <div class="section-head">
-          <h3>Bitácora de Combustible</h3>
+          <h3>Control de Combustible</h3>
           <button class="btn-primary" id="btn-open-fuel-modal" style="width: auto; padding: 8px 16px; margin: 0; font-size: 0.8rem;">
-            + Cargar Gas
+            + Cargar Gas (10s)
           </button>
         </div>
 
@@ -189,21 +202,21 @@
         <div class="card-cockpit highlight-cyan">
           <div class="hero-car-header" style="margin-bottom: 8px;">
             <div>
-              <div style="font-size: 0.72rem; color: var(--text-secondary); text-transform: uppercase;">Eficiencia de Consumo</div>
+              <div style="font-size: 0.72rem; color: var(--text-secondary); text-transform: uppercase;">Eficiencia Actual</div>
               <div style="font-size: 1.6rem; font-weight: 800; color: #fff;">
-                <span id="fuel-avg-kml">11.8</span> <small style="font-size: 0.85rem; color: var(--telemetry-cyan);">km/Litro</small>
+                <span id="fuel-avg-kml">11.89</span> <small style="font-size: 0.85rem; color: var(--telemetry-cyan);">km/Litro</small>
               </div>
             </div>
             <div style="text-align: right;">
-              <div style="font-size: 0.72rem; color: var(--text-secondary);">Gasto Total Mes</div>
-              <div style="font-size: 1.1rem; font-weight: 800; color: var(--chevy-gold-light);" id="fuel-month-expense">$2,450</div>
+              <div style="font-size: 0.72rem; color: var(--text-secondary);">Gasto Mes Actual</div>
+              <div style="font-size: 1.1rem; font-weight: 800; color: var(--chevy-gold-light);" id="fuel-month-expense">$2,551</div>
             </div>
           </div>
 
-          <!-- Barra Comparativa Aveo 1.6L Estándar -->
+          <!-- Barra Comparativa Aveo 1.6L Estándar de Fábrica -->
           <div style="background: rgba(0,0,0,0.3); border-radius: var(--radius-md); padding: 10px; margin-top: 10px; border: 1px solid var(--border-subtle);">
             <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
-              📊 Parámetro de Fábrica (Aveo 2011 1.6L Sedán):
+              📊 Parámetro Oficial de Fábrica (Aveo 2011 Sedán 1.6L):
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; font-size: 0.72rem; text-align: center;">
               <div style="background: rgba(255,255,255,0.04); padding: 6px; border-radius: 6px;">
@@ -230,13 +243,13 @@
         <!-- Estadísticas Rápidas de Gas -->
         <div class="metrics-grid-2x2">
           <div class="metric-tile">
-            <div class="metric-tile-header"><span>Mejor Rendimiento</span><span>🏆</span></div>
-            <div class="metric-tile-val text-green"><span id="fuel-best-kml">14.2</span><small>km/L</small></div>
-            <div class="metric-tile-sub">En carretera / autopista</div>
+            <div class="metric-tile-header"><span>Mejor Registro</span><span>🏆</span></div>
+            <div class="metric-tile-val text-green"><span id="fuel-best-kml">11.89</span><small>km/L</small></div>
+            <div class="metric-tile-sub">Máxima eficiencia</div>
           </div>
           <div class="metric-tile">
-            <div class="metric-tile-header"><span>Peor Rendimiento</span><span>🛑</span></div>
-            <div class="metric-tile-val text-red"><span id="fuel-worst-kml">9.4</span><small>km/L</small></div>
+            <div class="metric-tile-header"><span>Peor Registro</span><span>🛑</span></div>
+            <div class="metric-tile-val text-red"><span id="fuel-worst-kml">11.50</span><small>km/L</small></div>
             <div class="metric-tile-sub">Tráfico pesado o A/C</div>
           </div>
         </div>
@@ -254,224 +267,284 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- VISTA 3: MANTENIMIENTO Y SERVICIOS -->
+      <!-- VISTA 3: BITÁCORA INTELIGENTE DE MANTENIMIENTO -->
       <!-- ========================================== -->
       <section class="app-view" id="view-service">
         <div class="section-head">
-          <h3>Bitácora de Mantenimiento</h3>
+          <h3>Bitácora Inteligente de Mantenimiento</h3>
           <button class="btn-primary" id="btn-open-service-modal" style="width: auto; padding: 8px 16px; margin: 0; font-size: 0.8rem;">
-            + Registrar Servicio
+            + Registrar Entrada
           </button>
         </div>
 
-        <!-- Resumen de Alertas Preventivas -->
+        <!-- Semáforo Preventivo Aveo 1.6L -->
         <div class="card-cockpit highlight-gold">
           <div class="section-head">
-            <h3>Semáforo Preventivo Aveo 1.6L</h3>
-            <span style="font-size: 0.72rem; color: var(--chevy-gold-light);">Calibrado de fábrica</span>
+            <h3>Semáforo de Servicios Preventivos</h3>
+            <span style="font-size: 0.72rem; color: var(--chevy-gold-light);">Aveo 2011 1.6L DOHC</span>
           </div>
-          <p style="font-size: 0.74rem; color: var(--text-secondary); margin-bottom: 12px;">
-            El motor 1.6L DOHC (F16D3) requiere especial atención en banda de tiempo, junta de tapa de punterías y carcasa de termostato.
-          </p>
           <div id="service-semaphore-list">
             <!-- Items de semáforo inyectados por JS -->
           </div>
         </div>
 
-        <!-- Historial de Servicios Realizados -->
+        <!-- Historial de Servicios con Evaluación Gemini -->
         <div class="card-cockpit">
           <div class="section-head">
-            <h3>Historial de Trabajos Realizados</h3>
+            <h3>Historial Evaluado con Gemini AI</h3>
             <span style="font-size: 0.72rem; color: var(--text-muted);" id="service-count-label">0 servicios</span>
           </div>
           <div id="service-history-list">
-            <!-- Lista histórica inyectada por JS -->
+            <!-- Lista histórica con Structured Outputs inyectada por JS -->
           </div>
         </div>
       </section>
 
       <!-- ========================================== -->
-      <!-- VISTA 4: DIAGNÓSTICO INTELIGENTE AI -->
+      <!-- VISTA 4: COPILOTO MECÁNICO ("PREGÚNTALE AL AVEO") -->
       <!-- ========================================== -->
       <section class="app-view" id="view-diag">
         <div class="section-head">
-          <h3>Diagnóstico Inteligente Aveo</h3>
+          <h3>Copiloto Mecánico Aveo</h3>
           <span class="health-status-badge" style="background: rgba(6,182,212,0.15); color: var(--telemetry-cyan); border-color: rgba(6,182,212,0.3);">
-            AveoBot 1.6L
+            Gemini 2.5 Flash
           </span>
         </div>
 
-        <!-- Buscador de Código OBD2 / Síntoma -->
-        <div class="diag-search-box">
-          <span class="diag-search-icon">🔍</span>
-          <input type="text" class="diag-search-input" id="diag-search-input" placeholder="Buscar código (ej. P0300) o síntoma...">
-        </div>
-
-        <!-- Síntomas Comunes Rápidos -->
+        <!-- Chips de Preguntas Frecuentes al Copiloto -->
         <div class="symptom-tag-cloud">
-          <div class="symptom-tag" data-query="P0300">P0300 (Misfire múltiple)</div>
-          <div class="symptom-tag" data-query="P0420">P0420 (Catalizador)</div>
-          <div class="symptom-tag" data-query="P0171">P0171 (Mezcla pobre)</div>
-          <div class="symptom-tag" data-query="tiembla en ralenti">Tiembla en ralentí</div>
-          <div class="symptom-tag" data-query="cascabeleo">Cascabelea en subida</div>
-          <div class="symptom-tag" data-query="olor a gasolina">Olor a gasolina</div>
-          <div class="symptom-tag" data-query="se apaga con ac">Se apaga con A/C</div>
-          <div class="symptom-tag" data-query="ruido al arrancar en frio">Chirrido en frío</div>
-          <div class="symptom-tag" data-query="sube temperatura">Sube temperatura</div>
+          <div class="symptom-tag" data-query="¿Qué fusible controla el encendedor?">🔌 Fusible encendedor 15A</div>
+          <div class="symptom-tag" data-query="¿Qué fusible controla la bomba de gasolina?">⛽ Fusible bomba gasolina</div>
+          <div class="symptom-tag" data-query="¿Cuándo fue la última vez que cambié aceite y qué viscosidad lleva?">🛢️ Último cambio aceite</div>
+          <div class="symptom-tag" data-query="Se encendió el testigo HOLD parpadeando, ¿qué hago?">⚠️ Testigo HOLD parpadeando</div>
+          <div class="symptom-tag" data-query="¿Cuál es la presión de inflado de las 4 llantas?">🛞 Presión llantas 33 PSI</div>
+          <div class="symptom-tag" data-query="¿Cada cuánto debo cambiar la banda de distribución del 1.6L?">⚠️ Banda distribución 50k km</div>
+          <div class="symptom-tag" data-query="Tiembla el motor en ralentí, ¿qué reviso primero?">🛑 Tiembla en ralentí</div>
         </div>
 
-        <!-- Tarjeta de Asistente Conversacional "AveoBot AI" -->
+        <!-- Chat con Copiloto -->
         <div class="card-cockpit">
           <div class="section-head">
             <h3 style="display: flex; align-items: center; gap: 6px;">
-              <span>🤖</span> Consulta con AveoBot AI
+              <span>🤖</span> Pregúntale al Aveo
             </h3>
-            <span style="font-size: 0.68rem; color: #34d399;">● Modo Experto Aveo</span>
+            <span style="font-size: 0.68rem; color: #34d399;">● Contexto de Ficha y Bitácora Activo</span>
           </div>
 
           <div class="chat-window" id="chat-messages">
             <div class="chat-bubble bot">
-              ¡Hola! Soy tu asistente especializado en el <strong>Chevrolet Aveo 2011 1.6L DOHC</strong>. 
-              Dime qué síntoma presenta tu auto (ruidos, tirones, luces del tablero, consumo alto) o escribe un código OBD2 y te daré un diagnóstico con causas y solución paso a paso.
+              ¡Hola! Soy tu Copiloto Mecánico para tu <strong>Chevrolet Aveo 2011 Sedán 1.6L DOHC (F16D3)</strong>.
+              Tengo cargadas todas las especificaciones de fábrica de tu auto y toda tu bitácora de servicios. Hazme cualquier pregunta mecánica, de fusibles o de testigos.
             </div>
           </div>
 
           <div class="chat-input-bar">
-            <input type="text" class="chat-input" id="chat-input-text" placeholder="Ej: Mi Aveo pierde fuerza en subidas...">
+            <input type="text" class="chat-input" id="chat-input-text" placeholder="Escribe tu consulta al mecánico...">
             <button class="btn-chat-send" id="btn-chat-send" title="Enviar consulta">➤</button>
-          </div>
-        </div>
-
-        <!-- Biblioteca Rápida de Códigos OBD2 Aveo 1.6L -->
-        <div class="card-cockpit">
-          <div class="section-head">
-            <h3>Códigos OBD2 Más Frecuentes en Aveo</h3>
-          </div>
-          <div id="diag-popular-dtc-list">
-            <!-- Códigos OBD2 inyectados por JS -->
           </div>
         </div>
       </section>
 
       <!-- ========================================== -->
-      <!-- VISTA 5: GARAJE Y MANUAL TÉCNICO -->
+      <!-- VISTA 5: FICHA TÉCNICA Y GUANTERA DIGITAL -->
       <!-- ========================================== -->
       <section class="app-view" id="view-garage">
         <div class="section-head">
-          <h3>Ficha Técnica & Garaje</h3>
+          <h3>Ficha Técnica & Guantera Digital</h3>
+          <button class="section-head-action" id="btn-edit-car-docs">Editar Póliza/Placas</button>
         </div>
 
-        <!-- Ficha Técnica de Fábrica -->
+        <!-- Especificaciones de Fábrica -->
         <div class="card-cockpit highlight-gold">
           <div class="section-head">
-            <h3>Especificaciones de Fábrica</h3>
-            <span style="font-size: 0.72rem; color: var(--chevy-gold-light);">Aveo 2011 1.6L</span>
+            <h3>Ficha Técnica Oficial Aveo 2011</h3>
+            <span style="font-size: 0.72rem; color: var(--chevy-gold-light);">1.6L 16V DOHC</span>
           </div>
           <table class="specs-table">
             <tr>
-              <td class="spec-title">Motor</td>
-              <td class="spec-val">1.6L DOHC 16V (F16D3 / E-TEC II)</td>
+              <td class="spec-title">Motor / Cilindrada</td>
+              <td class="spec-val">1.6L 16V DOHC F16D3 (1,598 cc)</td>
             </tr>
             <tr>
-              <td class="spec-title">Potencia / Torque</td>
-              <td class="spec-val">103 HP @ 6,000 RPM / 107 lb-ft</td>
+              <td class="spec-title">Potencia & Torque</td>
+              <td class="spec-val">102 HP @ 5800 RPM / 145 Nm @ 3600 RPM</td>
             </tr>
             <tr>
-              <td class="spec-title">Tipo de Distribución</td>
-              <td class="spec-val" style="color: #fca5a5;">Banda dentada (Interferencia)</td>
+              <td class="spec-title">Distribución</td>
+              <td class="spec-val" style="color: #fca5a5;">Banda dentada (¡Interferencia Mecánica!)</td>
+            </tr>
+            <tr>
+              <td class="spec-title">Presión de Llantas (Frío)</td>
+              <td class="spec-val" style="color: var(--telemetry-cyan);">33 PSI (230 kPa) Del. y Tras.</td>
             </tr>
             <tr>
               <td class="spec-title">Capacidad de Tanque</td>
-              <td class="spec-val">45 Litros (11.9 gal)</td>
+              <td class="spec-val">45.0 Litros (Min. 91 RON)</td>
             </tr>
             <tr>
-              <td class="spec-title">Aceite Recomendado</td>
-              <td class="spec-val">3.75 L (c/filtro) 5W-30 o 10W-30</td>
+              <td class="spec-title">Aceite de Motor</td>
+              <td class="spec-val">SAE 5W-30 (o 10W-30) API SM • 3.75 L</td>
             </tr>
             <tr>
               <td class="spec-title">Refrigerante</td>
-              <td class="spec-val">7.0 Litros (Dex-Cool 50/50 Rosa)</td>
+              <td class="spec-val">6.3 L DEX-COOL 50/50 Rosa</td>
             </tr>
             <tr>
-              <td class="spec-title">Bujías & Calibración</td>
-              <td class="spec-val">NGK BKR6E-11 / 1.1 mm (0.043")</td>
+              <td class="spec-title">Transmisión Manual</td>
+              <td class="spec-val">1.8 L SAE 75W-90 API GL-4</td>
             </tr>
             <tr>
-              <td class="spec-title">Orden de Encendido</td>
-              <td class="spec-val">1 - 3 - 4 - 2</td>
+              <td class="spec-title">Transmisión Automática</td>
+              <td class="spec-val">5.6 ± 0.2 L ESSO JWS 3309 / TOTAL FLUID</td>
             </tr>
             <tr>
-              <td class="spec-title">Presión de Llantas</td>
-              <td class="spec-val">30 - 32 PSI (Medida 185/60 R14)</td>
+              <td class="spec-title">Dirección Asistida</td>
+              <td class="spec-val">1.1 L DEXRON VI (Rojo)</td>
+            </tr>
+            <tr>
+              <td class="spec-title">Líquido Frenos / Embrague</td>
+              <td class="spec-val">0.5 L DOT 3 / DOT 4 (Circuito en X)</td>
+            </tr>
+            <tr>
+              <td class="spec-title">Bujías Oficiales</td>
+              <td class="spec-val">NGK BKR6E-11 (Gap 1.0 - 1.1 mm)</td>
             </tr>
           </table>
         </div>
 
-        <!-- Documentación del Vehículo -->
+        <!-- Fusibles Clave del Aveo 2011 -->
         <div class="card-cockpit">
           <div class="section-head">
-            <h3>Datos y Documentos</h3>
-            <button class="section-head-action" id="btn-edit-car-docs">Editar</button>
+            <h3>Fusibles Clave del Aveo 2011</h3>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Ubicación & Amperaje</span>
           </div>
-          <table class="specs-table">
+          <div class="fuse-grid">
+            <div class="fuse-tile">
+              <div class="fuse-tile-head">
+                <span class="fuse-tile-name">🔌 CIGAR (Encendedor)</span>
+                <span class="fuse-amp-badge">15A</span>
+              </div>
+              <div class="fuse-tile-desc">Caja interior cabina. Toma corriente 12V.</div>
+            </div>
+
+            <div class="fuse-tile">
+              <div class="fuse-tile-head">
+                <span class="fuse-tile-name">⛽ F/PUMP (Bomba Gas)</span>
+                <span class="fuse-amp-badge">15A</span>
+              </div>
+              <div class="fuse-tile-desc">Caja motor junto a batería. Relé y bomba.</div>
+            </div>
+
+            <div class="fuse-tile">
+              <div class="fuse-tile-head">
+                <span class="fuse-tile-name">🔍 OBD2 (Diagnóstico)</span>
+                <span class="fuse-amp-badge">10A</span>
+              </div>
+              <div class="fuse-tile-desc">Caja interior cabina. Escáner.</div>
+            </div>
+
+            <div class="fuse-tile">
+              <div class="fuse-tile-head">
+                <span class="fuse-tile-name">💻 ECM / ECU (Motor)</span>
+                <span class="fuse-amp-badge">10A</span>
+              </div>
+              <div class="fuse-tile-desc">Caja motor. Computadora principal.</div>
+            </div>
+
+            <div class="fuse-tile">
+              <div class="fuse-tile-head">
+                <span class="fuse-tile-name">🌀 FAN LOW (Ventilador)</span>
+                <span class="fuse-amp-badge">20A</span>
+              </div>
+              <div class="fuse-tile-desc">Caja motor. Radiador velocidad 1.</div>
+            </div>
+
+            <div class="fuse-tile">
+              <div class="fuse-tile-head">
+                <span class="fuse-tile-name">🔥 FAN HIGH (Ventilador)</span>
+                <span class="fuse-amp-badge">30A</span>
+              </div>
+              <div class="fuse-tile-desc">Caja motor. Velocidad 2 con A/C.</div>
+            </div>
+
+            <div class="fuse-tile">
+              <div class="fuse-tile-head">
+                <span class="fuse-tile-name">📢 HORN (Claxon)</span>
+                <span class="fuse-amp-badge">15A</span>
+              </div>
+              <div class="fuse-tile-desc">Caja motor. Bocina y alarma.</div>
+            </div>
+
+            <div class="fuse-tile">
+              <div class="fuse-tile-head">
+                <span class="fuse-tile-name">💡 Faros H4</span>
+                <span class="fuse-amp-badge">15A/20A</span>
+              </div>
+              <div class="fuse-tile-desc">Caja motor. Focos 60/55W halógeno.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pasos de Emergencia -->
+        <div class="card-cockpit">
+          <div class="section-head">
+            <h3>Protocolos de Emergencia</h3>
+          </div>
+          <div style="margin-bottom: 12px;">
+            <h4 style="font-size: 0.85rem; color: var(--chevy-gold-light); margin-bottom: 4px;">⚡ Paso de Corriente Seguro:</h4>
+            <ol style="font-size: 0.76rem; color: var(--text-secondary); padding-left: 18px; line-height: 1.4;">
+              <li>Conectar pinza ROJA (+) en batería del Aveo descargada.</li>
+              <li>Conectar pinza ROJA (+) en batería del auto donante.</li>
+              <li>Conectar pinza NEGRA (-) en batería del auto donante.</li>
+              <li>Conectar pinza NEGRA (-) a tierra metálica del monoblock del Aveo (NUNCA al borne negativo de la batería del Aveo).</li>
+              <li>Encender auto donante, esperar 3 min y dar marcha al Aveo.</li>
+            </ol>
+          </div>
+
+          <div>
+            <h4 style="font-size: 0.85rem; color: #f87171; margin-bottom: 4px;">🌡️ Sobrecalentamiento:</h4>
+            <p style="font-size: 0.76rem; color: var(--text-secondary); line-height: 1.4;">
+              Orillarse. Encender calefacción al máximo para disipar calor. NUNCA abrir el tapón del depósito de DEX-COOL caliente por riesgo de quemaduras graves por vapor. Esperar 30 min y revisar si hay fugas en la carcasa plástica del termostato.
+            </p>
+          </div>
+        </div>
+
+        <!-- Documentos y Respaldo -->
+        <div class="card-cockpit">
+          <div class="section-head">
+            <h3>Guantera Digital & Seguro</h3>
+          </div>
+          <table class="specs-table" style="margin-bottom: 12px;">
             <tr>
               <td class="spec-title">Placas</td>
-              <td class="spec-val" id="garage-plates-val">---</td>
+              <td class="spec-val" id="garage-plates-val">NL-742-B</td>
             </tr>
             <tr>
-              <td class="spec-title">Número de Serie (VIN)</td>
-              <td class="spec-val" id="garage-vin-val">---</td>
+              <td class="spec-title">VIN / Serie</td>
+              <td class="spec-val" id="garage-vin-val">3G1JA5264BL129840</td>
             </tr>
             <tr>
               <td class="spec-title">Aseguradora & Póliza</td>
-              <td class="spec-val" id="garage-insurance-val">---</td>
+              <td class="spec-val" id="garage-insurance-val">Quálitas • POL-04829104</td>
             </tr>
             <tr>
-              <td class="spec-title">Teléfono Asistencia</td>
-              <td class="spec-val" id="garage-phone-val">---</td>
+              <td class="spec-title">Asistencia 24h</td>
+              <td class="spec-val" id="garage-phone-val"><a href="tel:8008002880" style="color:var(--telemetry-cyan); text-decoration:none;">📞 800 800 2880</a></td>
             </tr>
             <tr>
-              <td class="spec-title">Verificación Vehicular</td>
-              <td class="spec-val" id="garage-verif-val">---</td>
+              <td class="spec-title">Verificación</td>
+              <td class="spec-val" id="garage-verif-val">Mayo - Junio</td>
             </tr>
           </table>
-        </div>
-
-        <!-- Copias de Seguridad y Datos -->
-        <div class="card-cockpit">
-          <div class="section-head">
-            <h3>Gestión de Datos & Copia de Seguridad</h3>
-          </div>
-          <p style="font-size: 0.74rem; color: var(--text-secondary); margin-bottom: 12px;">
-            Tus datos se guardan de forma privada en el almacenamiento local de tu iPhone. Exporta una copia para guardarla en tu iCloud Drive.
-          </p>
 
           <button class="btn-primary" id="btn-export-backup" style="margin-bottom: 8px;">
-            📤 Exportar Respaldo Completo (JSON)
+            📤 Descargar Respaldo JSON Completo
           </button>
           
-          <label class="btn-secondary" style="margin-bottom: 8px; cursor: pointer;">
-            📥 Importar Respaldo desde Archivo
+          <label class="btn-secondary" style="cursor: pointer;">
+            📥 Restaurar Copia de Seguridad
             <input type="file" id="file-import-backup" accept=".json" style="display: none;">
           </label>
-
-          <button class="btn-secondary" id="btn-load-demo-data" style="border-color: rgba(6,182,212,0.3); color: var(--telemetry-cyan);">
-            🚗 Cargar Datos Demo de Ejemplo
-          </button>
-        </div>
-
-        <!-- Configuración de API Key Gemini (Opcional) -->
-        <div class="card-cockpit">
-          <div class="section-head">
-            <h3>Conexión con Gemini AI (Opcional)</h3>
-          </div>
-          <p style="font-size: 0.74rem; color: var(--text-secondary); margin-bottom: 10px;">
-            AveoLog AI cuenta con un motor de diagnóstico offline 100% autónomo. Si deseas consultas con modelos en la nube de Google, puedes ingresar tu API Key gratuita:
-          </p>
-          <div class="form-group" style="margin-bottom: 8px;">
-            <input type="password" class="form-input" id="cfg-gemini-key" placeholder="AIzaSy...">
-          </div>
-          <button class="btn-secondary" id="btn-save-gemini-key">Guardar Clave API</button>
         </div>
       </section>
 
@@ -493,29 +566,29 @@
 
       <button class="tabbar-item" data-view="view-service">
         <div class="tabbar-icon">🔧</div>
-        <div class="tabbar-label">Servicios</div>
+        <div class="tabbar-label">Bitácora</div>
         <span class="tabbar-badge" id="tab-service-badge" style="display: none;">!</span>
       </button>
 
       <button class="tabbar-item" data-view="view-diag">
-        <div class="tabbar-icon">🧠</div>
-        <div class="tabbar-label">Diagnóstico</div>
+        <div class="tabbar-icon">🤖</div>
+        <div class="tabbar-label">Copiloto IA</div>
       </button>
 
       <button class="tabbar-item" data-view="view-garage">
         <div class="tabbar-icon">📖</div>
-        <div class="tabbar-label">Garaje</div>
+        <div class="tabbar-label">Manual</div>
       </button>
     </nav>
 
     <!-- ========================================== -->
-    <!-- MODAL 1: REGISTRAR CARGA DE GASOLINA -->
+    <!-- MODAL 1: REGISTRAR CARGA DE GASOLINA (10s) -->
     <!-- ========================================== -->
     <div class="modal-overlay" id="modal-fuel">
       <div class="bottom-sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-header">
-          <h3>⛽ Nueva Carga de Gasolina</h3>
+          <h3>⛽ Carga de Gasolina (10 Segundos)</h3>
           <button class="sheet-close-btn" data-close-modal="modal-fuel">✕</button>
         </div>
 
@@ -543,24 +616,24 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Tipo de Combustible</label>
+            <label class="form-label">Tipo de Gasolina</label>
             <div class="form-segmented">
-              <button type="button" class="seg-btn active" data-seg="fuel-type" data-val="Magna">🟢 Magna (Regular)</button>
-              <button type="button" class="seg-btn" data-seg="fuel-type" data-val="Premium">🔴 Premium</button>
+              <button type="button" class="seg-btn active" data-seg="fuel-type" data-val="Magna">🟢 Magna (87 Oct)</button>
+              <button type="button" class="seg-btn" data-seg="fuel-type" data-val="Premium">🔴 Premium (91+ Oct)</button>
             </div>
           </div>
 
           <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; background: #0d121c; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.08);">
             <div>
               <div style="font-size: 0.82rem; font-weight: 700; color: #fff;">¿Tanque Lleno?</div>
-              <div style="font-size: 0.7rem; color: var(--text-muted);">Recomendado para cálculo exacto de km/L</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted);">Necesario para calcular km/L exactos</div>
             </div>
             <input type="checkbox" id="fuel-input-full" checked style="width: 20px; height: 20px; accent-color: var(--chevy-gold);">
           </div>
 
           <div class="form-group">
-            <label class="form-label">Gasolinera / Notas (Opcional)</label>
-            <input type="text" class="form-input" id="fuel-input-station" placeholder="Ej. Pemex Revolución, Oxxo Gas...">
+            <label class="form-label">Notas de Conducción</label>
+            <input type="text" class="form-input" id="fuel-input-station" placeholder="Ej. mucho tráfico en Monterrey, uso intensivo de A/C">
           </div>
 
           <button type="submit" class="btn-primary">Guardar Carga</button>
@@ -569,36 +642,40 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MODAL 2: REGISTRAR SERVICIO MECÁNICO -->
+    <!-- MODAL 2: REGISTRAR ENTRADA EN BITÁCORA -->
     <!-- ========================================== -->
     <div class="modal-overlay" id="modal-service">
       <div class="bottom-sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-header">
-          <h3>🔧 Registrar Servicio / Mantenimiento</h3>
+          <h3>🔧 Nueva Entrada en Bitácora</h3>
           <button class="sheet-close-btn" data-close-modal="modal-service">✕</button>
         </div>
 
         <form id="form-service">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">Categoría</label>
+              <select class="form-select" id="service-input-category" required>
+                <option value="Preventivo">🛡️ Preventivo</option>
+                <option value="Correctivo">🔨 Correctivo</option>
+                <option value="Falla/Síntoma">⚠️ Falla / Síntoma</option>
+                <option value="Modificación/Accesorio">✨ Modificación / Accesorio</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Proveedor</label>
+              <select class="form-select" id="service-input-who">
+                <option value="Taller Mecánico">Taller Mecánico</option>
+                <option value="Hecho por mí (DIY)">Hecho por mí (DIY)</option>
+                <option value="Agencia Chevrolet">Agencia</option>
+              </select>
+            </div>
+          </div>
+
           <div class="form-group">
-            <label class="form-label">Tipo de Mantenimiento</label>
-            <select class="form-select" id="service-input-type" required>
-              <option value="Banda de Distribución (Kit Completo)">⚠️ Banda de Distribución (Kit + Bomba + Poleas)</option>
-              <option value="Cambio de Aceite y Filtro">🛢️ Cambio de Aceite y Filtro (5W-30 / 10W-30)</option>
-              <option value="Filtro de Aire">🌬️ Filtro de Aire de Motor</option>
-              <option value="Filtro de Gasolina">⛽ Filtro de Gasolina</option>
-              <option value="Bujías y Cables">⚡ Bujías (1.1 mm) y/o Cables</option>
-              <option value="Anticongelante y Termostato">🌡️ Anticongelante Dex-Cool / Termostato</option>
-              <option value="Frenos Delanteros / Balatas">🛑 Balatas Delanteras / Rectificado</option>
-              <option value="Frenos Traseros / Zapatas">🛑 Zapatas Traseras / Tambores</option>
-              <option value="Líquido de Frenos">💧 Líquido de Frenos (DOT 3 / DOT 4)</option>
-              <option value="Aceite de Transmisión">⚙️ Aceite de Transmisión (Estándar/AT)</option>
-              <option value="Cuerpo de Aceleración / IAC">🧼 Limpieza Cuerpo de Aceleración y Válvula IAC</option>
-              <option value="Suspensión / Dirección">🔩 Suspensión (Bujes, Bieletas, Amortiguadores)</option>
-              <option value="Alineación y Balanceo">🛞 Alineación, Balanceo y Rotación</option>
-              <option value="Batería">🔋 Reemplazo de Batería</option>
-              <option value="Otro">🛠️ Otro Servicio / Reparación</option>
-            </select>
+            <label class="form-label">Título del Servicio o Falla</label>
+            <input type="text" class="form-input" id="service-input-title" placeholder="Ej. Cambio de Kit de Banda de Distribución y Bomba" required>
           </div>
 
           <div class="form-row-2">
@@ -612,32 +689,26 @@
             </div>
           </div>
 
-          <div class="form-row-2">
-            <div class="form-group">
-              <label class="form-label">Costo Total ($ MXN)</label>
-              <input type="number" step="0.01" class="form-input" id="service-input-cost" placeholder="Ej. 1800">
-            </div>
-            <div class="form-group">
-              <label class="form-label">¿Quién lo realizó?</label>
-              <select class="form-select" id="service-input-who">
-                <option value="Taller Mecánico">Taller Mecánico</option>
-                <option value="Hecho por mí (DIY)">Hecho por mí (DIY)</option>
-                <option value="Agencia Chevrolet">Agencia</option>
-              </select>
-            </div>
+          <div class="form-group">
+            <label class="form-label">Piezas / Fluidos Usados</label>
+            <input type="text" class="form-input" id="service-input-parts" placeholder="Ej. Kit Gates, Bujías NGK BKR6E-11, Aceite SAE 5W-30 Mobil">
           </div>
 
           <div class="form-group">
-            <label class="form-label">Refacciones / Marcas Utilizadas</label>
-            <input type="text" class="form-input" id="service-input-parts" placeholder="Ej. Kit Gates, Bujías NGK BKR6E-11, Aceite Mobil 5W-30">
+            <label class="form-label">Descripción Detallada</label>
+            <textarea class="form-textarea" id="service-input-desc" rows="2" placeholder="Detalles de la reparación, síntomas observados, garantía..."></textarea>
           </div>
 
           <div class="form-group">
-            <label class="form-label">Notas Adicionales / Garantía</label>
-            <textarea class="form-textarea" id="service-input-notes" rows="2" placeholder="Observaciones del mecánico, garantía de refacciones..."></textarea>
+            <label class="form-label">Costo Total ($ MXN)</label>
+            <input type="number" step="0.01" class="form-input" id="service-input-cost" placeholder="Ej. 3850">
           </div>
 
-          <button type="submit" class="btn-primary">Guardar en Bitácora</button>
+          <div style="font-size: 0.72rem; color: var(--telemetry-cyan); margin-bottom: 8px;">
+            🤖 Al guardar, Gemini 2.5 Flash evaluará impacto, precio y piezas relacionadas automáticamente.
+          </div>
+
+          <button type="submit" class="btn-primary" id="btn-submit-service">Guardar y Evaluar con IA</button>
         </form>
       </div>
     </div>
@@ -667,26 +738,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MODAL 4: DETALLE DE CÓDIGO OBD2 / SÍNTOMA -->
-    <!-- ========================================== -->
-    <div class="modal-overlay" id="modal-diag-detail">
-      <div class="bottom-sheet">
-        <div class="sheet-handle"></div>
-        <div class="sheet-header">
-          <h3 id="diag-detail-title">Detalle de Diagnóstico</h3>
-          <button class="sheet-close-btn" data-close-modal="modal-diag-detail">✕</button>
-        </div>
-
-        <div id="diag-detail-content" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-main);">
-          <!-- Inyectado por JS -->
-        </div>
-
-        <button class="btn-secondary" data-close-modal="modal-diag-detail" style="margin-top: 14px;">Entendido</button>
-      </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- MODAL 5: EDITAR DATOS DEL AUTO Y PÓLIZA -->
+    <!-- MODAL 4: EDITAR DATOS DEL AUTO Y PÓLIZA -->
     <!-- ========================================== -->
     <div class="modal-overlay" id="modal-car-docs">
       <div class="bottom-sheet">
@@ -699,7 +751,7 @@
         <form id="form-car-docs">
           <div class="form-group">
             <label class="form-label">Placas de Circulación</label>
-            <input type="text" class="form-input" id="doc-input-plates" placeholder="Ej. ABC-123-D">
+            <input type="text" class="form-input" id="doc-input-plates" placeholder="Ej. NL-742-B">
           </div>
           <div class="form-group">
             <label class="form-label">Número de Serie (VIN)</label>
@@ -708,17 +760,17 @@
           <div class="form-row-2">
             <div class="form-group">
               <label class="form-label">Aseguradora</label>
-              <input type="text" class="form-input" id="doc-input-ins-name" placeholder="Ej. Qualitas / GNP">
+              <input type="text" class="form-input" id="doc-input-ins-name" placeholder="Ej. Quálitas">
             </div>
             <div class="form-group">
               <label class="form-label">Número de Póliza</label>
-              <input type="text" class="form-input" id="doc-input-ins-policy" placeholder="Ej. 12345678">
+              <input type="text" class="form-input" id="doc-input-ins-policy" placeholder="Ej. POL-04829104">
             </div>
           </div>
           <div class="form-row-2">
             <div class="form-group">
               <label class="form-label">Tel. Asistencia 24h</label>
-              <input type="tel" class="form-input" id="doc-input-ins-phone" placeholder="Ej. 800-800-2880">
+              <input type="tel" class="form-input" id="doc-input-ins-phone" placeholder="Ej. 800 800 2880">
             </div>
             <div class="form-group">
               <label class="form-label">Mes de Verificación</label>

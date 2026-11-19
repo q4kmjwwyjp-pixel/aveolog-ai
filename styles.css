@@ -25,6 +25,7 @@
   --status-warn-glow: rgba(245, 158, 11, 0.25);
   --status-danger: #ef4444;
   --status-danger-glow: rgba(239, 68, 68, 0.28);
+  --status-info: #3b82f6;
   
   /* Tipografía y Bordes */
   --text-main: #f8fafc;
@@ -86,7 +87,7 @@ html, body {
   padding-bottom: 10px;
   padding-left: max(16px, var(--sal));
   padding-right: max(16px, var(--sar));
-  background: rgba(8, 11, 18, 0.85);
+  background: rgba(8, 11, 18, 0.88);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-subtle);
@@ -480,7 +481,7 @@ html, body {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(12, 16, 26, 0.88);
+  background: rgba(12, 16, 26, 0.92);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
   border-top: 1px solid var(--border-subtle);
@@ -571,18 +572,23 @@ html, body {
 /* Listados y Filas */
 .item-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   padding: 12px;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   transition: background 0.15s ease;
 }
 
 .item-row:active {
   background: rgba(255, 255, 255, 0.04);
+}
+
+.item-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .item-left {
@@ -628,6 +634,75 @@ html, body {
 .item-right .sub-val {
   font-size: 0.7rem;
   color: var(--text-muted);
+}
+
+/* Tarjeta de Evaluación Estructurada con IA (Gemini) */
+.ai-evaluation-card {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+
+.ai-eval-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.badge-impact {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+}
+
+.badge-impact.BUENO { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+.badge-impact.NORMAL { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+.badge-impact.MALO { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+.badge-impact.CRITICO { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+.badge-price {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+}
+
+.ai-eval-analysis {
+  color: #e2e8f0;
+  margin-bottom: 6px;
+}
+
+.ai-eval-related {
+  color: var(--chevy-gold-light);
+  font-size: 0.7rem;
+}
+
+.ai-eval-next {
+  color: var(--telemetry-cyan);
+  font-weight: 700;
+  font-size: 0.7rem;
+  margin-top: 4px;
+}
+
+/* Alerta de Caída de Combustible > 15% */
+.fuel-anomaly-box {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  font-size: 0.73rem;
+  color: #fca5a5;
+  line-height: 1.35;
 }
 
 /* Semáforo de Servicios en Mantenimiento */
@@ -1099,4 +1174,48 @@ html, body {
 .ios-toast.show {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
+}
+
+/* Visor de Fusibles y Emergencias */
+.fuse-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.fuse-tile {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px;
+}
+
+.fuse-tile-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.fuse-tile-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.fuse-amp-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--chevy-gold-light);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.fuse-tile-desc {
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  line-height: 1.3;
 }

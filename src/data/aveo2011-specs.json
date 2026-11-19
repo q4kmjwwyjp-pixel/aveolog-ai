@@ -1,0 +1,159 @@
+{
+  "vehiculo": {
+    "marca": "Chevrolet",
+    "modelo": "Aveo Sedán 4 puertas",
+    "anio": 2011,
+    "version": "Sedán 4P 1.6L",
+    "carroceria": "Sedán monocasco de acero",
+    "motor": {
+      "tipo": "1.6L DOHC 16 válvulas",
+      "disposicion": "4 cilindros en línea transversal delantero",
+      "codigo_motor": "F16D3 / E-TEC II (Familia 1)",
+      "cilindrada_cc": 1598,
+      "diametro_carrera_mm": "79.0 x 81.5",
+      "relacion_compresion": "9.5:1",
+      "potencia_hp": 102,
+      "potencia_kw": 76,
+      "potencia_rpm": 5800,
+      "torque_nm": 145,
+      "torque_lbft": 107,
+      "torque_rpm": 3600,
+      "alimentacion": "Inyección electrónica multipunto secuencial (MPFI)",
+      "distribucion": "Banda dentada con tensor mecánico y polea loca (MOTOR CON INTERFERENCIA MECÁNICA - si la banda se rompe se doblan válvulas)",
+      "intervalo_distribucion_km": 50000,
+      "orden_encendido": "1-3-4-2"
+    },
+    "dimensiones_pesos": {
+      "largo_mm": 4310,
+      "ancho_mm": 1710,
+      "alto_mm": 1505,
+      "distancia_ejes_mm": 2480,
+      "peso_bruto_kg": 1115
+    }
+  },
+  "combustible": {
+    "tipo_recomendado": "Gasolina sin plomo mínimo 91 RON (Magna 87 Octanos / Premium 91+)",
+    "capacidad_tanque_litros": 45.0,
+    "capacidad_tanque_galones": 11.9,
+    "rango_optimo_manejo_rpm": "2,000 a 3,000 RPM",
+    "alarma_velocidad_fabrica": "120 km/h",
+    "rendimiento_estimado_fabrica": {
+      "ciudad_kml": "10.5 - 11.5",
+      "mixto_kml": "12.5 - 13.5",
+      "carretera_kml": "14.5 - 16.0"
+    }
+  },
+  "fluidos_y_capacidades": {
+    "aceite_motor": {
+      "viscosidad": "SAE 5W-30 (alternativa 10W-30 en clima cálido como Monterrey)",
+      "clasificacion": "API SM / ILSAC GF-IV o superior (SN/SP)",
+      "capacidad_con_filtro_litros": 3.75,
+      "capacidad_sin_filtro_litros": 3.5,
+      "frecuencia_cambio_km": "5,000 - 7,500 km o 6 meses"
+    },
+    "refrigerante": {
+      "tipo": "Mezcla 50/50 agua desmineralizada y anticongelante DEX-COOL (Rosa/Naranja)",
+      "capacidad_total_litros": 6.3,
+      "inspeccion_critica": "Carcasa plástica de termostato y codo de salida (reemplazar por aluminio si presenta fuga o cristalización)"
+    },
+    "transmision": {
+      "manual": {
+        "tipo": "Manual 5 velocidades",
+        "aceite": "SAE 75W-90 API GL-4",
+        "capacidad_litros": 1.8
+      },
+      "automatica": {
+        "tipo": "Automática 4 velocidades con función HOLD",
+        "fluido": "ESSO JWS 3309 o TOTAL FLUID III G (Dexron III-H)",
+        "capacidad_litros": "5.6 ± 0.2"
+      }
+    },
+    "direccion_asistida": {
+      "fluido": "DEXRON VI (Líquido hidráulico rojo)",
+      "capacidad_litros": 1.1
+    },
+    "frenos_y_embrague": {
+      "fluido": "DOT 3 o DOT 4",
+      "capacidad_litros": 0.5,
+      "sistema": "Circuito diagonal en X hidráulico",
+      "delanteros": "Discos ventilados (236 mm o 256 mm)",
+      "traseros": "Tambores con zapatas autoajustables"
+    }
+  },
+  "llantas_y_ruedas": {
+    "medidas_homologadas": [
+      "185/60 R14 82H",
+      "185/55 R15 82V"
+    ],
+    "presion_frio": {
+      "kpa": 230,
+      "psi": 33,
+      "posicion": "Delanteras y traseras"
+    },
+    "patron_birlos": "4x100 mm",
+    "torque_tuercas_nm": 120
+  },
+  "encendido_y_electrica": {
+    "bujias": {
+      "modelo": "NGK BKR6E-11 (o Champion RC9YC4)",
+      "calibracion_gap_mm": "1.0 - 1.1 mm (0.039 - 0.043 in)",
+      "apriete_nm": 25,
+      "observacion": "Revisar presencia de aceite en los pozos por degradación del empaque de tapa de punterías"
+    },
+    "bateria": {
+      "voltaje": "12V",
+      "capacidad": "55 Ah",
+      "cca": "550 CCA (Corriente de arranque en frío)"
+    },
+    "alternador": {
+      "voltaje": "12V",
+      "amperaje": "85A"
+    }
+  },
+  "condiciones_severas_alertas": {
+    "definicion": [
+      "Viajes cortos de menos de 10 km donde el motor no alcanza temperatura de trabajo",
+      "Tráfico pesado / ralentí prolongado en clima superior a 32°C (típico de Monterrey)",
+      "Conducción frecuente en caminos polvorientos o con baches pronunciados"
+    ],
+    "acciones_requeridas": [
+      "Reducir intervalo de cambio de aceite a 5,000 km",
+      "Revisión semestral de bujes de horquilla y bieletas estabilizadoras",
+      "Limpieza preventiva de cuerpo de aceleración y válvula IAC cada 15,000 km",
+      "Verificación quincenal de presión de llantas a 33 PSI en frío"
+    ]
+  },
+  "fusibles_clave": [
+    { "nombre": "OBD", "amperaje": "10A", "ubicacion": "Cabina interior", "funcion": "Puerto de escáner y diagnóstico" },
+    { "nombre": "Bomba gasolina", "amperaje": "15A", "ubicacion": "Caja compartimento motor (F/PUMP)", "funcion": "Relé y bomba sumergida" },
+    { "nombre": "ECU / ECM", "amperaje": "10A", "ubicacion": "Caja compartimento motor", "funcion": "Computadora de motor y sensores" },
+    { "nombre": "Electroventilador Baja", "amperaje": "20A", "ubicacion": "Caja compartimento motor (COOLING FAN LOW)", "funcion": "Velocidad 1 del radiador" },
+    { "nombre": "Electroventilador Alta", "amperaje": "30A", "ubicacion": "Caja compartimento motor (COOLING FAN HIGH)", "funcion": "Velocidad 2 con A/C encendido o alta temp" },
+    { "nombre": "Claxon", "amperaje": "15A", "ubicacion": "Caja compartimento motor", "funcion": "Bocina" },
+    { "nombre": "Toma corriente / Encendedor", "amperaje": "15A", "ubicacion": "Cabina interior (CIGAR)", "funcion": "Cargador 12V de accesorios" },
+    { "nombre": "Luces principales", "amperaje": "15A / 20A", "ubicacion": "Caja motor (H/LP HI/LO)", "funcion": "Faros 60/55W H4 halógeno" }
+  ],
+  "testigos_tablero_alerta": [
+    { "testigo": "CHECK ENGINE (MIL)", "color": "Ámbar", "significado": "Falla en sistema de inyección o emisiones (OBD2)", "accion": "Si parpadea, detener el auto (falla destructiva de catalizador / misfire). Si está fijo, escanear." },
+    { "testigo": "HOLD (Transmisión AT)", "color": "Ámbar parpadeante", "significado": "Falla electrónica en caja automática o modo invierno forzado", "accion": "Revisar nivel de fluido JWS 3309 y escanear módulo TCM." },
+    { "testigo": "ACEITE (Aceitera)", "color": "Rojo", "significado": "Baja presión crítica de aceite de motor", "accion": "APAGAR MOTOR INMEDIATAMENTE. Verificar nivel y coladera de bomba." },
+    { "testigo": "TEMPERATURA", "color": "Rojo", "significado": "Sobrecalentamiento del refrigerante (>115°C)", "accion": "Detener el auto, encender calefacción al máximo, apagar motor y esperar a que enfríe antes de tocar el depósito." },
+    { "testigo": "BATERÍA", "color": "Rojo", "significado": "Alternador no está cargando (voltaje < 13.2V) o banda rota", "accion": "Revisar banda de accesorios y carga del alternador de 85A." },
+    { "testigo": "FRENO / ABS", "color": "Rojo / Ámbar", "significado": "Freno de mano puesto o nivel bajo de líquido de frenos", "accion": "Verificar depósito DOT 3/4 y desgaste de balatas delanteras." }
+  ],
+  "procedimientos_emergencia": {
+    "paso_de_corriente": [
+      "1. Apagar ambos vehículos y conectar borne ROJO (+) en batería descargada del Aveo.",
+      "2. Conectar otro extremo ROJO (+) en batería del auto donante.",
+      "3. Conectar borne NEGRO (-) en batería del auto donante.",
+      "4. Conectar extremo NEGRO (-) a una parte metálica sin pintar del motor del Aveo (tierra), NUNCA directo al poste negativo de la batería descargada.",
+      "5. Arrancar el auto donante, esperar 3 minutos y dar marcha al Aveo."
+    ],
+    "sobrecalentamiento": [
+      "1. Orillarse con precaución, poner intermitentes y NO apagar el motor de golpe si el ventilador está girando (poner calefacción al máximo para disipar calor).",
+      "2. Si sale vapor por el cofre, apagar el motor inmediatamente.",
+      "3. NUNCA abrir el tapón del depósito de DEX-COOL caliente (riesgo de quemaduras severas por vapor a presión).",
+      "4. Esperar al menos 30 minutos a que la temperatura baje y buscar fugas en la carcasa plástica del termostato, mangueras o radiador."
+    ]
+  }
+}
