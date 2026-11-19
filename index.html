@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>AveoLog AI — Chevrolet Aveo 2011 1.6L</title>
+  <title>AveoLog — Chevrolet Aveo 2011 1.6L</title>
   
-  <!-- PWA & iOS Safari Directives -->
+  <!-- PWA & iOS Safari Directives (Light Mode Minimalist Apple) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="AveoLog AI">
-  <meta name="application-name" content="AveoLog AI">
-  <meta name="theme-color" content="#080b12">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="AveoLog">
+  <meta name="application-name" content="AveoLog">
+  <meta name="theme-color" content="#FFFFFF">
   <meta name="format-detection" content="telephone=no">
   
   <!-- Icons -->
@@ -25,30 +25,37 @@
 <body>
   <div id="app-viewport">
     
-    <!-- HEADER IOS -->
+    <!-- HEADER IOS MINIMALISTA -->
     <header class="ios-header">
       <div class="header-brand">
-        <div class="header-logo">
-          <!-- Stylized Bowtie -->
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-            <path d="M4 10.5h16v3H4z" fill="#f59e0b"/>
-            <path d="M10 7h4v10h-4z" fill="#f59e0b"/>
+        <div class="header-logo" aria-hidden="true">
+          <svg viewBox="0 0 28 16" width="22" height="14" fill="none">
+            <path d="M9.5 2H18.5V5.2H25.5L23.7 10.8H18.5V14H9.5V10.8H2.5L4.3 5.2H9.5V2Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
           </svg>
         </div>
         <div class="brand-text">
-          <h1>AveoLog <span>AI 2.5</span></h1>
-          <div class="brand-subtitle">Aveo 2011 Sedán • 1.6L DOHC (F16D3)</div>
+          <h1>AveoLog</h1>
+          <div class="brand-subtitle">Aveo 2011 Blanco • 1.6L DOHC</div>
         </div>
       </div>
       <div class="header-actions">
-        <button class="btn-icon-header" id="btn-quick-scan" title="Escanear Tablero con Cámara (IA Efímera)">
-          📸
+        <button class="btn-icon-header" id="btn-quick-scan" title="Escanear Tablero" aria-label="Escanear Tablero">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+            <circle cx="12" cy="13" r="3.5"/>
+          </svg>
         </button>
-        <button class="btn-icon-header" id="btn-quick-odo" title="Actualizar Kilometraje">
-          🔢
+        <button class="btn-icon-header" id="btn-quick-odo" title="Actualizar Kilometraje" aria-label="Actualizar Kilometraje">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 14l4-4"/>
+            <path d="M3.34 19a10 10 0 1 1 17.32 0"/>
+          </svg>
         </button>
-        <button class="btn-icon-header" id="btn-quick-backup" title="Copia de Seguridad y Ajustes">
-          💾
+        <button class="btn-icon-header" id="btn-quick-backup" title="Manual y Ajustes" aria-label="Manual y Ajustes">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
         </button>
       </div>
     </header>
@@ -60,73 +67,116 @@
       <!-- VISTA 1: DASHBOARD DE SALUD ("INICIO") -->
       <!-- ========================================== -->
       <section class="app-view active" id="view-dashboard">
-        <!-- Hero Card del Auto -->
+        <!-- Hero Card del Auto Blanco -->
         <div class="card-cockpit hero-car-card">
           <div class="hero-car-header">
             <div class="hero-title-group">
               <h2>Chevrolet Aveo 2011</h2>
               <div class="hero-badge-spec">
-                <span>⚙️ 1.6L 16V DOHC • 102 HP @ 5800 RPM</span>
+                <span>Sedán Blanco • 1.6L 16V DOHC • 102 HP</span>
               </div>
             </div>
             <div class="health-status-badge" id="dash-health-badge">
               <span class="health-dot"></span>
-              <span id="dash-health-text">OPTIMO</span>
+              <span id="dash-health-text">ÓPTIMO</span>
             </div>
           </div>
 
           <div class="car-silhouette-visual">
-            <div class="car-vector-box">
-              <svg viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Chasis Aveo Sedán 2011 -->
-                <path d="M25 82 C30 82 45 81 60 82 C70 65 95 65 105 82 C160 82 205 82 225 82 C235 65 260 65 270 82 C295 82 305 78 305 68 C305 58 290 54 265 52 C240 50 215 30 185 28 C145 26 100 28 85 45 C50 50 30 58 25 70 Z" fill="#1e293b" stroke="#f59e0b" stroke-width="2.5"/>
-                <!-- Ventanillas -->
-                <path d="M92 46 C105 34 140 32 180 34 C198 35 220 50 230 50 L92 50 Z" fill="#0f172a" stroke="#38bdf8" stroke-width="1.2"/>
-                <!-- Poste central -->
-                <line x1="160" y1="33" x2="160" y2="50" stroke="#1e293b" stroke-width="3"/>
-                <!-- Ruedas R14 -->
-                <circle cx="82.5" cy="82.5" r="17" fill="#090d16" stroke="#64748b" stroke-width="3"/>
-                <circle cx="82.5" cy="82.5" r="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
-                <circle cx="247.5" cy="82.5" r="17" fill="#090d16" stroke="#64748b" stroke-width="3"/>
-                <circle cx="247.5" cy="82.5" r="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
-                <!-- Faros -->
-                <path d="M25 65 Q23 72 32 72" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
-                <path d="M300 62 Q303 68 295 70" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+            <div class="car-vector-box" aria-hidden="true">
+              <!-- Silueta minimalista blanca estilo Apple CarPlay -->
+              <svg viewBox="0 0 320 112" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="whiteCarBody" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="65%" stop-color="#F7F8FA"/>
+                    <stop offset="100%" stop-color="#E6E8EE"/>
+                  </linearGradient>
+                  <filter id="carShadow" x="-10%" y="-10%" width="120%" height="130%">
+                    <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#1D1D1F" flood-opacity="0.09"/>
+                  </filter>
+                </defs>
+                <!-- Sombra de piso -->
+                <ellipse cx="164" cy="94" rx="136" ry="5" fill="#1D1D1F" fill-opacity="0.07"/>
+                <!-- Carrocería Olympic White -->
+                <path filter="url(#carShadow)" d="M26 78 C32 78 46 78 60 78 C70 61 95 61 105 78 C160 78 205 78 225 78 C235 61 260 61 270 78 C294 78 304 74 304 64 C304 54 290 50 266 48 C240 46 216 26 185 24 C145 22 102 24 86 41 C52 46 32 54 26 66 Z" fill="url(#whiteCarBody)" stroke="#1D1D1F" stroke-width="1.6"/>
+                <!-- Ventanillas tintadas suaves -->
+                <path d="M93 42 C106 30 140 28 180 30 C198 31 220 46 230 46 L93 46 Z" fill="#E8ECF2" stroke="#1D1D1F" stroke-width="1.2" stroke-linejoin="round"/>
+                <!-- Poste B -->
+                <line x1="160" y1="29" x2="160" y2="46" stroke="#1D1D1F" stroke-width="2"/>
+                <!-- Línea de carácter lateral -->
+                <line x1="56" y1="57" x2="278" y2="55" stroke="#D2D5DD" stroke-width="1.2" stroke-linecap="round"/>
+                <!-- Ruedas -->
+                <circle cx="82.5" cy="78.5" r="16.5" fill="#1D1D1F"/>
+                <circle cx="82.5" cy="78.5" r="9.5" fill="#F5F5F7" stroke="#86868B" stroke-width="1"/>
+                <circle cx="82.5" cy="78.5" r="3" fill="#1D1D1F"/>
+                <circle cx="247.5" cy="78.5" r="16.5" fill="#1D1D1F"/>
+                <circle cx="247.5" cy="78.5" r="9.5" fill="#F5F5F7" stroke="#86868B" stroke-width="1"/>
+                <circle cx="247.5" cy="78.5" r="3" fill="#1D1D1F"/>
+                <!-- Faros y calaveras -->
+                <path d="M27 61 Q25 68 34 68" stroke="#0071E3" stroke-width="2" stroke-linecap="round"/>
+                <path d="M299 58 Q302 64 294 66" stroke="#FF3B30" stroke-width="2" stroke-linecap="round"/>
               </svg>
             </div>
             <div class="odometer-widget" id="btn-edit-odo-widget" title="Toca para actualizar odómetro">
-              <div class="label">Odómetro Actual</div>
+              <div class="label">Odómetro</div>
               <div class="val"><span id="dash-odo-val">0</span><small>km</small></div>
             </div>
           </div>
 
-          <!-- Alerta Crítica del Aveo 1.6: Banda de Distribución -->
+          <!-- Estado de Banda de Distribución 1.6L -->
           <div class="aveo-critical-banner" id="dash-timing-belt-banner">
-            <div class="aveo-critical-icon">⚠️</div>
+            <div class="aveo-critical-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </div>
             <div class="aveo-critical-info">
               <h4>Banda de Distribución 1.6L (Interferencia)</h4>
-              <p id="dash-timing-belt-desc">¡Atención! Motor con interferencia: si la banda se rompe, se doblan las 16 válvulas.</p>
+              <p id="dash-timing-belt-desc">Registra tu último cambio de banda para activar el seguimiento preventivo de 50,000 km.</p>
             </div>
           </div>
         </div>
 
-        <!-- Acciones Rápidas (Thumb Friendly) -->
-        <div class="action-buttons-group" style="grid-template-columns: repeat(4, 1fr);">
+        <!-- Acciones Rápidas (Apple Quick Controls) -->
+        <div class="action-buttons-group">
           <button class="btn-action-tile scan" id="dash-btn-scan-cluster">
-            <div class="tile-icon" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35);">📸</div>
-            <div class="tile-label">Foto Tablero</div>
+            <div class="tile-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                <circle cx="12" cy="13" r="3.5"/>
+              </svg>
+            </div>
+            <div class="tile-label">Escáner IA</div>
           </button>
           <button class="btn-action-tile fuel" id="dash-btn-add-fuel">
-            <div class="tile-icon">⛽</div>
-            <div class="tile-label">Cargar Gas</div>
+            <div class="tile-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 22L15 22"/>
+                <path d="M4 9L14 9"/>
+                <path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/>
+                <path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"/>
+              </svg>
+            </div>
+            <div class="tile-label">Gasolina</div>
           </button>
           <button class="btn-action-tile service" id="dash-btn-add-service">
-            <div class="tile-icon">🔧</div>
-            <div class="tile-label">+ Bitácora</div>
+            <div class="tile-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+              </svg>
+            </div>
+            <div class="tile-label">Servicio</div>
           </button>
           <button class="btn-action-tile diag" id="dash-btn-open-diag">
-            <div class="tile-icon">🤖</div>
-            <div class="tile-label">Copiloto IA</div>
+            <div class="tile-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <div class="tile-label">Copiloto</div>
           </button>
         </div>
 
@@ -134,51 +184,45 @@
         <div class="metrics-grid-2x2">
           <div class="metric-tile">
             <div class="metric-tile-header">
-              <span>Rendimiento Promedio</span>
-              <span>⛽</span>
+              <span>Rendimiento</span>
             </div>
-            <div class="metric-tile-val text-cyan"><span id="dash-kml-val">11.8</span><small>km/L</small></div>
-            <div class="metric-tile-sub" id="dash-kml-sub">Calculado entre tanques</div>
+            <div class="metric-tile-val"><span id="dash-kml-val">11.5</span><small>km/L</small></div>
+            <div class="metric-tile-sub" id="dash-kml-sub">Promedio entre cargas</div>
           </div>
 
           <div class="metric-tile">
             <div class="metric-tile-header">
               <span>Autonomía Est.</span>
-              <span>📍</span>
             </div>
-            <div class="metric-tile-val text-gold"><span id="dash-range-val">398</span><small>km</small></div>
+            <div class="metric-tile-val"><span id="dash-range-val">388</span><small>km</small></div>
             <div class="metric-tile-sub">Tanque 45.0 L</div>
           </div>
 
           <div class="metric-tile">
             <div class="metric-tile-header">
               <span>Costo por Km</span>
-              <span>💵</span>
             </div>
-            <div class="metric-tile-val text-green"><span id="dash-costkm-val">$2.04</span><small>/km</small></div>
-            <div class="metric-tile-sub" id="dash-costkm-sub">Gasto en gasolina</div>
+            <div class="metric-tile-val"><span id="dash-costkm-val">$2.10</span><small>/km</small></div>
+            <div class="metric-tile-sub" id="dash-costkm-sub">Consumo de combustible</div>
           </div>
 
           <div class="metric-tile">
             <div class="metric-tile-header">
               <span>Próximo Servicio</span>
-              <span>⏱️</span>
             </div>
-            <div class="metric-tile-val text-gold"><span id="dash-next-service-km">1,550</span><small>km</small></div>
-            <div class="metric-tile-sub" id="dash-next-service-name">Aceite SAE 5W-30</div>
+            <div class="metric-tile-val text-accent"><span id="dash-next-service-km">---</span><small>km</small></div>
+            <div class="metric-tile-sub" id="dash-next-service-name">Ingresa tu km real</div>
           </div>
         </div>
 
         <!-- Resumen de Salud por IA -->
         <div class="card-cockpit" id="dash-ai-health-box">
           <div class="section-head">
-            <h3 style="display: flex; align-items: center; gap: 6px;">
-              <span>🤖</span> Diagnóstico de Salud Gemini
-            </h3>
-            <span style="font-size: 0.7rem; color: #34d399;" id="dash-ai-score-label">Listo</span>
+            <h3>Diagnóstico Inteligente</h3>
+            <span class="pill-meta" id="dash-ai-score-label">Gemini 2.5</span>
           </div>
-          <p style="font-size: 0.78rem; color: #e2e8f0; line-height: 1.4;" id="dash-ai-summary-text">
-            Bitácora limpia sin datos inventados. Toma una foto a tu tablero (📸) o ingresa tu kilometraje real para activar las alertas preventivas del motor 1.6L DOHC.
+          <p class="body-copy" id="dash-ai-summary-text">
+            Bitácora limpia sin datos inventados. Escanea una foto de tu tablero (desde cámara o galería) o ingresa tu kilometraje real para activar las alertas preventivas del motor 1.6L DOHC.
           </p>
         </div>
 
@@ -186,7 +230,7 @@
         <div class="card-cockpit">
           <div class="section-head">
             <h3>Actividad Reciente</h3>
-            <button class="section-head-action" id="dash-see-all-logs">Ver Bitácora</button>
+            <button class="section-head-action" id="dash-see-all-logs">Ver todo</button>
           </div>
           <div id="dash-recent-list">
             <!-- Inyectado vía JS -->
@@ -198,46 +242,41 @@
       <!-- VISTA 2: RENDIMIENTO DE COMBUSTIBLE -->
       <!-- ========================================== -->
       <section class="app-view" id="view-fuel">
-        <div class="section-head">
-          <h3>Control de Combustible</h3>
-          <button class="btn-primary" id="btn-open-fuel-modal" style="width: auto; padding: 8px 16px; margin: 0; font-size: 0.8rem;">
-            + Cargar Gas (10s)
+        <div class="section-head page-title-bar">
+          <h2>Combustible</h2>
+          <button class="btn-pill-action" id="btn-open-fuel-modal">
+            + Registrar Carga
           </button>
         </div>
 
         <!-- Tarjeta de Rendimiento Comparativo Aveo 1.6L -->
-        <div class="card-cockpit highlight-cyan">
-          <div class="hero-car-header" style="margin-bottom: 8px;">
+        <div class="card-cockpit">
+          <div class="hero-car-header" style="margin-bottom: 12px;">
             <div>
-              <div style="font-size: 0.72rem; color: var(--text-secondary); text-transform: uppercase;">Eficiencia Actual</div>
-              <div style="font-size: 1.6rem; font-weight: 800; color: #fff;">
-                <span id="fuel-avg-kml">11.89</span> <small style="font-size: 0.85rem; color: var(--telemetry-cyan);">km/Litro</small>
+              <div class="meta-label">Eficiencia Promedio</div>
+              <div class="display-metric">
+                <span id="fuel-avg-kml">11.5</span> <small>km/L</small>
               </div>
             </div>
             <div style="text-align: right;">
-              <div style="font-size: 0.72rem; color: var(--text-secondary);">Gasto Mes Actual</div>
-              <div style="font-size: 1.1rem; font-weight: 800; color: var(--chevy-gold-light);" id="fuel-month-expense">$2,551</div>
+              <div class="meta-label">Gasto del Mes</div>
+              <div class="display-metric-sm" id="fuel-month-expense">$0</div>
             </div>
           </div>
 
           <!-- Barra Comparativa Aveo 1.6L Estándar de Fábrica -->
-          <div style="background: rgba(0,0,0,0.3); border-radius: var(--radius-md); padding: 10px; margin-top: 10px; border: 1px solid var(--border-subtle);">
-            <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
-              📊 Parámetro Oficial de Fábrica (Aveo 2011 Sedán 1.6L):
+          <div class="benchmark-strip">
+            <div class="benchmark-col">
+              <div class="bm-label">Ciudad (Fábrica)</div>
+              <div class="bm-val">10.5 – 11.5 km/L</div>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; font-size: 0.72rem; text-align: center;">
-              <div style="background: rgba(255,255,255,0.04); padding: 6px; border-radius: 6px;">
-                <div style="color: var(--text-muted);">Ciudad</div>
-                <div style="font-weight: 700; color: #f8fafc;">10.5 - 11.5 km/L</div>
-              </div>
-              <div style="background: rgba(6,182,212,0.12); padding: 6px; border-radius: 6px; border: 1px solid rgba(6,182,212,0.3);">
-                <div style="color: var(--telemetry-cyan);">Tu Promedio</div>
-                <div style="font-weight: 800; color: #fff;" id="fuel-stat-badge-kml">11.8 km/L</div>
-              </div>
-              <div style="background: rgba(255,255,255,0.04); padding: 6px; border-radius: 6px;">
-                <div style="color: var(--text-muted);">Carretera</div>
-                <div style="font-weight: 700; color: #f8fafc;">14.5 - 16.0 km/L</div>
-              </div>
+            <div class="benchmark-col active">
+              <div class="bm-label">Tu Aveo</div>
+              <div class="bm-val" id="fuel-stat-badge-kml">11.5 km/L</div>
+            </div>
+            <div class="benchmark-col">
+              <div class="bm-label">Carretera</div>
+              <div class="bm-val">14.5 – 16.0 km/L</div>
             </div>
           </div>
 
@@ -250,14 +289,14 @@
         <!-- Estadísticas Rápidas de Gas -->
         <div class="metrics-grid-2x2">
           <div class="metric-tile">
-            <div class="metric-tile-header"><span>Mejor Registro</span><span>🏆</span></div>
-            <div class="metric-tile-val text-green"><span id="fuel-best-kml">11.89</span><small>km/L</small></div>
+            <div class="metric-tile-header"><span>Mejor Rendimiento</span></div>
+            <div class="metric-tile-val text-green"><span id="fuel-best-kml">11.5</span><small>km/L</small></div>
             <div class="metric-tile-sub">Máxima eficiencia</div>
           </div>
           <div class="metric-tile">
-            <div class="metric-tile-header"><span>Peor Registro</span><span>🛑</span></div>
-            <div class="metric-tile-val text-red"><span id="fuel-worst-kml">11.50</span><small>km/L</small></div>
-            <div class="metric-tile-sub">Tráfico pesado o A/C</div>
+            <div class="metric-tile-header"><span>Menor Rendimiento</span></div>
+            <div class="metric-tile-val text-amber"><span id="fuel-worst-kml">11.5</span><small>km/L</small></div>
+            <div class="metric-tile-sub">Tráfico o uso de A/C</div>
           </div>
         </div>
 
@@ -265,7 +304,7 @@
         <div class="card-cockpit">
           <div class="section-head">
             <h3>Historial de Cargas</h3>
-            <span style="font-size: 0.72rem; color: var(--text-muted);" id="fuel-count-label">0 registros</span>
+            <span class="pill-meta" id="fuel-count-label">0 registros</span>
           </div>
           <div id="fuel-history-list">
             <!-- Inyectado por JS -->
@@ -277,18 +316,18 @@
       <!-- VISTA 3: BITÁCORA INTELIGENTE DE MANTENIMIENTO -->
       <!-- ========================================== -->
       <section class="app-view" id="view-service">
-        <div class="section-head">
-          <h3>Bitácora Inteligente de Mantenimiento</h3>
-          <button class="btn-primary" id="btn-open-service-modal" style="width: auto; padding: 8px 16px; margin: 0; font-size: 0.8rem;">
-            + Registrar Entrada
+        <div class="section-head page-title-bar">
+          <h2>Bitácora</h2>
+          <button class="btn-pill-action" id="btn-open-service-modal">
+            + Nuevo Servicio
           </button>
         </div>
 
         <!-- Semáforo Preventivo Aveo 1.6L -->
-        <div class="card-cockpit highlight-gold">
+        <div class="card-cockpit">
           <div class="section-head">
-            <h3>Semáforo de Servicios Preventivos</h3>
-            <span style="font-size: 0.72rem; color: var(--chevy-gold-light);">Aveo 2011 1.6L DOHC</span>
+            <h3>Plan Preventivo Oficial</h3>
+            <span class="pill-meta">Motor F16D3 1.6L</span>
           </div>
           <div id="service-semaphore-list">
             <!-- Items de semáforo inyectados por JS -->
@@ -298,8 +337,8 @@
         <!-- Historial de Servicios con Evaluación Gemini -->
         <div class="card-cockpit">
           <div class="section-head">
-            <h3>Historial Evaluado con Gemini AI</h3>
-            <span style="font-size: 0.72rem; color: var(--text-muted);" id="service-count-label">0 servicios</span>
+            <h3>Historial Evaluado con IA</h3>
+            <span class="pill-meta" id="service-count-label">0 servicios</span>
           </div>
           <div id="service-history-list">
             <!-- Lista histórica con Structured Outputs inyectada por JS -->
@@ -311,43 +350,38 @@
       <!-- VISTA 4: COPILOTO MECÁNICO ("PREGÚNTALE AL AVEO") -->
       <!-- ========================================== -->
       <section class="app-view" id="view-diag">
-        <div class="section-head">
-          <h3>Copiloto Mecánico Aveo</h3>
-          <span class="health-status-badge" style="background: rgba(6,182,212,0.15); color: var(--telemetry-cyan); border-color: rgba(6,182,212,0.3);">
-            Gemini 2.5 Flash
-          </span>
+        <div class="section-head page-title-bar">
+          <h2>Copiloto IA</h2>
+          <span class="pill-meta">Gemini 2.5 Flash</span>
         </div>
 
         <!-- Chips de Preguntas Frecuentes al Copiloto -->
         <div class="symptom-tag-cloud">
-          <div class="symptom-tag" data-query="¿Qué fusible controla el encendedor?">🔌 Fusible encendedor 15A</div>
-          <div class="symptom-tag" data-query="¿Qué fusible controla la bomba de gasolina?">⛽ Fusible bomba gasolina</div>
-          <div class="symptom-tag" data-query="¿Cuándo fue la última vez que cambié aceite y qué viscosidad lleva?">🛢️ Último cambio aceite</div>
-          <div class="symptom-tag" data-query="Se encendió el testigo HOLD parpadeando, ¿qué hago?">⚠️ Testigo HOLD parpadeando</div>
-          <div class="symptom-tag" data-query="¿Cuál es la presión de inflado de las 4 llantas?">🛞 Presión llantas 33 PSI</div>
-          <div class="symptom-tag" data-query="¿Cada cuánto debo cambiar la banda de distribución del 1.6L?">⚠️ Banda distribución 50k km</div>
-          <div class="symptom-tag" data-query="Tiembla el motor en ralentí, ¿qué reviso primero?">🛑 Tiembla en ralentí</div>
+          <button type="button" class="symptom-tag" data-query="¿Qué fusible controla el encendedor?">Fusible encendedor 15A</button>
+          <button type="button" class="symptom-tag" data-query="¿Qué fusible controla la bomba de gasolina?">Fusible bomba gasolina</button>
+          <button type="button" class="symptom-tag" data-query="¿Cuándo fue la última vez que cambié aceite y qué viscosidad lleva?">Aceite SAE 5W-30</button>
+          <button type="button" class="symptom-tag" data-query="Se encendió el testigo HOLD parpadeando, ¿qué hago?">Testigo HOLD parpadeando</button>
+          <button type="button" class="symptom-tag" data-query="¿Cuál es la presión de inflado de las 4 llantas?">Presión llantas 33 PSI</button>
+          <button type="button" class="symptom-tag" data-query="¿Cada cuánto debo cambiar la banda de distribución del 1.6L?">Banda distribución 50k km</button>
+          <button type="button" class="symptom-tag" data-query="Tiembla el motor en ralentí, ¿qué reviso primero?">Temblor en ralentí</button>
         </div>
 
         <!-- Chat con Copiloto -->
-        <div class="card-cockpit">
-          <div class="section-head">
-            <h3 style="display: flex; align-items: center; gap: 6px;">
-              <span>🤖</span> Pregúntale al Aveo
-            </h3>
-            <span style="font-size: 0.68rem; color: #34d399;">● Contexto de Ficha y Bitácora Activo</span>
-          </div>
-
+        <div class="card-cockpit chat-card">
           <div class="chat-window" id="chat-messages">
             <div class="chat-bubble bot">
-              ¡Hola! Soy tu Copiloto Mecánico para tu <strong>Chevrolet Aveo 2011 Sedán 1.6L DOHC (F16D3)</strong>.
-              Tengo cargadas todas las especificaciones de fábrica de tu auto y toda tu bitácora de servicios. Hazme cualquier pregunta mecánica, de fusibles o de testigos.
+              Hola. Soy el Copiloto Mecánico de tu <strong>Chevrolet Aveo 2011 Sedán 1.6L DOHC</strong>. Tengo cargadas las especificaciones de fábrica y tu bitácora. ¿Qué síntoma, fusible o servicio quieres consultar?
             </div>
           </div>
 
           <div class="chat-input-bar">
-            <input type="text" class="chat-input" id="chat-input-text" placeholder="Escribe tu consulta al mecánico...">
-            <button class="btn-chat-send" id="btn-chat-send" title="Enviar consulta">➤</button>
+            <input type="text" class="chat-input" id="chat-input-text" placeholder="Pregunta sobre fusibles, ruidos, fluidos...">
+            <button class="btn-chat-send" id="btn-chat-send" title="Enviar consulta" aria-label="Enviar consulta">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5"/>
+                <polyline points="5 12 12 5 19 12"/>
+              </svg>
+            </button>
           </div>
         </div>
       </section>
@@ -356,16 +390,16 @@
       <!-- VISTA 5: FICHA TÉCNICA Y GUANTERA DIGITAL -->
       <!-- ========================================== -->
       <section class="app-view" id="view-garage">
-        <div class="section-head">
-          <h3>Ficha Técnica & Guantera Digital</h3>
-          <button class="section-head-action" id="btn-edit-car-docs">Editar Póliza/Placas</button>
+        <div class="section-head page-title-bar">
+          <h2>Manual y Guantera</h2>
+          <button class="btn-pill-action" id="btn-edit-car-docs">Editar Póliza</button>
         </div>
 
         <!-- Especificaciones de Fábrica -->
-        <div class="card-cockpit highlight-gold">
+        <div class="card-cockpit">
           <div class="section-head">
-            <h3>Ficha Técnica Oficial Aveo 2011</h3>
-            <span style="font-size: 0.72rem; color: var(--chevy-gold-light);">1.6L 16V DOHC</span>
+            <h3>Especificaciones de Fábrica</h3>
+            <span class="pill-meta">1.6L 16V DOHC</span>
           </div>
           <table class="specs-table">
             <tr>
@@ -373,28 +407,28 @@
               <td class="spec-val">1.6L 16V DOHC F16D3 (1,598 cc)</td>
             </tr>
             <tr>
-              <td class="spec-title">Potencia & Torque</td>
-              <td class="spec-val">102 HP @ 5800 RPM / 145 Nm @ 3600 RPM</td>
+              <td class="spec-title">Potencia y Torque</td>
+              <td class="spec-val">102 HP @ 5800 RPM • 145 Nm @ 3600 RPM</td>
             </tr>
             <tr>
               <td class="spec-title">Distribución</td>
-              <td class="spec-val" style="color: #fca5a5;">Banda dentada (¡Interferencia Mecánica!)</td>
+              <td class="spec-val text-red">Banda dentada (Con interferencia)</td>
             </tr>
             <tr>
               <td class="spec-title">Presión de Llantas (Frío)</td>
-              <td class="spec-val" style="color: var(--telemetry-cyan);">33 PSI (230 kPa) Del. y Tras.</td>
+              <td class="spec-val text-accent">33 PSI (230 kPa) en las 4 ruedas</td>
             </tr>
             <tr>
               <td class="spec-title">Capacidad de Tanque</td>
-              <td class="spec-val">45.0 Litros (Min. 91 RON)</td>
+              <td class="spec-val">45.0 Litros (Mín. 87/91 Oct)</td>
             </tr>
             <tr>
               <td class="spec-title">Aceite de Motor</td>
-              <td class="spec-val">SAE 5W-30 (o 10W-30) API SM • 3.75 L</td>
+              <td class="spec-val">SAE 5W-30 API SM/SN • 3.75 L c/filtro</td>
             </tr>
             <tr>
               <td class="spec-title">Refrigerante</td>
-              <td class="spec-val">6.3 L DEX-COOL 50/50 Rosa</td>
+              <td class="spec-val">6.3 L DEX-COOL 50/50</td>
             </tr>
             <tr>
               <td class="spec-title">Transmisión Manual</td>
@@ -402,19 +436,19 @@
             </tr>
             <tr>
               <td class="spec-title">Transmisión Automática</td>
-              <td class="spec-val">5.6 ± 0.2 L ESSO JWS 3309 / TOTAL FLUID</td>
+              <td class="spec-val">5.6 L ESSO JWS 3309 / TOTAL FLUID</td>
             </tr>
             <tr>
-              <td class="spec-title">Dirección Asistida</td>
-              <td class="spec-val">1.1 L DEXRON VI (Rojo)</td>
+              <td class="spec-title">Dirección Hidráulica</td>
+              <td class="spec-val">1.1 L DEXRON VI</td>
             </tr>
             <tr>
-              <td class="spec-title">Líquido Frenos / Embrague</td>
+              <td class="spec-title">Líquido de Frenos</td>
               <td class="spec-val">0.5 L DOT 3 / DOT 4 (Circuito en X)</td>
             </tr>
             <tr>
               <td class="spec-title">Bujías Oficiales</td>
-              <td class="spec-val">NGK BKR6E-11 (Gap 1.0 - 1.1 mm)</td>
+              <td class="spec-val">NGK BKR6E-11 (Calibración 1.0–1.1 mm)</td>
             </tr>
           </table>
         </div>
@@ -422,72 +456,72 @@
         <!-- Fusibles Clave del Aveo 2011 -->
         <div class="card-cockpit">
           <div class="section-head">
-            <h3>Fusibles Clave del Aveo 2011</h3>
-            <span style="font-size: 0.72rem; color: var(--text-muted);">Ubicación & Amperaje</span>
+            <h3>Directorio de Fusibles Clave</h3>
+            <span class="pill-meta">Cabina y Motor</span>
           </div>
           <div class="fuse-grid">
             <div class="fuse-tile">
               <div class="fuse-tile-head">
-                <span class="fuse-tile-name">🔌 CIGAR (Encendedor)</span>
+                <span class="fuse-tile-name">CIGAR (Toma 12V)</span>
                 <span class="fuse-amp-badge">15A</span>
               </div>
-              <div class="fuse-tile-desc">Caja interior cabina. Toma corriente 12V.</div>
+              <div class="fuse-tile-desc">Caja interior cabina. Encendedor y cargador.</div>
             </div>
 
             <div class="fuse-tile">
               <div class="fuse-tile-head">
-                <span class="fuse-tile-name">⛽ F/PUMP (Bomba Gas)</span>
+                <span class="fuse-tile-name">F/PUMP (Bomba Gas)</span>
                 <span class="fuse-amp-badge">15A</span>
               </div>
-              <div class="fuse-tile-desc">Caja motor junto a batería. Relé y bomba.</div>
+              <div class="fuse-tile-desc">Caja motor junto a batería. Bomba combustible.</div>
             </div>
 
             <div class="fuse-tile">
               <div class="fuse-tile-head">
-                <span class="fuse-tile-name">🔍 OBD2 (Diagnóstico)</span>
+                <span class="fuse-tile-name">OBD2 (Diagnóstico)</span>
                 <span class="fuse-amp-badge">10A</span>
               </div>
-              <div class="fuse-tile-desc">Caja interior cabina. Escáner.</div>
+              <div class="fuse-tile-desc">Caja interior cabina. Puerto de escáner.</div>
             </div>
 
             <div class="fuse-tile">
               <div class="fuse-tile-head">
-                <span class="fuse-tile-name">💻 ECM / ECU (Motor)</span>
+                <span class="fuse-tile-name">ECM / ECU (Motor)</span>
                 <span class="fuse-amp-badge">10A</span>
               </div>
-              <div class="fuse-tile-desc">Caja motor. Computadora principal.</div>
+              <div class="fuse-tile-desc">Caja motor. Computadora de inyección.</div>
             </div>
 
             <div class="fuse-tile">
               <div class="fuse-tile-head">
-                <span class="fuse-tile-name">🌀 FAN LOW (Ventilador)</span>
+                <span class="fuse-tile-name">FAN LOW (Radiador)</span>
                 <span class="fuse-amp-badge">20A</span>
               </div>
-              <div class="fuse-tile-desc">Caja motor. Radiador velocidad 1.</div>
+              <div class="fuse-tile-desc">Caja motor. Ventilador baja velocidad.</div>
             </div>
 
             <div class="fuse-tile">
               <div class="fuse-tile-head">
-                <span class="fuse-tile-name">🔥 FAN HIGH (Ventilador)</span>
+                <span class="fuse-tile-name">FAN HIGH (Radiador)</span>
                 <span class="fuse-amp-badge">30A</span>
               </div>
-              <div class="fuse-tile-desc">Caja motor. Velocidad 2 con A/C.</div>
+              <div class="fuse-tile-desc">Caja motor. Ventilador alta velocidad y A/C.</div>
             </div>
 
             <div class="fuse-tile">
               <div class="fuse-tile-head">
-                <span class="fuse-tile-name">📢 HORN (Claxon)</span>
+                <span class="fuse-tile-name">HORN (Claxon)</span>
                 <span class="fuse-amp-badge">15A</span>
               </div>
-              <div class="fuse-tile-desc">Caja motor. Bocina y alarma.</div>
+              <div class="fuse-tile-desc">Caja motor. Bocina y alerta.</div>
             </div>
 
             <div class="fuse-tile">
               <div class="fuse-tile-head">
-                <span class="fuse-tile-name">💡 Faros H4</span>
-                <span class="fuse-amp-badge">15A/20A</span>
+                <span class="fuse-tile-name">HEADLAMP (Faros H4)</span>
+                <span class="fuse-amp-badge">15A</span>
               </div>
-              <div class="fuse-tile-desc">Caja motor. Focos 60/55W halógeno.</div>
+              <div class="fuse-tile-desc">Caja motor. Luces principales 60/55W.</div>
             </div>
           </div>
         </div>
@@ -497,31 +531,31 @@
           <div class="section-head">
             <h3>Protocolos de Emergencia</h3>
           </div>
-          <div style="margin-bottom: 12px;">
-            <h4 style="font-size: 0.85rem; color: var(--chevy-gold-light); margin-bottom: 4px;">⚡ Paso de Corriente Seguro:</h4>
-            <ol style="font-size: 0.76rem; color: var(--text-secondary); padding-left: 18px; line-height: 1.4;">
-              <li>Conectar pinza ROJA (+) en batería del Aveo descargada.</li>
-              <li>Conectar pinza ROJA (+) en batería del auto donante.</li>
-              <li>Conectar pinza NEGRA (-) en batería del auto donante.</li>
-              <li>Conectar pinza NEGRA (-) a tierra metálica del monoblock del Aveo (NUNCA al borne negativo de la batería del Aveo).</li>
-              <li>Encender auto donante, esperar 3 min y dar marcha al Aveo.</li>
+          <div class="protocol-block">
+            <h4>Paso de Corriente Seguro</h4>
+            <ol>
+              <li>Conectar pinza ROJA (+) al borne positivo de la batería descargada del Aveo.</li>
+              <li>Conectar pinza ROJA (+) al borne positivo del auto donante.</li>
+              <li>Conectar pinza NEGRA (-) al borne negativo del auto donante.</li>
+              <li>Conectar pinza NEGRA (-) a tierra metálica del monoblock del Aveo (nunca al borne negativo del Aveo).</li>
+              <li>Arrancar auto donante 3 minutos y encender el Aveo.</li>
             </ol>
           </div>
 
-          <div>
-            <h4 style="font-size: 0.85rem; color: #f87171; margin-bottom: 4px;">🌡️ Sobrecalentamiento:</h4>
-            <p style="font-size: 0.76rem; color: var(--text-secondary); line-height: 1.4;">
-              Orillarse. Encender calefacción al máximo para disipar calor. NUNCA abrir el tapón del depósito de DEX-COOL caliente por riesgo de quemaduras graves por vapor. Esperar 30 min y revisar si hay fugas en la carcasa plástica del termostato.
+          <div class="protocol-block" style="margin-bottom: 0;">
+            <h4 class="text-red">Sobrecalentamiento</h4>
+            <p class="body-copy">
+              Detener el motor y orillarse. Nunca abrir el tapón del depósito de DEX-COOL en caliente. Esperar 30 minutos y revisar posibles fugas en la carcasa plástica del termostato.
             </p>
           </div>
         </div>
 
-        <!-- Documentos y Respaldo -->
+        <!-- Documentos, API Key y Respaldo -->
         <div class="card-cockpit">
           <div class="section-head">
-            <h3>Guantera Digital & Seguro</h3>
+            <h3>Guantera Digital y Ajustes</h3>
           </div>
-          <table class="specs-table" style="margin-bottom: 12px;">
+          <table class="specs-table" style="margin-bottom: 16px;">
             <tr>
               <td class="spec-title">Placas</td>
               <td class="spec-val" id="garage-plates-val">Sin registrar</td>
@@ -531,7 +565,7 @@
               <td class="spec-val" id="garage-vin-val">Sin registrar</td>
             </tr>
             <tr>
-              <td class="spec-title">Aseguradora & Póliza</td>
+              <td class="spec-title">Aseguradora y Póliza</td>
               <td class="spec-val" id="garage-insurance-val">Sin registrar</td>
             </tr>
             <tr>
@@ -544,77 +578,102 @@
             </tr>
           </table>
 
-          <!-- Configuración de Clave Gemini (Opcional para iPhone / GitHub Pages) -->
-          <div style="background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.25); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
-            <div style="font-size: 0.78rem; font-weight: 800; color: var(--telemetry-cyan); margin-bottom: 4px;">
-              🔑 Clave Gemini AI (Para Escáner de Fotos y Copiloto)
-            </div>
-            <p style="font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 8px;">
-              Si usas la app en GitHub Pages o no has configurado <code>.env</code> en el servidor, pega tu API Key gratuita de Google AI Studio aquí (se guarda solo en tu dispositivo):
+          <!-- Configuración de Clave Gemini -->
+          <div class="api-key-box">
+            <div class="api-key-title">Clave Gemini AI (iPhone / Standalone)</div>
+            <p class="api-key-desc">
+              Tu clave se almacena únicamente en este dispositivo para el escáner de fotos del tablero, evaluación de servicios y el Copiloto IA.
             </p>
-            <div style="display: flex; gap: 6px;">
-              <input type="password" class="form-input" id="garage-gemini-key-input" placeholder="AIzaSy..." style="padding: 8px 12px; font-size: 0.82rem;">
-              <button type="button" class="btn-primary" id="btn-save-gemini-key" style="width: auto; margin: 0; padding: 8px 14px; font-size: 0.8rem;">Guardar</button>
+            <div class="api-key-row">
+              <input type="password" class="form-input" id="garage-gemini-key-input" placeholder="AIzaSy...">
+              <button type="button" class="btn-primary btn-inline" id="btn-save-gemini-key">Guardar</button>
             </div>
           </div>
 
-          <button class="btn-primary" id="btn-export-backup" style="margin-bottom: 8px;">
-            📤 Descargar Respaldo JSON Completo
-          </button>
-          
-          <label class="btn-secondary" style="cursor: pointer; margin-bottom: 8px;">
-            📥 Restaurar Copia de Seguridad
-            <input type="file" id="file-import-backup" accept=".json" style="display: none;">
-          </label>
+          <div class="stack-actions">
+            <button class="btn-primary" id="btn-export-backup">
+              Exportar Respaldo JSON
+            </button>
+            
+            <label class="btn-secondary" style="cursor: pointer;">
+              Restaurar Copia de Seguridad
+              <input type="file" id="file-import-backup" accept=".json" style="display: none;">
+            </label>
 
-          <button type="button" class="btn-secondary" id="btn-reset-all-data" style="border-color: rgba(239, 68, 68, 0.35); color: #f87171;">
-            🗑️ Borrar Todos los Datos (Empezar de Cero)
-          </button>
+            <button type="button" class="btn-secondary btn-danger-outline" id="btn-reset-all-data">
+              Borrar Todos los Datos (Restablecer)
+            </button>
+          </div>
         </div>
       </section>
 
     </main>
 
     <!-- ========================================== -->
-    <!-- BARRA DE NAVEGACIÓN INFERIOR (IOS TABBAR) -->
+    <!-- BARRA DE NAVEGACIÓN INFERIOR (APPLE TABBAR) -->
     <!-- ========================================== -->
-    <nav class="ios-tabbar">
+    <nav class="ios-tabbar" aria-label="Navegación principal">
       <button class="tabbar-item active" data-view="view-dashboard">
-        <div class="tabbar-icon">🏎️</div>
+        <div class="tabbar-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 14l4-4"/>
+            <path d="M3.34 19a10 10 0 1 1 17.32 0"/>
+          </svg>
+        </div>
         <div class="tabbar-label">Inicio</div>
       </button>
 
       <button class="tabbar-item" data-view="view-fuel">
-        <div class="tabbar-icon">⛽</div>
+        <div class="tabbar-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 22L15 22"/>
+            <path d="M4 9L14 9"/>
+            <path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/>
+            <path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"/>
+          </svg>
+        </div>
         <div class="tabbar-label">Gasolina</div>
       </button>
 
       <button class="tabbar-item" data-view="view-service">
-        <div class="tabbar-icon">🔧</div>
+        <div class="tabbar-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+        </div>
         <div class="tabbar-label">Bitácora</div>
         <span class="tabbar-badge" id="tab-service-badge" style="display: none;">!</span>
       </button>
 
       <button class="tabbar-item" data-view="view-diag">
-        <div class="tabbar-icon">🤖</div>
-        <div class="tabbar-label">Copiloto IA</div>
+        <div class="tabbar-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div class="tabbar-label">Copiloto</div>
       </button>
 
       <button class="tabbar-item" data-view="view-garage">
-        <div class="tabbar-icon">📖</div>
+        <div class="tabbar-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+        </div>
         <div class="tabbar-label">Manual</div>
       </button>
     </nav>
 
     <!-- ========================================== -->
-    <!-- MODAL 1: REGISTRAR CARGA DE GASOLINA (10s) -->
+    <!-- MODAL 1: REGISTRAR CARGA DE GASOLINA -->
     <!-- ========================================== -->
     <div class="modal-overlay" id="modal-fuel">
       <div class="bottom-sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-header">
-          <h3>⛽ Carga de Gasolina (10 Segundos)</h3>
-          <button class="sheet-close-btn" data-close-modal="modal-fuel">✕</button>
+          <h3>Registrar Carga de Gasolina</h3>
+          <button class="sheet-close-btn" data-close-modal="modal-fuel" aria-label="Cerrar">✕</button>
         </div>
 
         <form id="form-fuel">
@@ -624,7 +683,7 @@
               <input type="date" class="form-input" id="fuel-input-date" required>
             </div>
             <div class="form-group">
-              <label class="form-label">Odómetro (Km)</label>
+              <label class="form-label">Odómetro (km)</label>
               <input type="number" class="form-input" id="fuel-input-odo" placeholder="Ej. 128500" required>
             </div>
           </div>
@@ -641,24 +700,24 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Tipo de Gasolina</label>
+            <label class="form-label">Combustible</label>
             <div class="form-segmented">
-              <button type="button" class="seg-btn active" data-seg="fuel-type" data-val="Magna">🟢 Magna (87 Oct)</button>
-              <button type="button" class="seg-btn" data-seg="fuel-type" data-val="Premium">🔴 Premium (91+ Oct)</button>
+              <button type="button" class="seg-btn active" data-seg="fuel-type" data-val="Magna">Magna (87 Oct)</button>
+              <button type="button" class="seg-btn" data-seg="fuel-type" data-val="Premium">Premium (91+ Oct)</button>
             </div>
           </div>
 
-          <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; background: #0d121c; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.08);">
+          <div class="form-group switch-row">
             <div>
-              <div style="font-size: 0.82rem; font-weight: 700; color: #fff;">¿Tanque Lleno?</div>
-              <div style="font-size: 0.7rem; color: var(--text-muted);">Necesario para calcular km/L exactos</div>
+              <div class="switch-title">Tanque Lleno</div>
+              <div class="switch-sub">Permite calcular km/L con precisión</div>
             </div>
-            <input type="checkbox" id="fuel-input-full" checked style="width: 20px; height: 20px; accent-color: var(--chevy-gold);">
+            <input type="checkbox" id="fuel-input-full" checked class="ios-checkbox">
           </div>
 
           <div class="form-group">
-            <label class="form-label">Notas de Conducción</label>
-            <input type="text" class="form-input" id="fuel-input-station" placeholder="Ej. mucho tráfico en Monterrey, uso intensivo de A/C">
+            <label class="form-label">Estación o Notas</label>
+            <input type="text" class="form-input" id="fuel-input-station" placeholder="Ej. Tráfico en ciudad, uso de A/C">
           </div>
 
           <button type="submit" class="btn-primary">Guardar Carga</button>
@@ -673,8 +732,8 @@
       <div class="bottom-sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-header">
-          <h3>🔧 Nueva Entrada en Bitácora</h3>
-          <button class="sheet-close-btn" data-close-modal="modal-service">✕</button>
+          <h3>Nuevo Registro en Bitácora</h3>
+          <button class="sheet-close-btn" data-close-modal="modal-service" aria-label="Cerrar">✕</button>
         </div>
 
         <form id="form-service">
@@ -682,14 +741,14 @@
             <div class="form-group">
               <label class="form-label">Categoría</label>
               <select class="form-select" id="service-input-category" required>
-                <option value="Preventivo">🛡️ Preventivo</option>
-                <option value="Correctivo">🔨 Correctivo</option>
-                <option value="Falla/Síntoma">⚠️ Falla / Síntoma</option>
-                <option value="Modificación/Accesorio">✨ Modificación / Accesorio</option>
+                <option value="Preventivo">Preventivo</option>
+                <option value="Correctivo">Correctivo</option>
+                <option value="Falla/Síntoma">Falla / Síntoma</option>
+                <option value="Modificación/Accesorio">Modificación / Accesorio</option>
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Proveedor</label>
+              <label class="form-label">Realizado por</label>
               <select class="form-select" id="service-input-who">
                 <option value="Taller Mecánico">Taller Mecánico</option>
                 <option value="Hecho por mí (DIY)">Hecho por mí (DIY)</option>
@@ -699,8 +758,8 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Título del Servicio o Falla</label>
-            <input type="text" class="form-input" id="service-input-title" placeholder="Ej. Cambio de Kit de Banda de Distribución y Bomba" required>
+            <label class="form-label">Servicio o Síntoma</label>
+            <input type="text" class="form-input" id="service-input-title" placeholder="Ej. Cambio de Kit de Banda de Distribución" required>
           </div>
 
           <div class="form-row-2">
@@ -715,13 +774,13 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Piezas / Fluidos Usados</label>
-            <input type="text" class="form-input" id="service-input-parts" placeholder="Ej. Kit Gates, Bujías NGK BKR6E-11, Aceite SAE 5W-30 Mobil">
+            <label class="form-label">Refacciones / Fluidos</label>
+            <input type="text" class="form-input" id="service-input-parts" placeholder="Ej. Kit Gates, Bujías NGK BKR6E-11, SAE 5W-30">
           </div>
 
           <div class="form-group">
-            <label class="form-label">Descripción Detallada</label>
-            <textarea class="form-textarea" id="service-input-desc" rows="2" placeholder="Detalles de la reparación, síntomas observados, garantía..."></textarea>
+            <label class="form-label">Notas Detalladas</label>
+            <textarea class="form-textarea" id="service-input-desc" rows="2" placeholder="Detalles de la reparación o comportamiento..."></textarea>
           </div>
 
           <div class="form-group">
@@ -729,8 +788,8 @@
             <input type="number" step="0.01" class="form-input" id="service-input-cost" placeholder="Ej. 3850">
           </div>
 
-          <div style="font-size: 0.72rem; color: var(--telemetry-cyan); margin-bottom: 8px;">
-            🤖 Al guardar, Gemini 2.5 Flash evaluará impacto, precio y piezas relacionadas automáticamente.
+          <div class="helper-note">
+            Gemini 2.5 Flash evaluará el impacto técnico, calificación del precio y piezas relacionadas automáticamente.
           </div>
 
           <button type="submit" class="btn-primary" id="btn-submit-service">Guardar y Evaluar con IA</button>
@@ -745,19 +804,19 @@
       <div class="bottom-sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-header">
-          <h3>🔢 Actualizar Odómetro</h3>
-          <button class="sheet-close-btn" data-close-modal="modal-odo">✕</button>
+          <h3>Actualizar Odómetro</h3>
+          <button class="sheet-close-btn" data-close-modal="modal-odo" aria-label="Cerrar">✕</button>
         </div>
 
         <form id="form-odo">
           <div class="form-group">
-            <label class="form-label">Kilometraje Actual del Tablero</label>
-            <input type="number" class="form-input" id="input-quick-odo-val" style="font-size: 1.4rem; font-weight: 800; font-family: monospace; text-align: center;" required>
+            <label class="form-label">Kilometraje Actual (km)</label>
+            <input type="number" class="form-input odo-large-input" id="input-quick-odo-val" required>
           </div>
-          <p style="font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 12px; text-align: center;">
-            Esto recalculará inmediatamente los semáforos de mantenimiento y la autonomía restante.
+          <p class="helper-note" style="text-align: center;">
+            Recalcula de inmediato los intervalos preventivos y la autonomía estimada.
           </p>
-          <button type="submit" class="btn-primary">Actualizar Kilometraje</button>
+          <button type="submit" class="btn-primary">Guardar Kilometraje</button>
         </form>
       </div>
     </div>
@@ -769,14 +828,14 @@
       <div class="bottom-sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-header">
-          <h3>📋 Datos del Aveo y Documentos</h3>
-          <button class="sheet-close-btn" data-close-modal="modal-car-docs">✕</button>
+          <h3>Guantera Digital</h3>
+          <button class="sheet-close-btn" data-close-modal="modal-car-docs" aria-label="Cerrar">✕</button>
         </div>
 
         <form id="form-car-docs">
           <div class="form-group">
             <label class="form-label">Placas de Circulación</label>
-            <input type="text" class="form-input" id="doc-input-plates" placeholder="Ej. NL-742-B">
+            <input type="text" class="form-input" id="doc-input-plates" placeholder="Ej. ABC-123-A">
           </div>
           <div class="form-group">
             <label class="form-label">Número de Serie (VIN)</label>
@@ -785,25 +844,25 @@
           <div class="form-row-2">
             <div class="form-group">
               <label class="form-label">Aseguradora</label>
-              <input type="text" class="form-input" id="doc-input-ins-name" placeholder="Ej. Quálitas">
+              <input type="text" class="form-input" id="doc-input-ins-name" placeholder="Nombre">
             </div>
             <div class="form-group">
               <label class="form-label">Número de Póliza</label>
-              <input type="text" class="form-input" id="doc-input-ins-policy" placeholder="Ej. POL-04829104">
+              <input type="text" class="form-input" id="doc-input-ins-policy" placeholder="Póliza">
             </div>
           </div>
           <div class="form-row-2">
             <div class="form-group">
               <label class="form-label">Tel. Asistencia 24h</label>
-              <input type="tel" class="form-input" id="doc-input-ins-phone" placeholder="Ej. 800 800 2880">
+              <input type="tel" class="form-input" id="doc-input-ins-phone" placeholder="800...">
             </div>
             <div class="form-group">
-              <label class="form-label">Mes de Verificación</label>
-              <input type="text" class="form-input" id="doc-input-verif" placeholder="Ej. Mayo - Junio">
+              <label class="form-label">Periodo Verificación</label>
+              <input type="text" class="form-input" id="doc-input-verif" placeholder="Meses">
             </div>
           </div>
 
-          <button type="submit" class="btn-primary">Guardar Documentación</button>
+          <button type="submit" class="btn-primary">Guardar Documentos</button>
         </form>
       </div>
     </div>
@@ -815,69 +874,86 @@
       <div class="bottom-sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-header">
-          <h3>📸 Escáner de Tablero (IA Efímera)</h3>
-          <button class="sheet-close-btn" data-close-modal="modal-scan-cluster">✕</button>
+          <h3>Escáner de Tablero IA</h3>
+          <button class="sheet-close-btn" data-close-modal="modal-scan-cluster" aria-label="Cerrar">✕</button>
         </div>
 
-        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 10px 12px; margin-bottom: 12px; font-size: 0.74rem; color: #a7f3d0;">
-          🔒 <strong>Ahorro Total de Base de Datos:</strong> Toma una foto a tu tablero. Gemini extraerá el <strong>kilometraje, testigos encendidos, gasolina y temperatura</strong>, y <strong>eliminará la foto inmediatamente</strong>. Solo se guarda la información.
+        <div class="ephemeral-privacy-note">
+          <strong>Procesamiento Efímero:</strong> Gemini analiza la imagen para extraer el kilometraje, testigos encendidos, gasolina y temperatura, y <strong>elimina la fotografía de inmediato</strong> para no ocupar espacio en tu base de datos.
         </div>
 
-        <div class="form-group">
-          <label class="btn-primary" style="cursor: pointer; margin-top: 0; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff;">
-            📷 Tomar Foto al Tablero / Elegir Imagen
-            <input type="file" id="input-scan-cluster-file" accept="image/*" capture="environment" style="display: none;">
+        <!-- Dos opciones claras: Tomar Foto con Cámara o Elegir de Galería -->
+        <div class="scan-source-grid">
+          <label class="btn-scan-option primary">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+              <circle cx="12" cy="13" r="3.5"/>
+            </svg>
+            <span>Tomar Foto</span>
+            <small>Usar cámara</small>
+            <input type="file" id="input-scan-camera-file" accept="image/*" capture="environment" style="display: none;">
+          </label>
+
+          <label class="btn-scan-option secondary">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span>Elegir de Galería</span>
+            <small>Fototeca / Archivos</small>
+            <input type="file" id="input-scan-gallery-file" accept="image/*" style="display: none;">
           </label>
         </div>
 
         <!-- Estado de Procesamiento -->
-        <div id="scan-loading-box" style="display: none; text-align: center; padding: 20px 10px;">
-          <div style="font-size: 1.8rem; margin-bottom: 8px; animation: pulseDot 1s infinite;">🤖🔍</div>
-          <div style="font-weight: 800; color: var(--telemetry-cyan); font-size: 0.9rem;">Analizando tablero del Aveo 2011...</div>
-          <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 4px;">Extrayendo odómetro, testigos y agujas (la imagen se borrará al terminar)...</div>
+        <div id="scan-loading-box" class="scan-loading-state" style="display: none;">
+          <div class="ios-spinner" aria-hidden="true"></div>
+          <div class="scan-loading-title">Analizando instrumentos del Aveo...</div>
+          <div class="scan-loading-sub">Extrayendo odómetro, testigos y agujas. La imagen se descartará al finalizar.</div>
         </div>
 
         <!-- Resultados Extraídos -->
         <div id="scan-result-box" style="display: none;">
-          <div class="card-cockpit highlight-cyan" style="margin-bottom: 12px; padding: 14px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-              <span style="font-size: 0.72rem; font-weight: 800; color: #34d399;">🗑️ FOTO ELIMINADA • DATOS EXTRAÍDOS:</span>
-              <span class="badge-impact" id="scan-res-alert-badge">OPTIMO</span>
+          <div class="scan-result-card">
+            <div class="scan-result-head">
+              <span class="scan-discarded-tag">Foto eliminada • Datos extraídos</span>
+              <span class="badge-impact" id="scan-res-alert-badge">ÓPTIMO</span>
             </div>
 
-            <div class="metrics-grid-2x2" style="margin-bottom: 10px;">
-              <div class="metric-tile" style="padding: 10px;">
-                <div class="metric-tile-header"><span>Odómetro Leído</span><span>🔢</span></div>
-                <div class="metric-tile-val text-gold" id="scan-res-odo">---</div>
+            <div class="metrics-grid-2x2" style="margin-bottom: 12px;">
+              <div class="metric-tile" style="padding: 12px;">
+                <div class="metric-tile-header"><span>Odómetro Leído</span></div>
+                <div class="metric-tile-val" id="scan-res-odo">---</div>
               </div>
-              <div class="metric-tile" style="padding: 10px;">
-                <div class="metric-tile-header"><span>Gasolina / Temp</span><span>🌡️</span></div>
-                <div class="metric-tile-val text-cyan" style="font-size: 0.95rem;" id="scan-res-gauges">---</div>
+              <div class="metric-tile" style="padding: 12px;">
+                <div class="metric-tile-header"><span>Indicadores</span></div>
+                <div class="metric-tile-val" style="font-size: 0.92rem;" id="scan-res-gauges">---</div>
               </div>
             </div>
 
-            <div style="margin-bottom: 8px;">
-              <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">🚨 Testigos Detectados:</div>
-              <div id="scan-res-lights" style="font-size: 0.8rem; font-weight: 700; color: #fff;">Ninguno</div>
+            <div class="scan-detail-block">
+              <div class="scan-detail-label">Testigos Detectados</div>
+              <div id="scan-res-lights" class="scan-detail-val">Ninguno</div>
             </div>
 
-            <div style="margin-bottom: 8px;">
-              <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 2px;">🤖 Diagnóstico Técnico:</div>
-              <div id="scan-res-diag" style="font-size: 0.78rem; color: #e2e8f0; line-height: 1.4;"></div>
+            <div class="scan-detail-block">
+              <div class="scan-detail-label">Diagnóstico Técnico</div>
+              <div id="scan-res-diag" class="scan-detail-body"></div>
             </div>
 
-            <div>
-              <div style="font-size: 0.72rem; font-weight: 700; color: var(--chevy-gold-light); margin-bottom: 2px;">🛠️ Acción Recomendada:</div>
-              <div id="scan-res-action" style="font-size: 0.76rem; color: var(--text-secondary); line-height: 1.35;"></div>
+            <div class="scan-detail-block" style="margin-bottom: 0;">
+              <div class="scan-detail-label">Acción Recomendada</div>
+              <div id="scan-res-action" class="scan-detail-body"></div>
             </div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <button type="button" class="btn-primary" id="btn-scan-apply-odo" style="margin-top: 0;">
-              ✅ Aplicar Kilometraje al Odómetro
+          <div class="stack-actions">
+            <button type="button" class="btn-primary" id="btn-scan-apply-odo">
+              Aplicar Kilometraje al Odómetro
             </button>
-            <button type="button" class="btn-secondary" id="btn-scan-save-symptom" style="margin-top: 0; border-color: rgba(245, 158, 11, 0.4); color: var(--chevy-gold-light);">
-              🔧 Guardar Diagnóstico de Testigos en Bitácora
+            <button type="button" class="btn-secondary" id="btn-scan-save-symptom">
+              Guardar Diagnóstico en Bitácora
             </button>
           </div>
         </div>
@@ -889,19 +965,25 @@
     <!-- ========================================== -->
     <div class="ios-pwa-install-banner" id="ios-install-banner">
       <div class="install-banner-content">
-        <div class="install-icon">📲</div>
-        <div class="install-text">
-          <h4>Instala AveoLog AI en tu iPhone</h4>
-          <p>Pulsa el botón Compartir <strong>(⎋)</strong> de Safari y luego selecciona <strong>"Agregar a pantalla de inicio" (+)</strong> para usarla como app nativa.</p>
+        <div class="install-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+          </svg>
         </div>
-        <button class="install-close-btn" id="btn-close-install-banner">✕</button>
+        <div class="install-text">
+          <h4>Instala AveoLog en tu iPhone</h4>
+          <p>Toca Compartir en Safari y selecciona <strong>"Agregar a pantalla de inicio"</strong> para usarla a pantalla completa.</p>
+        </div>
+        <button class="install-close-btn" id="btn-close-install-banner" aria-label="Cerrar">✕</button>
       </div>
     </div>
 
     <!-- TOAST NOTIFICACIÓN -->
     <div class="ios-toast" id="ios-toast">
-      <span id="toast-icon">✅</span>
-      <span id="toast-msg">Guardado correctamente</span>
+      <span id="toast-icon"></span>
+      <span id="toast-msg">Guardado</span>
     </div>
 
   </div>

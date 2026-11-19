@@ -314,8 +314,9 @@ class AveoLogApp {
       this.haptic("light");
     });
 
-    // Eventos del Escáner Efímero de Tablero
-    document.getElementById("input-scan-cluster-file")?.addEventListener("change", (e) => this.handleDashboardImageSelected(e));
+    // Eventos del Escáner Efímero de Tablero (Cámara y Galería de Fotos)
+    document.getElementById("input-scan-camera-file")?.addEventListener("change", (e) => this.handleDashboardImageSelected(e));
+    document.getElementById("input-scan-gallery-file")?.addEventListener("change", (e) => this.handleDashboardImageSelected(e));
     document.getElementById("btn-scan-apply-odo")?.addEventListener("click", () => this.applyScannedOdometer());
     document.getElementById("btn-scan-save-symptom")?.addEventListener("click", () => this.saveScannedSymptomToLog());
 
@@ -395,27 +396,43 @@ class AveoLogApp {
   }
 
   switchView(viewId) {
-    this.currentView = viewId;
-    this.tabButtons.forEach(btn => {
-      btn.classList.toggle("active", btn.dataset.view === viewId);
-    });
-    this.views.forEach(v => {
-      v.classList.toggle("active", v.id === viewId);
-    });
+    if (this.currentView === viewId) return;
 
-    const scrollElem = document.getElementById("main-scroll");
-    if (scrollElem) scrollElem.scrollTop = 0;
+    const viewOrder = ["view-dashboard", "view-fuel", "view-service", "view-diag", "view-garage"];
+    const prevIdx = viewOrder.indexOf(this.currentView);
+    const nextIdx = viewOrder.indexOf(viewId);
+    const slideClass = nextIdx >= prevIdx ? "slide-from-right" : "slide-from-left";
 
-    if (viewId === "view-fuel") {
-      this.renderFuelView();
-    } else if (viewId === "view-service") {
-      this.renderServiceView();
-    } else if (viewId === "view-diag") {
-      // Vista Copiloto
-    } else if (viewId === "view-garage") {
-      this.renderGarageView();
+    const performSwitch = () => {
+      this.currentView = viewId;
+      this.tabButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.view === viewId);
+      });
+      this.views.forEach(v => {
+        v.classList.remove("active", "slide-from-right", "slide-from-left");
+        if (v.id === viewId) {
+          v.classList.add("active", slideClass);
+        }
+      });
+
+      const scrollElem = document.getElementById("main-scroll");
+      if (scrollElem) scrollElem.scrollTop = 0;
+
+      if (viewId === "view-fuel") {
+        this.renderFuelView();
+      } else if (viewId === "view-service") {
+        this.renderServiceView();
+      } else if (viewId === "view-garage") {
+        this.renderGarageView();
+      } else if (viewId === "view-dashboard") {
+        this.renderDashboard();
+      }
+    };
+
+    if (document.startViewTransition) {
+      document.startViewTransition(() => performSwitch());
     } else {
-      this.renderDashboard();
+      performSwitch();
     }
   }
 
@@ -582,20 +599,19 @@ class AveoLogApp {
     
     if (timingBelt) {
       if (!timingBelt.lastDoneOdo || timingBelt.lastDoneOdo <= 0) {
-        banner.style.borderColor = "rgba(245, 158, 11, 0.35)";
+        banner.style.background = "var(--bg-app)";
         bannerDesc.innerHTML = `Registra en Bitácora cuándo hiciste el último cambio de banda de distribución (se cambia cada <strong>50,000 km</strong>; motor con interferencia).`;
       } else {
         const remaining = timingBelt.nextDueOdo - currentOdo;
         if (remaining <= 0) {
-          banner.style.background = "linear-gradient(90deg, rgba(239,68,68,0.3) 0%, rgba(220,38,38,0.15) 100%)";
-          banner.style.borderColor = "#ef4444";
-          bannerDesc.innerHTML = `<strong style="color:#ef4444;">¡URGENTE!</strong> Banda de distribución vencida por <strong>${Math.abs(remaining).toLocaleString()} km</strong>. Motor con interferencia: si se rompe dobla válvulas.`;
+          banner.style.background = "var(--status-danger-bg)";
+          bannerDesc.innerHTML = `<strong style="color:var(--status-danger);">Urgente:</strong> Banda de distribución vencida por <strong>${Math.abs(remaining).toLocaleString()} km</strong>. Motor con interferencia: si se rompe dobla válvulas.`;
         } else if (remaining < 5000) {
-          banner.style.borderColor = "#f59e0b";
+          banner.style.background = "var(--status-warn-bg)";
           bannerDesc.innerHTML = `Quedan <strong>${remaining.toLocaleString()} km</strong> para el cambio preventivo del kit de distribución (banda + bomba + poleas).`;
         } else {
-          banner.style.borderColor = "rgba(16,185,129,0.3)";
-          bannerDesc.innerHTML = `Kit de distribución en orden. Próximo cambio en <strong>${remaining.toLocaleString()} km</strong> (${timingBelt.nextDueOdo.toLocaleString()} km).`;
+          banner.style.background = "var(--status-good-bg)";
+          bannerDesc.innerHTML = `Kit de distribución al día. Próximo cambio en <strong>${remaining.toLocaleString()} km</strong> (${timingBelt.nextDueOdo.toLocaleString()} km).`;
         }
       }
     }
@@ -607,20 +623,17 @@ class AveoLogApp {
     const hasSoon = servicesStatus.some(s => s.status === "soon");
 
     if (hasDue) {
-      healthBadge.style.background = "rgba(239, 68, 68, 0.18)";
-      healthBadge.style.borderColor = "rgba(239, 68, 68, 0.4)";
-      healthBadge.style.color = "#f87171";
-      healthText.textContent = "ATENCION";
+      healthBadge.style.background = "var(--status-danger-bg)";
+      healthBadge.style.color = "var(--status-danger)";
+      healthText.textContent = "ATENCIÓN";
     } else if (hasSoon) {
-      healthBadge.style.background = "rgba(245, 158, 11, 0.18)";
-      healthBadge.style.borderColor = "rgba(245, 158, 11, 0.4)";
-      healthBadge.style.color = "#fbbf24";
+      healthBadge.style.background = "var(--status-warn-bg)";
+      healthBadge.style.color = "var(--status-warn)";
       healthText.textContent = "PREVENTIVO";
     } else {
-      healthBadge.style.background = "rgba(16, 185, 129, 0.15)";
-      healthBadge.style.borderColor = "rgba(16, 185, 129, 0.3)";
-      healthBadge.style.color = "#34d399";
-      healthText.textContent = "OPTIMO";
+      healthBadge.style.background = "var(--status-good-bg)";
+      healthBadge.style.color = "var(--status-good)";
+      healthText.textContent = "ÓPTIMO";
     }
 
     this.renderDashboardRecentList();
@@ -658,16 +671,19 @@ class AveoLogApp {
     const recent = events.slice(0, 4);
 
     if (recent.length === 0) {
-      listEl.innerHTML = `<div style="text-align:center; padding:16px; color:var(--text-muted); font-size:0.8rem;">Sin movimientos registrados aún.</div>`;
+      listEl.innerHTML = `<div style="text-align:center; padding:18px; color:var(--text-muted); font-size:0.8rem;">Sin movimientos registrados aún.</div>`;
       return;
     }
+
+    const fuelSvg = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22L15 22"/><path d="M4 9L14 9"/><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"/></svg>`;
+    const wrenchSvg = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`;
 
     listEl.innerHTML = recent.map(item => `
       <div class="item-row">
         <div class="item-row-top">
           <div class="item-left">
-            <div class="item-icon-box" style="${item.type === 'fuel' ? 'color:#f59e0b;' : 'color:#06b6d4;'}">
-              ${item.type === 'fuel' ? '⛽' : '🔧'}
+            <div class="item-icon-box">
+              ${item.type === 'fuel' ? fuelSvg : wrenchSvg}
             </div>
             <div class="item-title-col">
               <h4>${item.title}</h4>
@@ -694,7 +710,7 @@ class AveoLogApp {
     document.getElementById("fuel-stat-badge-kml").textContent = `${tele.avgKml} km/L`;
     document.getElementById("fuel-best-kml").textContent = tele.bestKml;
     document.getElementById("fuel-worst-kml").textContent = tele.worstKml;
-    document.getElementById("fuel-count-label").textContent = `${this.state.fuelLogs.length} cargas registradas`;
+    document.getElementById("fuel-count-label").textContent = `${this.state.fuelLogs.length} registros`;
 
     this.renderFuelChart(tele.historyKml);
 
@@ -704,29 +720,31 @@ class AveoLogApp {
     const sorted = [...this.state.fuelLogs].sort((a, b) => b.odometer - a.odometer);
 
     if (sorted.length === 0) {
-      listEl.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.8rem;">No hay cargas registradas. Pulsa '+ Cargar Gas' para agregar tu primera carga.</div>`;
+      listEl.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.8rem;">No hay cargas registradas. Toca '+ Registrar Carga' para agregar tu primera carga.</div>`;
       return;
     }
+
+    const fuelSvg = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22L15 22"/><path d="M4 9L14 9"/><path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"/></svg>`;
 
     listEl.innerHTML = sorted.map((log, idx) => {
       let kmlText = "";
       const olderLog = sorted[idx + 1];
       if (olderLog && log.odometer > olderLog.odometer && log.liters > 0) {
         const kml = ((log.odometer - olderLog.odometer) / log.liters).toFixed(2);
-        kmlText = `<span style="color:var(--telemetry-cyan); font-weight:700;">${kml} km/L</span> • `;
+        kmlText = `<span style="color:var(--accent-blue); font-weight:600;">${kml} km/L</span> • `;
       }
 
       return `
         <div class="item-row">
           <div class="item-row-top">
             <div class="item-left">
-              <div class="item-icon-box" style="color: ${log.fuelType === 'Premium' ? '#ef4444' : '#10b981'};">
-                ⛽
+              <div class="item-icon-box" style="color: ${log.fuelType === 'Premium' ? 'var(--status-danger)' : 'var(--status-good)'};">
+                ${fuelSvg}
               </div>
               <div class="item-title-col">
                 <h4>${log.liters} L ${log.fuelType}</h4>
                 <p>${(log.date || '').slice(0, 10)} • ${log.odometer.toLocaleString()} km • ${log.station || 'Gasolinera'}</p>
-                ${log.notes ? `<div style="font-size:0.68rem; color:var(--text-muted); margin-top:2px;">"${log.notes}"</div>` : ''}
+                ${log.notes ? `<div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">"${log.notes}"</div>` : ''}
               </div>
             </div>
             <div class="item-right">
@@ -736,7 +754,7 @@ class AveoLogApp {
           </div>
           ${log.aiAnomalyNote ? `
             <div class="fuel-anomaly-box">
-              <strong>🤖 Análisis de Anomalía Gemini:</strong><br>
+              <strong>Diagnóstico de Anomalía Gemini:</strong><br>
               ${log.aiAnomalyNote}
             </div>
           ` : ''}
@@ -751,8 +769,8 @@ class AveoLogApp {
 
     if (!history || history.length < 2) {
       wrapper.innerHTML = `
-        <div style="height:100%; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:0.75rem;">
-          Registra al menos 2 cargas completas para generar la curva de rendimiento.
+        <div style="height:100%; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:0.76rem;">
+          Registra al menos 2 cargas completas para trazar la curva de rendimiento.
         </div>
       `;
       return;
@@ -778,24 +796,24 @@ class AveoLogApp {
     const areaD = `${pathD} L ${getX(history.length - 1)} ${height - paddingY} L ${getX(0)} ${height - paddingY} Z`;
 
     const dots = history.map((h, i) => `
-      <circle cx="${getX(i)}" cy="${getY(h.kml)}" r="4.5" fill="#06b6d4" stroke="#080b12" stroke-width="2"/>
-      <text x="${getX(i)}" y="${getY(h.kml) - 8}" fill="#94a3b8" font-size="9" text-anchor="middle" font-weight="700">${h.kml}</text>
+      <circle cx="${getX(i)}" cy="${getY(h.kml)}" r="4" fill="#1D1D1F" stroke="#FFFFFF" stroke-width="2"/>
+      <text x="${getX(i)}" y="${getY(h.kml) - 8}" fill="#1D1D1F" font-size="9.5" text-anchor="middle" font-weight="600">${h.kml}</text>
     `).join("");
 
     wrapper.innerHTML = `
       <svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" style="overflow:visible;">
         <defs>
           <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.35"/>
-            <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.0"/>
+            <stop offset="0%" stop-color="#1D1D1F" stop-opacity="0.12"/>
+            <stop offset="100%" stop-color="#1D1D1F" stop-opacity="0.0"/>
           </linearGradient>
         </defs>
         
-        <line x1="${paddingX}" y1="${getY(minVal)}" x2="${width - paddingX}" y2="${getY(minVal)}" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3"/>
-        <line x1="${paddingX}" y1="${getY(maxVal)}" x2="${width - paddingX}" y2="${getY(maxVal)}" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3"/>
+        <line x1="${paddingX}" y1="${getY(minVal)}" x2="${width - paddingX}" y2="${getY(minVal)}" stroke="rgba(60,60,67,0.12)" stroke-dasharray="3,3"/>
+        <line x1="${paddingX}" y1="${getY(maxVal)}" x2="${width - paddingX}" y2="${getY(maxVal)}" stroke="rgba(60,60,67,0.12)" stroke-dasharray="3,3"/>
 
         <path d="${areaD}" fill="url(#chartGrad)"/>
-        <path d="${pathD}" fill="none" stroke="#06b6d4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="${pathD}" fill="none" stroke="#1D1D1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
         ${dots}
       </svg>
     `;
@@ -871,16 +889,19 @@ class AveoLogApp {
     const tabBadge = document.getElementById("tab-service-badge");
     if (tabBadge) tabBadge.style.display = hasDue ? "block" : "none";
 
+    const alertSvg = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+    const wrenchSvg = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`;
+
     listEl.innerHTML = services.map(s => {
       let pillClass = "status-ok";
       let pillText = `En ${s.kmRemaining.toLocaleString()} km`;
 
       if (s.status === "pending") {
         pillClass = "status-soon";
-        pillText = `Toca para registrar último`;
+        pillText = `Registrar último`;
       } else if (s.status === "due") {
         pillClass = "status-due";
-        pillText = `⚠️ Vencido por ${Math.abs(s.kmRemaining).toLocaleString()} km`;
+        pillText = `Vencido por ${Math.abs(s.kmRemaining).toLocaleString()} km`;
       } else if (s.status === "soon") {
         pillClass = "status-soon";
         pillText = `Próximo: ${s.kmRemaining.toLocaleString()} km`;
@@ -892,8 +913,8 @@ class AveoLogApp {
         <div class="item-row" style="cursor:pointer;" onclick="app.quickRegisterService('${s.name}')">
           <div class="item-row-top">
             <div class="item-left">
-              <div class="item-icon-box" style="${s.critical ? 'border-color: rgba(239,68,68,0.4); color: #f87171;' : ''}">
-                ${s.critical ? '⚠️' : '🔧'}
+              <div class="item-icon-box" style="${s.critical ? 'color: var(--status-danger);' : ''}">
+                ${s.critical ? alertSvg : wrenchSvg}
               </div>
               <div class="item-title-col">
                 <h4>${s.name}</h4>
@@ -919,24 +940,26 @@ class AveoLogApp {
     if (!histEl) return;
 
     const sorted = [...this.state.maintenanceLogs].sort((a, b) => b.odometer - a.odometer);
-    if (countEl) countEl.textContent = `${sorted.length} servicios registrados`;
+    if (countEl) countEl.textContent = `${sorted.length} servicios`;
 
     if (sorted.length === 0) {
       histEl.innerHTML = `<div style="text-align:center; padding:18px; color:var(--text-muted); font-size:0.8rem;">Aún no hay servicios registrados en la bitácora.</div>`;
       return;
     }
 
+    const wrenchSvg = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`;
+
     histEl.innerHTML = sorted.map(item => `
       <div class="item-row">
         <div class="item-row-top">
           <div class="item-left">
-            <div class="item-icon-box" style="color:var(--telemetry-cyan);">
-              🛠️
+            <div class="item-icon-box">
+              ${wrenchSvg}
             </div>
             <div class="item-title-col">
               <h4>${item.title}</h4>
               <p>${(item.date || '').slice(0, 10)} • ${item.odometer.toLocaleString()} km • ${item.provider || 'Mecánico'}</p>
-              ${item.partsUsed ? `<div style="font-size:0.68rem; color:var(--chevy-gold-light); margin-top:2px;">Refacciones: ${item.partsUsed}</div>` : ''}
+              ${item.partsUsed ? `<div style="font-size:0.71rem; color:var(--text-secondary); margin-top:2px;">Refacciones: ${item.partsUsed}</div>` : ''}
             </div>
           </div>
           <div class="item-right">
@@ -957,12 +980,12 @@ class AveoLogApp {
             </div>
             ${item.aiRelatedParts ? `
               <div class="ai-eval-related">
-                🔍 <strong>Aprovechar para revisar:</strong> ${item.aiRelatedParts}
+                <strong>Revisar también:</strong> ${item.aiRelatedParts}
               </div>
             ` : ''}
             ${item.aiNextServiceKm ? `
               <div class="ai-eval-next">
-                ⏱️ Próximo servicio sugerido: ${item.aiNextServiceKm.toLocaleString()} km
+                Próximo servicio sugerido: ${item.aiNextServiceKm.toLocaleString()} km
               </div>
             ` : ''}
           </div>
@@ -1126,10 +1149,12 @@ class AveoLogApp {
     this.lastScanResult = null;
     const loadingBox = document.getElementById("scan-loading-box");
     const resultBox = document.getElementById("scan-result-box");
-    const fileInput = document.getElementById("input-scan-cluster-file");
+    const camInput = document.getElementById("input-scan-camera-file");
+    const galInput = document.getElementById("input-scan-gallery-file");
     if (loadingBox) loadingBox.style.display = "none";
     if (resultBox) resultBox.style.display = "none";
-    if (fileInput) fileInput.value = "";
+    if (camInput) camInput.value = "";
+    if (galInput) galInput.value = "";
     this.openModal("modal-scan-cluster");
   }
 
@@ -1384,20 +1409,20 @@ Evalúa este mantenimiento o síntoma para un Chevrolet Aveo 2011 Sedán 1.6L 16
     if (res.odometro_detectado && res.odometro_detectado > 0) {
       odoEl.innerHTML = `${Number(res.odometro_detectado).toLocaleString()}<small>km</small>`;
       btnApplyOdo.style.display = "flex";
-      btnApplyOdo.textContent = `✅ Actualizar Odómetro a ${Number(res.odometro_detectado).toLocaleString()} km`;
+      btnApplyOdo.textContent = `Aplicar ${Number(res.odometro_detectado).toLocaleString()} km al Odómetro`;
     } else {
       odoEl.textContent = "No visible";
       btnApplyOdo.style.display = "none";
     }
 
-    gaugesEl.textContent = `⛽ ${res.nivel_combustible_aprox || 'N/A'} • 🌡️ ${res.temperatura_motor || 'N/A'}`;
+    gaugesEl.textContent = `Gas: ${res.nivel_combustible_aprox || 'N/A'} • Temp: ${res.temperatura_motor || 'N/A'}`;
 
     if (Array.isArray(res.testigos_encendidos) && res.testigos_encendidos.length > 0) {
       lightsEl.innerHTML = res.testigos_encendidos
-        .map(t => `<span style="display:inline-block; background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); color:#fca5a5; padding:2px 8px; border-radius:999px; font-size:0.72rem; margin:2px;">⚠️ ${t}</span>`)
+        .map(t => `<span style="display:inline-block; background:var(--status-danger-bg); color:var(--status-danger); padding:3px 9px; border-radius:999px; font-size:0.72rem; font-weight:600; margin:2px;">${t}</span>`)
         .join(" ");
     } else {
-      lightsEl.innerHTML = `<span style="color:#34d399;">✅ Ningún testigo de falla encendido</span>`;
+      lightsEl.innerHTML = `<span style="color:var(--status-good); font-weight:600;">Ningún testigo de falla encendido</span>`;
     }
 
     diagEl.textContent = res.diagnostico_tablero || "";

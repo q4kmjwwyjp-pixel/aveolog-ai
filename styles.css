@@ -1,46 +1,50 @@
 /* ==========================================================================
-   AVEOLOG AI — DESIGN SYSTEM (iOS Cockpit Telemetry)
-   Optimizado para iPhone Safari PWA (Dynamic Island / Notch / Safe Areas)
+   AVEOLOG — APPLE CUPERTINO LIGHT DESIGN SYSTEM (Olympic White Edition)
+   Minimalist, high-contrast iOS aesthetic for Chevrolet Aveo 2011 Blanco
    ========================================================================== */
 
 :root {
-  /* Paleta Base Automotriz */
-  --bg-app: #080b12;
-  --bg-surface: #101622;
-  --bg-surface-elevated: #161f30;
-  --bg-card: rgba(22, 31, 48, 0.85);
-  --bg-glass: rgba(16, 22, 34, 0.78);
+  /* Paleta Superficies (Blanco Predominante / Alabastro iOS) */
+  --bg-app: #F5F5F7;
+  --bg-surface: #FFFFFF;
+  --bg-surface-secondary: #F2F2F7;
+  --bg-surface-tertiary: #E5E5EA;
+  --bg-translucent: rgba(255, 255, 255, 0.84);
   
-  /* Acentos de Marca & Telemetría */
-  --chevy-gold: #f59e0b;
-  --chevy-gold-light: #fbbf24;
-  --chevy-gold-glow: rgba(245, 158, 11, 0.22);
-  --telemetry-cyan: #06b6d4;
-  --telemetry-cyan-glow: rgba(6, 182, 212, 0.25);
+  /* Tipografía y Tinta (Cupertino Graphite) */
+  --text-main: #1D1D1F;
+  --text-secondary: #6E6E73;
+  --text-muted: #86868B;
+  --text-on-dark: #FFFFFF;
   
-  /* Semáforo de Estado */
-  --status-good: #10b981;
-  --status-good-glow: rgba(16, 185, 129, 0.25);
-  --status-warn: #f59e0b;
-  --status-warn-glow: rgba(245, 158, 11, 0.25);
-  --status-danger: #ef4444;
-  --status-danger-glow: rgba(239, 68, 68, 0.28);
-  --status-info: #3b82f6;
+  /* Acentos del Sistema Apple */
+  --accent-primary: #1D1D1F;
+  --accent-blue: #0071E3;
+  --accent-blue-soft: rgba(0, 113, 227, 0.08);
   
-  /* Tipografía y Bordes */
-  --text-main: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-glow: rgba(245, 158, 11, 0.35);
+  /* Semáforo Semántico iOS */
+  --status-good: #248A3D;
+  --status-good-bg: rgba(52, 199, 89, 0.12);
+  --status-warn: #B25000;
+  --status-warn-bg: rgba(255, 149, 0, 0.14);
+  --status-danger: #D70015;
+  --status-danger-bg: rgba(255, 59, 48, 0.11);
   
-  /* Sombras y Radios iOS */
-  --radius-sm: 8px;
+  /* Separadores y Sombras (Una sola declaración de elevación por superficie) */
+  --separator: rgba(60, 60, 67, 0.11);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.04);
+  --shadow-floating: 0 12px 32px rgba(0, 0, 0, 0.12);
+  --shadow-sheet: 0 -8px 40px rgba(0, 0, 0, 0.14);
+  
+  /* Radios iOS */
+  --radius-sm: 10px;
   --radius-md: 14px;
-  --radius-lg: 20px;
+  --radius-lg: 16px;
   --radius-pill: 9999px;
-  --shadow-card: 0 8px 24px -4px rgba(0, 0, 0, 0.45);
-  --shadow-sheet: 0 -10px 40px rgba(0, 0, 0, 0.7);
+  
+  /* Curvas de Animación Apple Spring */
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   
   /* Medidas de Safe Area iOS */
   --sat: env(safe-area-inset-top, 0px);
@@ -49,12 +53,18 @@
   --sar: env(safe-area-inset-right, 0px);
 }
 
-/* Reset y Base */
+/* Superficies del Navegador (Selection, Caret, Focus, Scrollbars, Tabular Numerals) */
+::selection {
+  background: rgba(0, 113, 227, 0.18);
+  color: var(--text-main);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   -webkit-tap-highlight-color: transparent;
+  caret-color: var(--accent-blue);
 }
 
 html, body {
@@ -62,35 +72,50 @@ html, body {
   height: 100%;
   background-color: var(--bg-app);
   color: var(--text-main);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
-  line-height: 1.45;
-  letter-spacing: -0.2px;
+  line-height: 1.47;
+  letter-spacing: -0.015em;
   overflow: hidden;
   position: fixed;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Contenedor Principal de la App */
+/* Números tabulares en toda métrica y kilometraje */
+.val,
+.metric-tile-val,
+.display-metric,
+.display-metric-sm,
+.main-val,
+.bm-val,
+.spec-val,
+.odo-large-input {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Contenedor Principal */
 #app-viewport {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
-  background: radial-gradient(circle at 50% 0%, #151d2f 0%, #080b12 70%);
+  background-color: var(--bg-app);
+  max-width: 680px;
+  margin: 0 auto;
 }
 
-/* Barra Superior / Header iOS */
+/* Barra Superior Minimalista Apple */
 .ios-header {
-  padding-top: calc(var(--sat) + 8px);
-  padding-bottom: 10px;
-  padding-left: max(16px, var(--sal));
-  padding-right: max(16px, var(--sar));
-  background: rgba(8, 11, 18, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-subtle);
+  padding-top: calc(var(--sat) + 10px);
+  padding-bottom: 12px;
+  padding-left: max(18px, var(--sal));
+  padding-right: max(18px, var(--sar));
+  background: var(--bg-translucent);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid var(--separator);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -101,44 +126,31 @@ html, body {
 .header-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
 }
 
 .header-logo {
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, #1e293b, #0f172a);
-  border: 1px solid rgba(245, 158, 11, 0.4);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px var(--chevy-gold-glow);
 }
 
 .brand-text h1 {
-  font-size: 1.05rem;
-  font-weight: 800;
-  letter-spacing: -0.3px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.brand-text h1 span {
-  color: var(--chevy-gold-light);
-  font-size: 0.72rem;
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  padding: 2px 6px;
-  border-radius: var(--radius-pill);
+  font-size: 1.08rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: -0.025em;
+  color: var(--text-main);
+  line-height: 1.15;
 }
 
 .brand-subtitle {
-  font-size: 0.72rem;
+  font-size: 0.73rem;
   color: var(--text-secondary);
   font-weight: 500;
 }
@@ -150,8 +162,9 @@ html, body {
 }
 
 .btn-icon-header {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   color: var(--text-main);
   width: 36px;
   height: 36px;
@@ -159,135 +172,167 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s var(--ease-spring), background-color 0.2s ease;
+}
+
+.btn-icon-header:hover {
+  background: var(--bg-surface-secondary);
 }
 
 .btn-icon-header:active {
-  transform: scale(0.92);
-  background: rgba(255, 255, 255, 0.12);
+  transform: scale(0.91);
+  background: var(--bg-surface-tertiary);
 }
 
-/* Contenido Principal con Scroll Suave iOS */
+/* Contenido Principal con Scroll Suave */
 .ios-content-scroll {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  padding: 16px;
-  padding-bottom: calc(var(--sab) + 85px);
+  padding: 18px 16px;
+  padding-bottom: calc(var(--sab) + 96px);
   position: relative;
 }
 
-/* Secciones / Vistas */
+.ios-content-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.ios-content-scroll::-webkit-scrollbar-thumb {
+  background: rgba(60, 60, 67, 0.18);
+  border-radius: var(--radius-pill);
+}
+
+/* Transiciones Elegantes Entre Interfaces (View Transitions API + Spring Choreography) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+  animation-timing-function: var(--ease-spring);
+}
+
 .app-view {
   display: none;
-  animation: fadeIn 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
 
 .app-view.active {
   display: block;
+  animation: appleViewEnter 0.36s var(--ease-spring) both;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+.app-view.slide-from-right {
+  animation: appleSlideFromRight 0.36s var(--ease-spring) both;
 }
 
-/* Tarjetas Estilo Cockpit */
+.app-view.slide-from-left {
+  animation: appleSlideFromLeft 0.36s var(--ease-spring) both;
+}
+
+@keyframes appleViewEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.992);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes appleSlideFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes appleSlideFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Tarjetas Blancas Minimalistas (Elevación única: sombra suave sin borde fantasma) */
 .card-cockpit {
-  background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
   border-radius: var(--radius-lg);
-  padding: 16px;
+  padding: 18px;
   margin-bottom: 14px;
   box-shadow: var(--shadow-card);
   position: relative;
   overflow: hidden;
+  transition: transform 0.25s var(--ease-spring), box-shadow 0.25s ease;
 }
 
-.card-cockpit.highlight-gold {
-  border-color: rgba(245, 158, 11, 0.28);
-  box-shadow: 0 4px 20px -2px var(--chevy-gold-glow);
-}
-
-.card-cockpit.highlight-cyan {
-  border-color: rgba(6, 182, 212, 0.28);
-  box-shadow: 0 4px 20px -2px var(--telemetry-cyan-glow);
-}
-
-/* Hero Car Card */
+/* Hero Card del Aveo Blanco */
 .hero-car-card {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  position: relative;
+  background: var(--bg-surface);
+  padding: 20px 18px 18px;
 }
 
 .hero-car-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .hero-title-group h2 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.4px;
+  font-size: 1.32rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-main);
 }
 
 .hero-badge-spec {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--chevy-gold-light);
-  background: rgba(245, 158, 11, 0.12);
-  padding: 3px 8px;
-  border-radius: var(--radius-pill);
-  margin-top: 4px;
-  border: 1px solid rgba(245, 158, 11, 0.25);
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 2px;
 }
 
 .health-status-badge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 5px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 5px 11px;
   border-radius: var(--radius-pill);
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: var(--status-good-bg);
+  color: var(--status-good);
+  letter-spacing: 0.01em;
 }
 
 .health-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: #34d399;
-  box-shadow: 0 0 10px #34d399;
-  animation: pulseDot 2s infinite ease-in-out;
-}
-
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.85); }
+  background: currentColor;
 }
 
 .car-silhouette-visual {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 6px;
-  margin: 6px 0 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 12px;
+  padding: 14px 4px;
+  margin: 8px 0 14px;
+  border-top: 0.5px solid var(--separator);
+  border-bottom: 0.5px solid var(--separator);
 }
 
 .car-vector-box {
@@ -297,42 +342,139 @@ html, body {
 }
 
 .car-vector-box svg {
-  max-width: 170px;
+  max-width: 185px;
   height: auto;
-  filter: drop-shadow(0 4px 12px rgba(6, 182, 212, 0.2));
 }
 
 .odometer-widget {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--bg-app);
   border-radius: var(--radius-md);
-  padding: 8px 12px;
+  padding: 10px 14px;
   text-align: right;
   cursor: pointer;
+  transition: transform 0.2s var(--ease-spring), background-color 0.2s ease;
+  min-width: 118px;
+}
+
+.odometer-widget:hover {
+  background: var(--bg-surface-secondary);
+}
+
+.odometer-widget:active {
+  transform: scale(0.96);
 }
 
 .odometer-widget .label {
   font-size: 0.68rem;
-  color: var(--text-muted);
+  font-weight: 600;
+  color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.04em;
 }
 
 .odometer-widget .val {
-  font-size: 1.25rem;
-  font-weight: 800;
-  font-family: "SF Mono", monospace, monospace;
-  color: #fff;
-  letter-spacing: 0.5px;
+  font-size: 1.32rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+  margin-top: 1px;
 }
 
 .odometer-widget .val small {
   font-size: 0.75rem;
-  color: var(--chevy-gold-light);
-  margin-left: 2px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-left: 3px;
 }
 
-/* Grid de Métricas Principales */
+/* Banner Preventivo Banda de Distribución */
+.aveo-critical-banner {
+  background: var(--bg-app);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+
+.aveo-critical-icon {
+  color: var(--text-main);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.aveo-critical-info h4 {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.aveo-critical-info p {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  line-height: 1.38;
+}
+
+/* Acciones Rápidas (4 Botones Blancos Limpios) */
+.action-buttons-group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.btn-action-tile {
+  background: var(--bg-surface);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 14px 6px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-main);
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  transition: transform 0.22s var(--ease-spring), background-color 0.2s ease;
+}
+
+.btn-action-tile:hover {
+  background: #FAFAFC;
+}
+
+.btn-action-tile:active {
+  transform: scale(0.94);
+  background: var(--bg-surface-secondary);
+}
+
+.btn-action-tile .tile-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--bg-app);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-action-tile.scan .tile-icon {
+  background: var(--text-main);
+  color: #FFFFFF;
+}
+
+.btn-action-tile .tile-label {
+  font-size: 0.73rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+/* Grid de Métricas 2x2 */
 .metrics-grid-2x2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -342,151 +484,361 @@ html, body {
 
 .metric-tile {
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 12px;
-  position: relative;
+  padding: 14px 16px;
+  box-shadow: var(--shadow-card);
 }
 
 .metric-tile-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   color: var(--text-secondary);
   margin-bottom: 6px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .metric-tile-val {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #fff;
+  font-size: 1.42rem;
+  font-weight: 700;
+  color: var(--text-main);
   line-height: 1.1;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.03em;
 }
 
 .metric-tile-val small {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 500;
   margin-left: 3px;
 }
 
 .metric-tile-sub {
-  font-size: 0.68rem;
-  margin-top: 4px;
+  font-size: 0.71rem;
+  margin-top: 5px;
   color: var(--text-muted);
 }
 
-.text-cyan { color: var(--telemetry-cyan) !important; }
-.text-gold { color: var(--chevy-gold-light) !important; }
+.text-accent { color: var(--accent-blue) !important; }
 .text-green { color: var(--status-good) !important; }
+.text-amber { color: var(--status-warn) !important; }
 .text-red { color: var(--status-danger) !important; }
 
-/* Botones de Acción Rápida (Thumb-Friendly) */
-.action-buttons-group {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 8px;
+/* Encabezados de Página y Sección */
+.page-title-bar {
   margin-bottom: 14px;
+  padding: 2px 2px 0;
 }
 
-.btn-action-tile {
-  background: linear-gradient(180deg, #1e293b 0%, #151e2e 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.page-title-bar h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-main);
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-head h3 {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.section-head-action {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--accent-blue);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-pill-action {
+  background: var(--text-main);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 8px 15px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-spring), opacity 0.2s ease;
+}
+
+.btn-pill-action:active {
+  transform: scale(0.95);
+  opacity: 0.88;
+}
+
+.pill-meta {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-app);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.body-copy {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.48;
+  max-width: 68ch;
+}
+
+/* Métricas de Combustible y Comparativa */
+.meta-label {
+  font-size: 0.73rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.display-metric {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.03em;
+}
+
+.display-metric small {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.display-metric-sm {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.benchmark-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: var(--bg-app);
+  padding: 10px;
   border-radius: var(--radius-md);
-  padding: 12px 6px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.benchmark-col {
+  padding: 6px 4px;
+  border-radius: 8px;
+}
+
+.benchmark-col.active {
+  background: var(--bg-surface);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.bm-label {
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.bm-val {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Listados Estilo iOS Inset Grouped */
+.item-row {
   display: flex;
   flex-direction: column;
+  padding: 13px 0;
+  border-bottom: 0.5px solid var(--separator);
+  transition: background-color 0.15s ease;
+}
+
+.item-row:first-child {
+  padding-top: 4px;
+}
+
+.item-row:last-child {
+  border-bottom: none;
+  padding-bottom: 2px;
+}
+
+.item-row-top {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.btn-action-tile:active {
-  transform: scale(0.95);
-  filter: brightness(1.15);
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
 
-.btn-action-tile .tile-icon {
+.item-icon-box {
   width: 36px;
   height: 36px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
-}
-
-.btn-action-tile.fuel .tile-icon {
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.btn-action-tile.service .tile-icon {
-  background: rgba(6, 182, 212, 0.15);
-  border: 1px solid rgba(6, 182, 212, 0.3);
-}
-
-.btn-action-tile.diag .tile-icon {
-  background: rgba(168, 85, 247, 0.15);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-}
-
-.btn-action-tile .tile-label {
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-align: center;
+  font-size: 0.95rem;
+  background: var(--bg-app);
   color: var(--text-main);
-}
-
-/* Alerta Crítica Aveo 1.6L (Banda Distribución) */
-.aveo-critical-banner {
-  background: linear-gradient(90deg, rgba(239, 68, 68, 0.16) 0%, rgba(245, 158, 11, 0.1) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.aveo-critical-icon {
-  font-size: 1.5rem;
   flex-shrink: 0;
 }
 
-.aveo-critical-info h4 {
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: #fca5a5;
-  margin-bottom: 2px;
+.item-title-col {
+  min-width: 0;
 }
 
-.aveo-critical-info p {
-  font-size: 0.72rem;
+.item-title-col h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+.item-title-col p {
+  font-size: 0.74rem;
   color: var(--text-secondary);
-  line-height: 1.35;
+  margin-top: 1px;
 }
 
-/* Barra de Navegación Inferior Estilo iOS TabBar */
+.item-right {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.item-right .main-val {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.item-right .sub-val {
+  font-size: 0.71rem;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+/* Tarjeta de Evaluación Estructurada con IA (Gemini) */
+.ai-evaluation-card {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--bg-app);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.ai-eval-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.badge-impact {
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.badge-impact.BUENO { background: var(--status-good-bg); color: var(--status-good); }
+.badge-impact.NORMAL { background: var(--accent-blue-soft); color: var(--accent-blue); }
+.badge-impact.MALO { background: var(--status-warn-bg); color: var(--status-warn); }
+.badge-impact.CRITICO { background: var(--status-danger-bg); color: var(--status-danger); }
+
+.badge-price {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+}
+
+.ai-eval-analysis {
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.ai-eval-related {
+  color: var(--text-secondary);
+  font-size: 0.73rem;
+}
+
+.ai-eval-next {
+  color: var(--accent-blue);
+  font-weight: 600;
+  font-size: 0.73rem;
+  margin-top: 4px;
+}
+
+/* Alerta de Caída de Combustible > 15% */
+.fuel-anomaly-box {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--status-danger-bg);
+  font-size: 0.75rem;
+  color: var(--status-danger);
+  line-height: 1.4;
+}
+
+/* Semáforo de Servicios en Mantenimiento */
+.service-pill-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.status-due {
+  background: var(--status-danger-bg);
+  color: var(--status-danger);
+}
+
+.status-soon {
+  background: var(--status-warn-bg);
+  color: var(--status-warn);
+}
+
+.status-ok {
+  background: var(--status-good-bg);
+  color: var(--status-good);
+}
+
+/* Barra de Navegación Inferior Estilo Apple iOS */
 .ios-tabbar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(12, 16, 26, 0.92);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 8px;
-  padding-bottom: max(8px, var(--sab));
+  background: var(--bg-translucent);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  border-top: 0.5px solid var(--separator);
+  padding-top: 7px;
+  padding-bottom: max(10px, var(--sab));
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -504,271 +856,86 @@ html, body {
   cursor: pointer;
   background: none;
   border: none;
-  padding: 4px 0;
+  padding: 3px 0;
   position: relative;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 0.2s ease, transform 0.2s var(--ease-spring);
 }
 
 .tabbar-item:active {
-  transform: scale(0.9);
+  transform: scale(0.92);
 }
 
 .tabbar-icon {
-  font-size: 1.25rem;
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.24s var(--ease-spring);
 }
 
 .tabbar-label {
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: -0.1px;
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .tabbar-item.active {
-  color: var(--chevy-gold-light);
+  color: var(--text-main);
+}
+
+.tabbar-item.active .tabbar-label {
+  font-weight: 600;
 }
 
 .tabbar-item.active .tabbar-icon {
-  transform: translateY(-2px);
-  filter: drop-shadow(0 2px 8px var(--chevy-gold-glow));
+  transform: translateY(-1px);
 }
 
 .tabbar-badge {
   position: absolute;
-  top: 2px;
-  right: calc(50% - 16px);
+  top: 0;
+  right: calc(50% - 18px);
   background: var(--status-danger);
-  color: #fff;
+  color: #FFFFFF;
   font-size: 0.6rem;
-  font-weight: 800;
+  font-weight: 700;
   padding: 1px 5px;
   border-radius: var(--radius-pill);
 }
 
-/* Encabezados de Sección */
-.section-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.section-head h3 {
-  font-size: 1rem;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.2px;
-}
-
-.section-head-action {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--chevy-gold-light);
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-/* Listados y Filas */
-.item-row {
-  display: flex;
-  flex-direction: column;
-  padding: 12px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  margin-bottom: 10px;
-  transition: background 0.15s ease;
-}
-
-.item-row:active {
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.item-row-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.item-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.item-icon-box {
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-subtle);
-  flex-shrink: 0;
-}
-
-.item-title-col h4 {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: #fff;
-}
-
-.item-title-col p {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-}
-
-.item-right {
-  text-align: right;
-}
-
-.item-right .main-val {
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #fff;
-}
-
-.item-right .sub-val {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
-/* Tarjeta de Evaluación Estructurada con IA (Gemini) */
-.ai-evaluation-card {
-  margin-top: 10px;
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(6, 182, 212, 0.25);
-  font-size: 0.76rem;
-  line-height: 1.4;
-}
-
-.ai-eval-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
-.badge-impact {
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  text-transform: uppercase;
-}
-
-.badge-impact.BUENO { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
-.badge-impact.NORMAL { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
-.badge-impact.MALO { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
-.badge-impact.CRITICO { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-
-.badge-price {
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-secondary);
-}
-
-.ai-eval-analysis {
-  color: #e2e8f0;
-  margin-bottom: 6px;
-}
-
-.ai-eval-related {
-  color: var(--chevy-gold-light);
-  font-size: 0.7rem;
-}
-
-.ai-eval-next {
-  color: var(--telemetry-cyan);
-  font-weight: 700;
-  font-size: 0.7rem;
-  margin-top: 4px;
-}
-
-/* Alerta de Caída de Combustible > 15% */
-.fuel-anomaly-box {
-  margin-top: 8px;
-  padding: 8px 10px;
-  border-radius: var(--radius-sm);
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  font-size: 0.73rem;
-  color: #fca5a5;
-  line-height: 1.35;
-}
-
-/* Semáforo de Servicios en Mantenimiento */
-.service-pill-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: var(--radius-pill);
-}
-
-.status-due {
-  background: rgba(239, 68, 68, 0.18);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.35);
-}
-
-.status-soon {
-  background: rgba(245, 158, 11, 0.18);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.35);
-}
-
-.status-ok {
-  background: rgba(16, 185, 129, 0.18);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.35);
-}
-
-/* Formularios iOS & Bottom Sheets */
+/* Modales y Bottom Sheets Estilo iOS */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 200;
-  display: none;
+  display: flex;
   align-items: flex-end;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.25s ease;
+  pointer-events: none;
+  transition: opacity 0.28s var(--ease-spring);
 }
 
 .modal-overlay.active {
-  display: flex;
   opacity: 1;
+  pointer-events: auto;
 }
 
 .bottom-sheet {
   width: 100%;
-  max-width: 520px;
-  background: #121826;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: none;
+  max-width: 540px;
+  background: var(--bg-surface);
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
   box-shadow: var(--shadow-sheet);
-  padding: 16px 20px calc(var(--sab) + 24px);
+  padding: 14px 20px calc(var(--sab) + 24px);
   max-height: 88vh;
   display: flex;
   flex-direction: column;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(104%);
+  transition: transform 0.38s var(--ease-spring);
   overflow-y: auto;
 }
 
@@ -777,11 +944,12 @@ html, body {
 }
 
 .sheet-handle {
-  width: 38px;
+  width: 36px;
   height: 5px;
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--bg-surface-tertiary);
   margin: 0 auto 14px;
+  flex-shrink: 0;
 }
 
 .sheet-header {
@@ -792,61 +960,73 @@ html, body {
 }
 
 .sheet-header h3 {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #fff;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
 }
 
 .sheet-close-btn {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-app);
   border: none;
   color: var(--text-secondary);
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.15s ease;
 }
 
 .sheet-close-btn:active {
-  background: rgba(255, 255, 255, 0.16);
+  background: var(--bg-surface-tertiary);
 }
 
-/* Campos de Formulario */
+/* Campos de Formulario iOS */
 .form-group {
   margin-bottom: 14px;
 }
 
 .form-label {
   display: block;
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.74rem;
+  font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .form-input, .form-select, .form-textarea {
   width: 100%;
-  background: #0d121c;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--bg-app);
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
   padding: 12px 14px;
-  color: #fff;
+  color: var(--text-main);
   font-size: 0.95rem;
   font-family: inherit;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   -webkit-appearance: none;
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+  color: var(--text-muted);
 }
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
   outline: none;
-  border-color: var(--chevy-gold);
-  box-shadow: 0 0 0 3px var(--chevy-gold-glow);
+  background: var(--bg-surface);
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
+}
+
+.odo-large-input {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
 }
 
 .form-row-2 {
@@ -857,102 +1037,260 @@ html, body {
 
 .form-segmented {
   display: flex;
-  background: #0d121c;
+  background: var(--bg-app);
   padding: 3px;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 11px;
 }
 
 .seg-btn {
   flex: 1;
   padding: 8px 10px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.78rem;
+  font-weight: 500;
   border: none;
   background: none;
-  color: var(--text-muted);
-  border-radius: 10px;
+  color: var(--text-secondary);
+  border-radius: 9px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s var(--ease-spring);
 }
 
 .seg-btn.active {
-  background: #1e293b;
-  color: var(--chevy-gold-light);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-/* Botones de Envío */
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-app);
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+}
+
+.switch-title {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.switch-sub {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.ios-checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--text-main);
+}
+
+.helper-note {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+/* Botones Primarios y Secundarios Apple */
 .btn-primary {
   width: 100%;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  background: var(--text-main);
   border: none;
   border-radius: var(--radius-md);
-  padding: 14px;
-  color: #000;
-  font-size: 0.95rem;
-  font-weight: 800;
+  padding: 14px 16px;
+  color: #FFFFFF;
+  font-size: 0.92rem;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 10px;
-  box-shadow: 0 4px 16px var(--chevy-gold-glow);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s var(--ease-spring), opacity 0.2s ease;
 }
 
 .btn-primary:active {
-  transform: scale(0.97);
-  filter: brightness(0.95);
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.btn-primary.btn-inline {
+  width: auto;
+  padding: 10px 16px;
+  font-size: 0.82rem;
 }
 
 .btn-secondary {
   width: 100%;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-app);
+  border: none;
   border-radius: var(--radius-md);
-  padding: 12px;
-  color: #fff;
+  padding: 13px 16px;
+  color: var(--text-main);
   font-size: 0.88rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 8px;
+  transition: transform 0.2s var(--ease-spring), background-color 0.2s ease;
 }
 
 .btn-secondary:active {
-  background: rgba(255, 255, 255, 0.12);
+  transform: scale(0.98);
+  background: var(--bg-surface-tertiary);
 }
 
-/* Diagnóstico AI — AveoBot Chat y Buscador */
-.diag-search-box {
-  position: relative;
+.btn-danger-outline {
+  color: var(--status-danger);
+  background: var(--status-danger-bg);
+}
+
+.stack-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Escáner de Tablero: Opciones Cámara vs Galería */
+.ephemeral-privacy-note {
+  background: var(--bg-app);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  line-height: 1.42;
+}
+
+.ephemeral-privacy-note strong {
+  color: var(--text-main);
+}
+
+.scan-source-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
   margin-bottom: 14px;
 }
 
-.diag-search-input {
-  width: 100%;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-pill);
-  padding: 12px 18px 12px 42px;
-  color: #fff;
+.btn-scan-option {
+  border-radius: var(--radius-md);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s var(--ease-spring), opacity 0.2s ease;
+}
+
+.btn-scan-option:active {
+  transform: scale(0.96);
+}
+
+.btn-scan-option.primary {
+  background: var(--text-main);
+  color: #FFFFFF;
+}
+
+.btn-scan-option.secondary {
+  background: var(--bg-app);
+  color: var(--text-main);
+}
+
+.btn-scan-option span {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.btn-scan-option small {
+  font-size: 0.7rem;
+  opacity: 0.72;
+}
+
+.scan-loading-state {
+  text-align: center;
+  padding: 24px 12px;
+}
+
+.ios-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2.5px solid var(--bg-surface-tertiary);
+  border-top-color: var(--text-main);
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  animation: iosSpin 0.75s linear infinite;
+}
+
+@keyframes iosSpin {
+  to { transform: rotate(360deg); }
+}
+
+.scan-loading-title {
+  font-weight: 600;
+  color: var(--text-main);
   font-size: 0.9rem;
 }
 
-.diag-search-icon {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1rem;
-  color: var(--text-muted);
+.scan-loading-sub {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
 }
 
+.scan-result-card {
+  background: var(--bg-app);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.scan-result-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.scan-discarded-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--status-good);
+}
+
+.scan-detail-block {
+  margin-bottom: 10px;
+}
+
+.scan-detail-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.scan-detail-val {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.scan-detail-body {
+  font-size: 0.79rem;
+  color: var(--text-main);
+  line-height: 1.44;
+}
+
+/* Copiloto Chat Minimalista */
 .symptom-tag-cloud {
   display: flex;
   flex-wrap: wrap;
@@ -961,58 +1299,62 @@ html, body {
 }
 
 .symptom-tag {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   border-radius: var(--radius-pill);
-  padding: 5px 12px;
-  font-size: 0.74rem;
-  color: var(--text-secondary);
+  padding: 7px 13px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-main);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: transform 0.18s var(--ease-spring), background-color 0.15s ease;
 }
 
-.symptom-tag:active, .symptom-tag.active {
-  background: rgba(6, 182, 212, 0.15);
-  border-color: var(--telemetry-cyan);
-  color: #fff;
+.symptom-tag:active {
+  transform: scale(0.95);
+  background: var(--text-main);
+  color: #FFFFFF;
 }
 
-/* Chat Assistant Container */
-.chat-window {
-  background: #0c101a;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+.chat-card {
   padding: 14px;
-  min-height: 280px;
-  max-height: 380px;
+}
+
+.chat-window {
+  background: var(--bg-app);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  min-height: 310px;
+  max-height: 410px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 12px;
 }
 
 .chat-bubble {
-  max-width: 86%;
+  max-width: 85%;
   padding: 10px 14px;
-  border-radius: 16px;
+  border-radius: 18px;
   font-size: 0.85rem;
-  line-height: 1.4;
+  line-height: 1.44;
 }
 
 .chat-bubble.bot {
   align-self: flex-start;
-  background: #162033;
-  color: #e2e8f0;
-  border-bottom-left-radius: 4px;
-  border: 1px solid rgba(6, 182, 212, 0.2);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border-bottom-left-radius: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .chat-bubble.user {
   align-self: flex-end;
-  background: linear-gradient(135deg, #0284c7, #0369a1);
-  color: #fff;
-  border-bottom-right-radius: 4px;
+  background: var(--text-main);
+  color: #FFFFFF;
+  border-bottom-right-radius: 5px;
 }
 
 .chat-input-bar {
@@ -1022,101 +1364,48 @@ html, body {
 
 .chat-input {
   flex: 1;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-app);
+  border: 1px solid transparent;
   border-radius: var(--radius-pill);
-  padding: 10px 16px;
-  color: #fff;
+  padding: 11px 16px;
+  color: var(--text-main);
   font-size: 0.9rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.chat-input:focus {
+  outline: none;
+  background: var(--bg-surface);
+  border-color: var(--accent-blue);
 }
 
 .btn-chat-send {
-  background: var(--chevy-gold);
+  background: var(--text-main);
   border: none;
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  color: #000;
-  font-size: 1.1rem;
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
+  transition: transform 0.2s var(--ease-spring);
 }
 
-/* Banner de Instalación iOS Safari */
-.ios-pwa-install-banner {
-  position: fixed;
-  bottom: calc(var(--sab) + 75px);
-  left: 14px;
-  right: 14px;
-  background: rgba(18, 25, 41, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  border-radius: var(--radius-lg);
-  padding: 14px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-  z-index: 150;
-  display: none;
-  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+.btn-chat-send:active {
+  transform: scale(0.9);
 }
 
-@keyframes slideUp {
-  from { transform: translateY(40px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-.install-banner-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.install-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background: #0f172a;
-  border: 1px solid var(--chevy-gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  flex-shrink: 0;
-}
-
-.install-text h4 {
-  font-size: 0.88rem;
-  font-weight: 800;
-  color: #fff;
-}
-
-.install-text p {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-  line-height: 1.35;
-}
-
-.install-close-btn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 1.1rem;
-  cursor: pointer;
-  padding: 4px;
-  align-self: flex-start;
-}
-
-/* Especificaciones Técnicas (Ficha Garaje) */
+/* Especificaciones Técnicas y Guantera */
 .specs-table {
   width: 100%;
   border-collapse: collapse;
 }
 
 .specs-table tr {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 0.5px solid var(--separator);
 }
 
 .specs-table tr:last-child {
@@ -1124,71 +1413,33 @@ html, body {
 }
 
 .specs-table td {
-  padding: 10px 0;
+  padding: 11px 0;
   font-size: 0.82rem;
 }
 
 .specs-table td.spec-title {
   color: var(--text-secondary);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .specs-table td.spec-val {
   text-align: right;
-  font-weight: 700;
-  color: #fff;
+  font-weight: 600;
+  color: var(--text-main);
 }
 
-/* Gráfico de Combustible SVG */
-.fuel-chart-container {
-  width: 100%;
-  height: 130px;
-  margin-top: 8px;
-}
-
-/* Toast Notifications */
-.ios-toast {
-  position: fixed;
-  top: calc(var(--sat) + 65px);
-  left: 50%;
-  transform: translateX(-50%) translateY(-20px);
-  background: rgba(18, 25, 41, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 8px 18px;
-  border-radius: var(--radius-pill);
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  z-index: 999;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.ios-toast.show {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-
-/* Visor de Fusibles y Emergencias */
+/* Directorio de Fusibles */
 .fuse-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .fuse-tile {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-app);
   border-radius: var(--radius-md);
-  padding: 10px;
+  padding: 11px 12px;
 }
 
 .fuse-tile-head {
@@ -1200,22 +1451,163 @@ html, body {
 
 .fuse-tile-name {
   font-size: 0.78rem;
-  font-weight: 700;
-  color: #fff;
+  font-weight: 600;
+  color: var(--text-main);
 }
 
 .fuse-amp-badge {
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 1px 6px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 2px 7px;
   border-radius: var(--radius-pill);
-  background: rgba(245, 158, 11, 0.2);
-  color: var(--chevy-gold-light);
-  border: 1px solid rgba(245, 158, 11, 0.4);
+  background: var(--bg-surface);
+  color: var(--text-main);
 }
 
 .fuse-tile-desc {
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   color: var(--text-secondary);
-  line-height: 1.3;
+  line-height: 1.35;
+}
+
+/* Protocolos y API Key Box */
+.protocol-block {
+  margin-bottom: 14px;
+}
+
+.protocol-block h4 {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.protocol-block ol {
+  font-size: 0.79rem;
+  color: var(--text-secondary);
+  padding-left: 18px;
+  line-height: 1.48;
+}
+
+.api-key-box {
+  background: var(--bg-app);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.api-key-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.api-key-desc {
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.api-key-row {
+  display: flex;
+  gap: 8px;
+}
+
+.api-key-row .form-input {
+  background: var(--bg-surface);
+  padding: 9px 12px;
+  font-size: 0.84rem;
+}
+
+/* Gráfico de Combustible SVG */
+.fuel-chart-container {
+  width: 100%;
+  height: 130px;
+  margin-top: 8px;
+}
+
+/* Banner de Instalación iOS Safari */
+.ios-pwa-install-banner {
+  position: fixed;
+  bottom: calc(var(--sab) + 78px);
+  left: 16px;
+  right: 16px;
+  max-width: 520px;
+  margin: 0 auto;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-floating);
+  z-index: 150;
+  display: none;
+  animation: appleViewEnter 0.35s var(--ease-spring);
+}
+
+.install-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.install-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--bg-app);
+  color: var(--accent-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.install-text h4 {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.install-text p {
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  line-height: 1.36;
+}
+
+.install-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px;
+  align-self: flex-start;
+}
+
+/* Toast Notifications Estilo Dynamic Island / Pill */
+.ios-toast {
+  position: fixed;
+  top: calc(var(--sat) + 64px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-16px) scale(0.95);
+  background: var(--text-main);
+  padding: 9px 18px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-floating);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.28s var(--ease-spring);
+}
+
+.ios-toast.show {
+  transform: translateX(-50%) translateY(0) scale(1);
+  opacity: 1;
 }
