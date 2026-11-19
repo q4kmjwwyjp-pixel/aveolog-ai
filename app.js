@@ -1159,18 +1159,24 @@ class AveoLogApp {
   }
 
   /**
-   * Comprime la foto en un Canvas efímero en RAM (máx 1024px) para enviarla rápido a Gemini
-   * y destruye inmediatamente el Canvas, el File y el Buffer después de extraer el base64.
+   * Comprime la foto en un Canvas efímero en RAM (máx 640px) usando URL.createObjectURL
+   * (instantáneo en iOS Safari, sin bloqueo de FileReader) y revoca/destruye todo al terminar.
    */
   compressImageToEphemeralBase64(file) {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const maxDim = 800;
-          let w = img.width;
-          let h = img.height;
+      const objectUrl = URL.createObjectURL(file);
+      const img = new Image();
+      const decodeTimeout = setTimeout(() => {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error("Tiempo agotado decodificando la imagen del iPhone."));
+      }, 8000);
+
+      img.onload = () => {
+        clearTimeout(decodeTimeout);
+        try {
+          const maxDim = 640;
+          let w = img.width || 640;
+          let h = img.height || 480;
           if (w > maxDim || h > maxDim) {
             if (w > h) {
               h = Math.round((h * maxDim) / w);
@@ -1185,22 +1191,37 @@ class AveoLogApp {
           canvas.height = h;
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, w, h);
-          const dataUrl = canvas.toDataURL("image/jpeg", 0.78);
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.72);
 
-          // Destruir el canvas y la imagen en memoria inmediatamente
+          // Destruir el canvas, la imagen y el ObjectURL en memoria inmediatamente
           ctx.clearRect(0, 0, w, h);
           canvas.width = 0;
           canvas.height = 0;
           img.src = "";
+          URL.revokeObjectURL(objectUrl);
 
           resolve(dataUrl.replace(/^data:image\/jpeg;base64,/, ""));
-        };
-        img.onerror = () => reject(new Error("No se pudo decodificar la imagen."));
-        img.src = e.target.result;
+        } catch (err) {
+          URL.revokeObjectURL(objectUrl);
+          reject(err);
+        }
       };
-      reader.onerror = () => reject(new Error("Error leyendo la fotografía."));
-      reader.readAsDataURL(file);
+
+      img.onerror = () => {
+        clearTimeout(decodeTimeout);
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error("No se pudo leer el formato de la imagen. Intenta con una foto JPG/PNG o captura de pantalla."));
+      };
+
+      img.src = objectUrl;
     });
+  }
+
+  setScanStatusText(title, sub) {
+    const titleEl = document.querySelector("#scan-loading-box .scan-loading-title");
+    const subEl = document.querySelector("#scan-loading-box .scan-loading-sub");
+    if (titleEl && title) titleEl.textContent = title;
+    if (subEl && sub) subEl.textContent = sub;
   }
 
   async handleDashboardImageSelected(event) {
@@ -1211,6 +1232,7 @@ class AveoLogApp {
     const resultBox = document.getElementById("scan-result-box");
     if (loadingBox) loadingBox.style.display = "block";
     if (resultBox) resultBox.style.display = "none";
+    this.setScanStatusText("1/2 Optimizando foto en memoria...", "Comprimiendo imagen sin guardarla en base de datos...");
 
     let ephemeralBase64 = null;
     try {
@@ -1218,6 +1240,9 @@ class AveoLogApp {
 
       // Limpiar inmediatamente el input file del DOM para no retener el archivo en memoria del navegador
       event.target.value = "";
+
+      const kbSize = Math.round((ephemeralBase64.length * 3) / 4 / 1024);
+      this.setScanStatusText(`2/2 Conectando con Gemini 3.8 (${kbSize} KB)...`, "Extrayendo kilometraje y testigos del tablero...");
 
       let analysis = null;
 
@@ -1250,7 +1275,7 @@ class AveoLogApp {
       if (!analysis) {
         const localKey = this.state.car.geminiApiKey;
         if (!localKey) {
-          throw new Error("Para analizar fotos del tablero necesitas configurar tu GEMINI_API_KEY en la pestaña 'Manual' (o en el archivo .env de tu servidor).");
+          throw new Error("Para analizar fotos del tablero necesitas configurar tu GEMINI_API_KEY en la pestaña 'Manual'.");
         }
         analysis = await this.callGeminiVisionDirectly(ephemeralBase64, localKey);
       }
@@ -1260,7 +1285,7 @@ class AveoLogApp {
 
       this.lastScanResult = analysis;
       this.renderScanClusterResult(analysis);
-      this.showToast("Datos extraídos • Foto eliminada", "🗑️");
+      this.showToast("Datos extraídos • Foto eliminada", "");
       this.haptic("heavy");
     } catch (err) {
       ephemeralBase64 = null;
@@ -1270,22 +1295,23 @@ class AveoLogApp {
     }
   }
 
-  async invokeGeminiDirectWithFallback(payload, apiKey) {
-    // Lista priorizada de modelos activos + reintento automático si un modelo tiene saturación temporal (503 / 429)
+  async invokeGeminiDirectWithFallback(payload, apiKey, onProgress) {
     const models = [
       "gemini-3.8-flash",
       "gemini-3.8-flash-lite",
-      "gemini-3.8-pro",
-      "gemini-3.5-flash",
-      "gemini-3.0-flash"
+      "gemini-3.8-pro"
     ];
     let lastError = null;
 
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 1; attempt <= 2; attempt++) {
       for (const model of models) {
         try {
+          if (onProgress) {
+            onProgress(`Consultando ${model} (intento ${attempt}/2)...`);
+          }
+
           const controller = new AbortController();
-          const timer = setTimeout(() => controller.abort(), 16000);
+          const timer = setTimeout(() => controller.abort(), 9000);
 
           const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
           const res = await fetch(url, {
@@ -1303,20 +1329,19 @@ class AveoLogApp {
           const txt = await res.text();
           lastError = new Error(`Error Gemini (${res.status}): ${txt}`);
 
-          // Si la clave API es inválida (400/401/403), no seguir probando otros modelos
           if (res.status === 400 || res.status === 401 || res.status === 403) {
             throw lastError;
           }
-          // Si es 404 (modelo no habilitado) o 503/429 (alta demanda), brinca inmediatamente al siguiente modelo
         } catch (err) {
-          lastError = err;
+          lastError = err.name === "AbortError"
+            ? new Error(`Tiempo de espera agotado (9s) en ${model}.`)
+            : err;
           if (err.message && (err.message.includes("(400)") || err.message.includes("(401)") || err.message.includes("(403)"))) {
             throw err;
           }
         }
       }
-      // Breve pausa de 1.2s antes de segunda ronda si todos estuvieron en 503
-      await new Promise((r) => setTimeout(r, 1200));
+      await new Promise((r) => setTimeout(r, 800));
     }
 
     throw lastError;
@@ -1325,7 +1350,21 @@ class AveoLogApp {
   async callGeminiVisionDirectly(cleanBase64, apiKey) {
     const prompt = `
 Eres el Ingeniero Jefe del Chevrolet Aveo 2011 Sedán 1.6L 16V DOHC (F16D3).
-Analiza esta foto del tablero. Extrae el kilometraje total (odometro_detectado como entero o null), testigos encendidos, nivel de gasolina, temperatura del motor, nivel de alerta (OPTIMO, PREVENTIVO, ATENCION, CRITICO), diagnóstico técnico y acción recomendada.
+Analiza esta foto del tablero y devuelve ÚNICAMENTE un objeto JSON válido (sin bloques markdown \`\`\`json) con estas llaves exactas:
+{
+  "odometro_detectado": 125000,
+  "nivel_combustible_aprox": "1/2",
+  "temperatura_motor": "Normal",
+  "rpm_aprox": 800,
+  "testigos_encendidos": [],
+  "nivel_alerta": "OPTIMO",
+  "diagnostico_tablero": "Explicación breve en español",
+  "accion_recomendada": "Recomendación breve en español"
+}
+Notas:
+- Si el odómetro no es legible, pon "odometro_detectado": null.
+- Si no hay testigos de falla encendidos, deja "testigos_encendidos": [].
+- "nivel_alerta" debe ser uno de: "OPTIMO", "PREVENTIVO", "ATENCION", "CRITICO".
 `;
     const payload = {
       contents: [
@@ -1339,33 +1378,15 @@ Analiza esta foto del tablero. Extrae el kilometraje total (odometro_detectado c
       ],
       generationConfig: {
         temperature: 0.1,
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: "OBJECT",
-          properties: {
-            odometro_detectado: { type: "INTEGER", nullable: true },
-            nivel_combustible_aprox: { type: "STRING" },
-            temperatura_motor: { type: "STRING" },
-            rpm_aprox: { type: "INTEGER", nullable: true },
-            testigos_encendidos: { type: "ARRAY", items: { type: "STRING" } },
-            nivel_alerta: { type: "STRING", enum: ["OPTIMO", "PREVENTIVO", "ATENCION", "CRITICO"] },
-            diagnostico_tablero: { type: "STRING" },
-            accion_recomendada: { type: "STRING" }
-          },
-          required: [
-            "nivel_combustible_aprox",
-            "temperatura_motor",
-            "testigos_encendidos",
-            "nivel_alerta",
-            "diagnostico_tablero",
-            "accion_recomendada"
-          ]
-        }
+        responseMimeType: "application/json"
       }
     };
 
-    const data = await this.invokeGeminiDirectWithFallback(payload, apiKey);
-    const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const data = await this.invokeGeminiDirectWithFallback(payload, apiKey, (statusMsg) => {
+      this.setScanStatusText("2/2 Analizando con Gemini AI...", statusMsg);
+    });
+    let raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+    raw = raw.replace(/```json/gi, "").replace(/```/g, "").trim();
     return JSON.parse(raw);
   }
 
