@@ -1168,7 +1168,7 @@ class AveoLogApp {
       reader.onload = (e) => {
         const img = new Image();
         img.onload = () => {
-          const maxDim = 1024;
+          const maxDim = 800;
           let w = img.width;
           let h = img.height;
           if (w > maxDim || h > maxDim) {
@@ -1271,26 +1271,52 @@ class AveoLogApp {
   }
 
   async invokeGeminiDirectWithFallback(payload, apiKey) {
-    const models = ["gemini-3.8-flash", "gemini-2.5-flash"];
+    // Lista priorizada de modelos activos + reintento automático si un modelo tiene saturación temporal (503 / 429)
+    const models = [
+      "gemini-3.8-flash",
+      "gemini-3.8-flash-lite",
+      "gemini-3.8-pro",
+      "gemini-3.5-flash",
+      "gemini-3.0-flash"
+    ];
     let lastError = null;
 
-    for (const model of models) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+    for (let attempt = 0; attempt < 2; attempt++) {
+      for (const model of models) {
+        try {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 16000);
 
-      if (res.ok) {
-        return await res.json();
-      }
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+            signal: controller.signal
+          });
+          clearTimeout(timer);
 
-      const txt = await res.text();
-      lastError = new Error(`Error Gemini (${res.status}): ${txt}`);
-      if (res.status !== 404) {
-        throw lastError;
+          if (res.ok) {
+            return await res.json();
+          }
+
+          const txt = await res.text();
+          lastError = new Error(`Error Gemini (${res.status}): ${txt}`);
+
+          // Si la clave API es inválida (400/401/403), no seguir probando otros modelos
+          if (res.status === 400 || res.status === 401 || res.status === 403) {
+            throw lastError;
+          }
+          // Si es 404 (modelo no habilitado) o 503/429 (alta demanda), brinca inmediatamente al siguiente modelo
+        } catch (err) {
+          lastError = err;
+          if (err.message && (err.message.includes("(400)") || err.message.includes("(401)") || err.message.includes("(403)"))) {
+            throw err;
+          }
+        }
       }
+      // Breve pausa de 1.2s antes de segunda ronda si todos estuvieron en 503
+      await new Promise((r) => setTimeout(r, 1200));
     }
 
     throw lastError;

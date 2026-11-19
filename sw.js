@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aveolog-ai-v4.2.0-network-first';
+const CACHE_NAME = 'aveolog-ai-v4.3.0-autofallback503';
 const ASSETS = [
   './',
   './index.html',
